@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -37,7 +38,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -78,6 +81,25 @@ fun HomeScreen(
     state: HomeState,
     onAction: (HomeAction) -> Unit,
 ) {
+    val listState = rememberLazyListState()
+
+    val shouldLoadMore by remember {
+        derivedStateOf {
+            val totalItems = listState.layoutInfo.totalItemsCount
+            val lastVisibleItemIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+
+            val endReached = lastVisibleItemIndex >= (totalItems - 3)
+
+            endReached && state.hasMorePages && !state.isLoadingMore && !state.isLoading
+        }
+    }
+
+    LaunchedEffect(shouldLoadMore) {
+        if (shouldLoadMore) {
+            onAction(HomeAction.LoadMore)
+        }
+    }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -146,7 +168,7 @@ fun HomeScreen(
                 }
             }
 
-            Box(modifier = Modifier.fillMaxSize()) {
+            Box(Modifier.fillMaxSize()) {
                 if (state.isLoading && state.repos.isEmpty()) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -186,7 +208,8 @@ fun HomeScreen(
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = PaddingValues(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        state = listState
                     ) {
                         items(state.repos) { repository ->
                             RepositoryCard(
@@ -199,10 +222,6 @@ fun HomeScreen(
 
                         if (state.hasMorePages) {
                             item {
-                                LaunchedEffect(Unit) {
-                                    onAction(HomeAction.LoadMore)
-                                }
-
                                 Box(
                                     modifier = Modifier
                                         .fillMaxWidth()

@@ -3,6 +3,7 @@ package zed.rainxch.githubstore.feature.home.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -38,7 +39,6 @@ class HomeViewModel(
         )
 
     private fun loadRepos(isInitial: Boolean = false, category: HomeCategory? = null) {
-        // Cancel any existing job
         currentJob?.cancel()
 
         if (isInitial) {
@@ -48,14 +48,13 @@ class HomeViewModel(
         val targetCategory = category ?: _state.value.currentCategory
 
         currentJob = viewModelScope.launch {
-            // Gate by auth
             val token = tokenDataSource.current()
+
             if (token == null) {
                 _state.update { it.copy(needsAuth = true, isLoading = false, isLoadingMore = false) }
                 return@launch
             }
 
-            // Update loading state
             _state.update {
                 it.copy(
                     isLoading = isInitial,
@@ -91,13 +90,19 @@ class HomeViewModel(
                             isLoading = false,
                             isLoadingMore = false,
                             hasMorePages = paginatedRepos.hasMore,
-                            errorMessage = null
                         )
                     }
                 }
 
             } catch (t: Throwable) {
                 Logger.w("Home viewmodel", t) { "Failed to load repos" }
+
+                if (t is CancellationException) {
+                    throw t
+                }
+
+                Logger.w("Home viewmodel", t) { "Failed" }
+
                 _state.update {
                     it.copy(
                         isLoading = false,
@@ -115,15 +120,20 @@ class HomeViewModel(
                 currentPage = 1
                 loadRepos(isInitial = true)
             }
+
             HomeAction.Retry -> {
                 loadRepos(isInitial = true)
             }
+
             HomeAction.LoadMore -> {
+                if (currentJob?.isActive == true) return
+
                 if (!_state.value.isLoadingMore && _state.value.hasMorePages) {
                     currentPage++
                     loadRepos(isInitial = false)
                 }
             }
+
             is HomeAction.SwitchCategory -> {
                 currentPage = 1
                 loadRepos(isInitial = true, category = action.category)

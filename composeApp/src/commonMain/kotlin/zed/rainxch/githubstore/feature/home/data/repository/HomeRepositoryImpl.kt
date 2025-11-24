@@ -1,5 +1,6 @@
 package zed.rainxch.githubstore.feature.home.data.repository
 
+import co.touchlab.kermit.Logger
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.post
@@ -9,11 +10,14 @@ import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -59,10 +63,12 @@ class HomeRepositoryImpl(
         val maxPagesToFetch = 3
 
         val query = buildSimplifiedQuery(baseQuery)
-        println("GitHub Search Query: $query, starting page: $startPage")
+        Logger.d { "GitHub Search Query: $query, starting page: $startPage" }
 
         var pagesFetched = 0
         while (results.size < desiredCount && pagesFetched < maxPagesToFetch) {
+            currentCoroutineContext().ensureActive()
+
             try {
                 val response: GithubRepoSearchResponse =
                     githubNetworkClient.get("/search/repositories") {
@@ -73,7 +79,7 @@ class HomeRepositoryImpl(
                         parameter("page", page)
                     }.body()
 
-                println("Page $page: Got ${response.items.size} repos from search")
+                Logger.d { "Page $page: Got ${response.items.size} repos from search" }
 
                 if (response.items.isEmpty()) break
 
@@ -84,7 +90,7 @@ class HomeRepositoryImpl(
                     .take(50)
                     .map { it.first }
 
-                println("Checking ${candidates.size} candidates for installers")
+                Logger.d { "Checking ${candidates.size} candidates for installers" }
 
                 coroutineScope {
                     val deferredResults = candidates.map { repo ->
@@ -102,13 +108,14 @@ class HomeRepositoryImpl(
                         if (result != null) {
                             results.add(result)
 
-                            // Emit intermediate results every 5 repos or when reaching desired count
                             if (results.size % 5 == 0 || results.size >= desiredCount) {
-                                emit(PaginatedRepos(
-                                    repos = results.toList(),
-                                    hasMore = results.size < desiredCount
-                                ))
-                                println("Emitted: ${results.size} repos so far")
+                                emit(
+                                    PaginatedRepos(
+                                        repos = results.toList(),
+                                        hasMore = results.size < desiredCount
+                                    )
+                                )
+                                Logger.d { "Emitted: ${results.size} repos so far" }
                             }
 
                             if (results.size >= desiredCount) {
@@ -122,21 +129,26 @@ class HomeRepositoryImpl(
                 page++
                 pagesFetched++
             } catch (e: Exception) {
-                println("Error in search: ${e.message}")
+                if (e is CancellationException) {
+                    throw e
+                }
+
+                Logger.e { "Error in search: ${e.message}" }
                 e.printStackTrace()
                 break
             }
         }
 
-        // Final emit with complete results
         if (results.isNotEmpty()) {
-            emit(PaginatedRepos(
-                repos = results.take(desiredCount),
-                hasMore = pagesFetched < maxPagesToFetch && results.size >= desiredCount
-            ))
+            emit(
+                PaginatedRepos(
+                    repos = results.take(desiredCount),
+                    hasMore = pagesFetched < maxPagesToFetch && results.size >= desiredCount
+                )
+            )
         }
 
-        println("Finished: ${results.size} total repos")
+        Logger.d { "Finished: ${results.size} total repos" }
     }.flowOn(Dispatchers.IO)
 
     private fun buildSimplifiedQuery(baseQuery: String): String {
@@ -163,6 +175,7 @@ class HomeRepositoryImpl(
                 if (language == "kotlin" || language == "java") score += 5
                 if (desc.contains("android") || desc.contains("apk")) score += 3
             }
+
             PlatformType.WINDOWS, PlatformType.MACOS, PlatformType.LINUX -> {
                 if (topics.any { it in setOf("desktop", "electron", "app", "gui") }) score += 10
                 if (topics.contains("cross-platform") || topics.contains("multiplatform")) score += 8
@@ -190,14 +203,19 @@ class HomeRepositoryImpl(
                 val name = asset.name.lowercase()
                 when (platform.type) {
                     PlatformType.ANDROID -> name.endsWith(".apk")
-                    PlatformType.WINDOWS -> name.endsWith(".msi") || name.endsWith(".exe") || name.contains(".exe")
+                    PlatformType.WINDOWS -> name.endsWith(".msi") || name.endsWith(".exe") || name.contains(
+                        ".exe"
+                    )
+
                     PlatformType.MACOS -> name.endsWith(".dmg") || name.endsWith(".pkg")
-                    PlatformType.LINUX -> name.endsWith(".appimage") || name.endsWith(".deb") || name.endsWith(".rpm")
+                    PlatformType.LINUX -> name.endsWith(".appimage") || name.endsWith(".deb") || name.endsWith(
+                        ".rpm"
+                    )
                 }
             }
 
             if (relevantAssets.isNotEmpty()) {
-                println("${repo.fullName}: Found installers")
+                Logger.d { "${repo.fullName}: Found installers" }
                 repo.toSummary()
             } else {
                 null
@@ -218,7 +236,6 @@ class HomeRepositoryImpl(
     )
 }
 
-// Platform interface to inject
 interface Platform {
     val type: PlatformType
 }
