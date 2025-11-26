@@ -53,6 +53,7 @@ import kotlinx.coroutines.flow.filter
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
+import zed.rainxch.githubstore.core.presentation.components.GithubStoreButton
 import zed.rainxch.githubstore.core.presentation.theme.GithubStoreTheme
 import zed.rainxch.githubstore.feature.home.presentation.components.HomeFilterChips
 import zed.rainxch.githubstore.core.presentation.components.RepositoryCard
@@ -197,7 +198,11 @@ fun HomeScreen(
 
                             Spacer(modifier = Modifier.height(8.dp))
 
-                            Text("Finding repositories...")
+                            Text(
+                                text = "Finding repositories...",
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
                         }
                     }
                 }
@@ -211,13 +216,20 @@ fun HomeScreen(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier.padding(16.dp)
                         ) {
-                            Text(state.errorMessage)
+                            Text(
+                                text = state.errorMessage,
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
 
                             Spacer(modifier = Modifier.height(8.dp))
 
-                            Button(onClick = { onAction(HomeAction.Retry) }) {
-                                Text("Retry")
-                            }
+                            GithubStoreButton(
+                                text = "Retry",
+                                onClick = {
+                                    onAction(HomeAction.Retry)
+                                }
+                            )
                         }
                     }
                 }
@@ -250,9 +262,17 @@ fun HomeScreen(
                                         horizontalArrangement = Arrangement.Center,
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
-                                        CircularProgressIndicator(modifier = Modifier.size(20.dp))
+                                        CircularProgressIndicator(
+                                            modifier = Modifier.size(20.dp)
+                                        )
+
                                         Spacer(modifier = Modifier.width(8.dp))
-                                        Text("Loading more...")
+
+                                        Text(
+                                            text = "Loading more...",
+                                            style = MaterialTheme.typography.titleMedium,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        )
                                     }
                                 }
                             }
@@ -267,7 +287,8 @@ fun HomeScreen(
                                         .fillMaxWidth()
                                         .padding(16.dp),
                                     textAlign = TextAlign.Center,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    style = MaterialTheme.typography.titleMedium
                                 )
                             }
                         }

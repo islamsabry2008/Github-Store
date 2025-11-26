@@ -9,7 +9,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
         modules(
             coreModule,
             authModule,
-            homeModule
+            homeModule,
+            searchModule
         )
     }
 }

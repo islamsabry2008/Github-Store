@@ -6,7 +6,10 @@ import zed.rainxch.githubstore.core.domain.model.GithubRepoSummary
 import zed.rainxch.githubstore.core.domain.model.GithubUser
 
 @Serializable
-data class GithubRepoSearchResponse(val items: List<GithubRepoNetworkModel>)
+data class GithubRepoSearchResponse(
+    @SerialName("total_count") val totalCount: Int,
+    val items: List<GithubRepoNetworkModel>
+)
 
 @Serializable
 data class GithubRepoNetworkModel(
