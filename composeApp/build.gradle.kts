@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.kotzilla)
 }
 
 // Load local.properties for secrets like GITHUB_CLIENT_ID
@@ -64,6 +65,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+
             // Koin core
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
@@ -86,6 +88,8 @@ kotlin {
             implementation(libs.coil.network.ktor3)
 
             implementation(libs.kotlinx.datetime)
+
+            implementation(libs.kotzilla.sdk)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -148,6 +152,8 @@ android {
         buildConfig = true
     }
 }
+
+// Kotzilla plugin is applied above. Configuration can be provided via composeApp/kotzilla.json.
 
 dependencies {
     debugImplementation(compose.uiTooling)
