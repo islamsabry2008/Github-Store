@@ -56,7 +56,7 @@ fun RepositoryCard(
                     model = repository.owner.avatarUrl,
                     contentDescription = null,
                     modifier = Modifier
-                        .size(24.dp)
+                        .size(32.dp)
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )

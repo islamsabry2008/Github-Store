@@ -45,7 +45,7 @@ fun AppHeader(
                 model = repo.owner.avatarUrl,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(80.dp)
+                    .size(100.dp)
                     .clip(CircleShape)
                     .border(
                         width = 1.dp,
