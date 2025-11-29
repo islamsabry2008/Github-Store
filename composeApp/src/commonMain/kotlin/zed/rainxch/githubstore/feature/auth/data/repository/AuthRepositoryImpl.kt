@@ -35,7 +35,6 @@ class AuthRepositoryImpl(
             var intervalMs = (start.intervalSec.coerceAtLeast(1)) * 1000L
 
             while (true) {
-                // Check expiration based on actual time
                 if (System.currentTimeMillis() >= expirationTime) {
                     throw CancellationException("Device code expired")
                 }

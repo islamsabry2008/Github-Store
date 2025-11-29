@@ -1,10 +1,11 @@
 package zed.rainxch.githubstore.feature.search.data.repository.dto
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class GithubReleaseNetworkModel(
-    val draft: Boolean? = null,
-    val prerelease: Boolean? = null,
-    val assets: List<AssetNetworkModel>
+    @SerialName("draft") val draft: Boolean? = null,
+    @SerialName("prerelease") val prerelease: Boolean? = null,
+    @SerialName("assets") val assets: List<AssetNetworkModel>
 )
