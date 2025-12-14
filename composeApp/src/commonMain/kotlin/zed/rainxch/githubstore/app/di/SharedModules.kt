@@ -7,7 +7,7 @@ import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import zed.rainxch.githubstore.MainViewModel
-import zed.rainxch.githubstore.app.AppStateManager
+import zed.rainxch.githubstore.app.app_state.AppStateManager
 import zed.rainxch.githubstore.core.data.data_source.DefaultTokenDataSource
 import zed.rainxch.githubstore.core.data.data_source.TokenDataSource
 import zed.rainxch.githubstore.core.data.repository.ThemesRepositoryImpl
@@ -29,6 +29,8 @@ import zed.rainxch.githubstore.feature.home.presentation.HomeViewModel
 import zed.rainxch.githubstore.feature.search.data.repository.SearchRepositoryImpl
 import zed.rainxch.githubstore.feature.search.domain.repository.SearchRepository
 import zed.rainxch.githubstore.feature.search.presentation.SearchViewModel
+import zed.rainxch.githubstore.feature.settings.data.repository.SettingsRepositoryImpl
+import zed.rainxch.githubstore.feature.settings.domain.repository.SettingsRepository
 import zed.rainxch.githubstore.feature.settings.presentation.SettingsViewModel
 import zed.rainxch.githubstore.network.RateLimitHandler
 
@@ -76,7 +78,6 @@ val authModule: Module = module {
     factory { StartDeviceFlowUseCase(get()) }
     factory { AwaitDeviceTokenUseCase(get()) }
     factory { ObserveAccessTokenUseCase(get()) }
-    factory { LogoutUseCase(get()) }
     factory { IsAuthenticatedUseCase(get()) }
 
     single<CoroutineScope> {
@@ -87,7 +88,6 @@ val authModule: Module = module {
         AuthenticationViewModel(
             startDeviceFlow = get(),
             awaitDeviceToken = get(),
-            logoutUc = get(),
             observeAccessToken = get(),
             browserHelper = get(),
             clipboardHelper = get(),
@@ -148,10 +148,17 @@ val detailsModule: Module = module {
 }
 
 val settingsModule: Module = module {
+    single<SettingsRepository> {
+        SettingsRepositoryImpl(
+            tokenDataSource = get()
+        )
+    }
+
     viewModel {
         SettingsViewModel(
             browserHelper = get(),
-            themesRepository = get()
+            themesRepository = get(),
+            settingsRepository = get()
         )
     }
 }

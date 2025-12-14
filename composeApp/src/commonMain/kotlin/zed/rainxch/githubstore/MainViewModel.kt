@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import zed.rainxch.githubstore.app.AppStateManager
+import zed.rainxch.githubstore.app.app_state.AppStateManager
 import zed.rainxch.githubstore.core.data.data_source.TokenDataSource
 import zed.rainxch.githubstore.core.domain.repository.ThemesRepository
 

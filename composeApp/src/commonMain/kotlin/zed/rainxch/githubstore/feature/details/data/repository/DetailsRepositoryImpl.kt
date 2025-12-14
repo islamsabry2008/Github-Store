@@ -1,12 +1,11 @@
 package zed.rainxch.githubstore.feature.details.data.repository
 
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import io.ktor.http.HttpHeaders
-import zed.rainxch.githubstore.app.AppStateManager
+import zed.rainxch.githubstore.app.app_state.AppStateManager
 import zed.rainxch.githubstore.core.domain.model.GithubRelease
 import zed.rainxch.githubstore.core.domain.model.GithubRepoSummary
 import zed.rainxch.githubstore.core.domain.model.GithubUser

@@ -2,7 +2,6 @@ package zed.rainxch.githubstore.feature.home.data.repository
 
 import co.touchlab.kermit.Logger
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.parameter
@@ -22,7 +21,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import zed.rainxch.githubstore.app.AppStateManager
+import zed.rainxch.githubstore.app.app_state.AppStateManager
 import zed.rainxch.githubstore.core.domain.model.GithubRepoSummary
 import zed.rainxch.githubstore.core.data.mappers.toSummary
 import zed.rainxch.githubstore.core.data.model.GithubRepoNetworkModel

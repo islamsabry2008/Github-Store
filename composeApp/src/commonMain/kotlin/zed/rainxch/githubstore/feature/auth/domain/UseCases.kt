@@ -10,15 +10,12 @@ class StartDeviceFlowUseCase(private val repo: AuthRepository) {
 }
 
 class AwaitDeviceTokenUseCase(private val repo: AuthRepository) {
-    suspend operator fun invoke(start: DeviceStart): DeviceTokenSuccess = repo.awaitDeviceToken(start)
+    suspend operator fun invoke(start: DeviceStart): DeviceTokenSuccess =
+        repo.awaitDeviceToken(start)
 }
 
 class ObserveAccessTokenUseCase(private val repo: AuthRepository) {
     operator fun invoke(): Flow<String?> = repo.accessTokenFlow
-}
-
-class LogoutUseCase(private val repo: AuthRepository) {
-    suspend operator fun invoke() = repo.logout()
 }
 
 class IsAuthenticatedUseCase(private val repo: AuthRepository) {

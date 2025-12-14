@@ -18,20 +18,18 @@ import zed.rainxch.githubstore.core.domain.model.DeviceStart
 import zed.rainxch.githubstore.core.presentation.utils.BrowserHelper
 import zed.rainxch.githubstore.core.presentation.utils.ClipboardHelper
 import zed.rainxch.githubstore.feature.auth.domain.AwaitDeviceTokenUseCase
-import zed.rainxch.githubstore.feature.auth.domain.LogoutUseCase
 import zed.rainxch.githubstore.feature.auth.domain.ObserveAccessTokenUseCase
 import zed.rainxch.githubstore.feature.auth.domain.StartDeviceFlowUseCase
 
 class AuthenticationViewModel(
     private val startDeviceFlow: StartDeviceFlowUseCase,
     private val awaitDeviceToken: AwaitDeviceTokenUseCase,
-    private val logoutUc: LogoutUseCase,
     observeAccessToken: ObserveAccessTokenUseCase,
     private val browserHelper: BrowserHelper,
     private val clipboardHelper: ClipboardHelper,
     private val scope: CoroutineScope,
 
-) : ViewModel() {
+    ) : ViewModel() {
 
     private var hasLoadedInitialData = false
 
@@ -73,7 +71,6 @@ class AuthenticationViewModel(
             is AuthenticationAction.StartLogin -> startLogin()
             is AuthenticationAction.CopyCode -> copyCode(action.start)
             is AuthenticationAction.OpenGitHub -> openGitHub(action.start)
-            is AuthenticationAction.Logout -> logout()
             AuthenticationAction.MarkLoggedIn -> _state.update { it.copy(loginState = AuthLoginState.LoggedIn) }
             AuthenticationAction.MarkLoggedOut -> _state.update { it.copy(loginState = AuthLoginState.LoggedOut) }
             is AuthenticationAction.OnInfo -> {
@@ -139,13 +136,6 @@ class AuthenticationViewModel(
             label = "GitHub Code",
             text = start.userCode
         )
-    }
-
-    private fun logout() {
-        scope.launch {
-            logoutUc()
-            _state.update { it.copy(loginState = AuthLoginState.LoggedOut) }
-        }
     }
 
 }

@@ -3,13 +3,10 @@ package zed.rainxch.githubstore.app.navigation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -18,10 +15,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import zed.rainxch.githubstore.MainAction
 import zed.rainxch.githubstore.MainState
-import zed.rainxch.githubstore.MainViewModel
-import zed.rainxch.githubstore.app.AppState
-import zed.rainxch.githubstore.app.RateLimitDialog
-import zed.rainxch.githubstore.core.presentation.theme.GithubStoreTheme
+import zed.rainxch.githubstore.app.app_state.components.RateLimitDialog
 import zed.rainxch.githubstore.feature.auth.presentation.AuthenticationRoot
 import zed.rainxch.githubstore.feature.details.presentation.DetailsRoot
 import zed.rainxch.githubstore.feature.home.presentation.HomeRoot

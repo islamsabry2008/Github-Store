@@ -179,10 +179,6 @@ class AuthRepositoryImpl(
         return block()
     }
 
-    override suspend fun logout() {
-        tokenDataSource.clear()
-    }
-
     companion object {
         const val DEFAULT_SCOPE = "repo"
     }

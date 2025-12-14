@@ -1,4 +1,4 @@
-package zed.rainxch.githubstore.app
+package zed.rainxch.githubstore.app.app_state.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

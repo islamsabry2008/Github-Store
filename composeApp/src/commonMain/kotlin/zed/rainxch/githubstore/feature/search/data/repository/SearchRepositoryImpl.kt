@@ -1,7 +1,6 @@
 package zed.rainxch.githubstore.feature.search.data.repository
 
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.parameter
@@ -21,7 +20,7 @@ import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withTimeoutOrNull
-import zed.rainxch.githubstore.app.AppStateManager
+import zed.rainxch.githubstore.app.app_state.AppStateManager
 import zed.rainxch.githubstore.core.domain.model.GithubRepoSummary
 import zed.rainxch.githubstore.core.data.mappers.toSummary
 import zed.rainxch.githubstore.core.data.model.GithubRepoNetworkModel

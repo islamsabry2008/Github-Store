@@ -12,6 +12,5 @@ interface AuthRepository {
 
     suspend fun awaitDeviceToken(start: DeviceStart): DeviceTokenSuccess
 
-    suspend fun logout()
     suspend fun isAuthenticated(): Boolean
 }

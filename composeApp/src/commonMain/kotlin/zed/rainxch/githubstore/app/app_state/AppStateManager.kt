@@ -1,4 +1,4 @@
-package zed.rainxch.githubstore.app
+package zed.rainxch.githubstore.app.app_state
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
