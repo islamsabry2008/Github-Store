@@ -216,6 +216,8 @@ repository. ⭐
 
 And [follow](https://github.com/rainxchzed/) me for my next creations! 🤩
 
+[Buy me a coffee](https://ko-fi.com/rainxchzed) if you love my work ☕
+
 ## Star History
 
 <a href="https://www.star-history.com/#rainxchzed/Github-Store&type=timeline&legend=top-left">
