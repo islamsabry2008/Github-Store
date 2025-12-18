@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import zed.rainxch.githubstore.feature.home.presentation.model.HomeCategory
 
 @Composable
@@ -25,7 +26,10 @@ fun RowScope.HomeFilterChips(
                 text = category.displayText,
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
+                maxLines = 1,
+                softWrap = false,
+                overflow = TextOverflow.Ellipsis
             )
         },
         shape = CircleShape,
