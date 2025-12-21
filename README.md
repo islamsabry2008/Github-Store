@@ -223,10 +223,11 @@ automatically—no manual submission required.
 
 ## Find this repository useful? ❤️
 
-Support it by joining [stargazers](https://github.com/rainxchzed/Github-Store/stargazers) for this
-repository. ⭐
+Support it by joining the [stargazers](https://github.com/rainxchzed/Github-Store/stargazers). ⭐
 
-And [follow](https://github.com/rainxchzed/) me for my next creations! 🤩
+If you want to help even more, please spread the word — share the project on X, Reddit, or with your community so more people discover it.
+
+And [follow me](https://github.com/rainxchzed/) to keep up with future updates and projects. 🤩
 
 ## Star History
 
