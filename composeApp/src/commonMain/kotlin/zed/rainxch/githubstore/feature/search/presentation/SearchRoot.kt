@@ -107,11 +107,17 @@ fun SearchScreen(
         derivedStateOf {
             val layoutInfo = listState.layoutInfo
             val totalItems = layoutInfo.totalItemsCount
-            val lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()
+            val visibleItems = layoutInfo.visibleItemsInfo
+
+            val viewportEndOffset = layoutInfo.viewportEndOffset
+
+            val hasItemNearEnd = visibleItems.any { item ->
+                val itemBottom = item.offset.y + item.size.height
+                itemBottom >= viewportEndOffset - 500
+            }
 
             totalItems > 0 &&
-                    lastVisibleItem != null &&
-                    lastVisibleItem.index >= (totalItems - 5) &&
+                    hasItemNearEnd &&
                     !state.isLoadingMore &&
                     !state.isLoading &&
                     state.hasMorePages
@@ -244,7 +250,7 @@ fun SearchScreen(
 
             if (state.totalCount != null) {
                 Text(
-                    text = "About ${state.totalCount} results",
+                    text = "~${state.totalCount} results",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.outline,
                     modifier = Modifier

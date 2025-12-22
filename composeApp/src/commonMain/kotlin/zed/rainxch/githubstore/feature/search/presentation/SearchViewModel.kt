@@ -95,8 +95,7 @@ class SearchViewModel(
                         searchPlatformType = _state.value.selectedSearchPlatformType,
                         page = currentPage
                     )
-                    .collect { paginatedRepos ->  // Changed from collectLatest to collect
-                        // Update currentPage from the response
+                    .collect { paginatedRepos ->
                         currentPage = paginatedRepos.nextPageIndex
 
                         val newReposWithStatus = coroutineScope {
@@ -143,7 +142,7 @@ class SearchViewModel(
                                 isLoading = false,
                                 isLoadingMore = false,
                                 hasMorePages = paginatedRepos.hasMore,
-                                totalCount = paginatedRepos.totalCount,
+                                totalCount = allRepos.size,
                                 errorMessage = if (allRepos.isEmpty() && !paginatedRepos.hasMore) {
                                     "No repositories found"
                                 } else null
