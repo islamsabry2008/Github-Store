@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">GitHub Store</string>
+
+    <string name="installed_apps">Aplicaciones instaladas</string>
+    <string name="navigate_back">Volver</string>
+    <string name="check_for_updates">Buscar actualizaciones</string>
+
+    <string name="cannot_launch">No se puede iniciar %1$s</string>
+    <string name="failed_to_open">No se pudo abrir %1$s</string>
+    <string name="failed_to_update">Error al actualizar %1$s: %2$s</string>
+    <string name="update_all_failed">Error al actualizar todo: %1$s</string>
+    <string name="all_apps_updated_successfully">Todas las aplicaciones se actualizaron correctamente</string>
+    <string name="no_updates_available">No hay actualizaciones disponibles</string>
+
+    <string name="search_your_apps">Buscar aplicaciones</string>
+    <string name="no_apps_found">No se encontraron aplicaciones</string>
+
+    <string name="update_all">Actualizar todo</string>
+    <string name="update">Actualizar</string>
+    <string name="open">Abrir</string>
+    <string name="cancel">Cancelar</string>
+
+    <string name="downloading">Descargando…</string>
+    <string name="installing">Instalando…</string>
+    <string name="checking">Comprobando…</string>
+    <string name="updated_successfully">Actualizado correctamente</string>
+    <string name="error_with_message">Error: %1$s</string>
+
+    <string name="updating_x_of_y">Actualizando %1$d de %2$d</string>
+    <string name="currently_updating">Actual: %1$s</string>
+
+    <string name="percent">%1$d%%</string>
+</resources>

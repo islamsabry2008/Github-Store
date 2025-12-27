@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">GitHub Store</string>
+
+    <string name="installed_apps">已安装的应用</string>
+    <string name="navigate_back">返回</string>
+    <string name="check_for_updates">检查更新</string>
+
+    <string name="cannot_launch">无法启动 %1$s</string>
+    <string name="failed_to_open">无法打开 %1$s</string>
+    <string name="failed_to_update">更新 %1$s 失败：%2$s</string>
+    <string name="update_all_failed">全部更新失败：%1$s</string>
+    <string name="all_apps_updated_successfully">所有应用已成功更新</string>
+    <string name="no_updates_available">暂无可用更新</string>
+
+    <string name="search_your_apps">搜索应用</string>
+    <string name="no_apps_found">未找到应用</string>
+
+    <string name="update_all">全部更新</string>
+    <string name="update">更新</string>
+    <string name="open">打开</string>
+    <string name="cancel">取消</string>
+
+    <string name="downloading">正在下载…</string>
+    <string name="installing">正在安装…</string>
+    <string name="checking">正在检查…</string>
+    <string name="updated_successfully">更新成功</string>
+    <string name="error_with_message">错误：%1$s</string>
+
+    <string name="updating_x_of_y">正在更新 %1$d / %2$d</string>
+    <string name="currently_updating">当前：%1$s</string>
+
+    <string name="percent">%1$d%%</string>
+</resources>

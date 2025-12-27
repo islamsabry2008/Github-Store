@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">GitHub Store</string>
+
+    <string name="installed_apps">インストール済みアプリ</string>
+    <string name="navigate_back">戻る</string>
+    <string name="check_for_updates">更新を確認</string>
+
+    <string name="cannot_launch">%1$s を起動できません</string>
+    <string name="failed_to_open">%1$s を開けませんでした</string>
+    <string name="failed_to_update">%1$s の更新に失敗しました：%2$s</string>
+    <string name="update_all_failed">すべての更新に失敗しました：%1$s</string>
+    <string name="all_apps_updated_successfully">すべてのアプリが更新されました</string>
+    <string name="no_updates_available">更新はありません</string>
+
+    <string name="search_your_apps">アプリを検索</string>
+    <string name="no_apps_found">アプリが見つかりません</string>
+
+    <string name="update_all">すべて更新</string>
+    <string name="update">更新</string>
+    <string name="open">開く</string>
+    <string name="cancel">キャンセル</string>
+
+    <string name="downloading">ダウンロード中…</string>
+    <string name="installing">インストール中…</string>
+    <string name="checking">確認中…</string>
+    <string name="updated_successfully">更新完了</string>
+    <string name="error_with_message">エラー：%1$s</string>
+
+    <string name="updating_x_of_y">%2$d 件中 %1$d 件を更新中</string>
+    <string name="currently_updating">現在：%1$s</string>
+
+    <string name="percent">%1$d%%</string>
+</resources>
