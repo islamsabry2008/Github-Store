@@ -4,17 +4,17 @@ import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import githubstore.composeapp.generated.resources.Inter_24pt_Black
+import githubstore.composeapp.generated.resources.Inter_24pt_Bold
+import githubstore.composeapp.generated.resources.Inter_24pt_Light
+import githubstore.composeapp.generated.resources.Inter_24pt_Medium
+import githubstore.composeapp.generated.resources.Inter_24pt_Regular
+import githubstore.composeapp.generated.resources.Inter_24pt_SemiBold
 import githubstore.composeapp.generated.resources.JetBrainsMono_Bold
 import githubstore.composeapp.generated.resources.JetBrainsMono_Light
 import githubstore.composeapp.generated.resources.JetBrainsMono_Medium
 import githubstore.composeapp.generated.resources.JetBrainsMono_Regular
 import githubstore.composeapp.generated.resources.JetBrainsMono_SemiBold
-import githubstore.composeapp.generated.resources.Poppins_Black
-import githubstore.composeapp.generated.resources.Poppins_Bold
-import githubstore.composeapp.generated.resources.Poppins_Light
-import githubstore.composeapp.generated.resources.Poppins_Medium
-import githubstore.composeapp.generated.resources.Poppins_Regular
-import githubstore.composeapp.generated.resources.Poppins_SemiBold
 import githubstore.composeapp.generated.resources.Res
 import org.jetbrains.compose.resources.Font
 
@@ -27,14 +27,14 @@ val jetbrainsMonoFontFamily
         Font(Res.font.JetBrainsMono_Bold, FontWeight.Bold),
     )
 
-val poppinsFontFamily
+val interFontFamily
     @Composable get() = FontFamily(
-        Font(Res.font.Poppins_Light, FontWeight.Light),
-        Font(Res.font.Poppins_Regular, FontWeight.Normal),
-        Font(Res.font.Poppins_Medium, FontWeight.Medium),
-        Font(Res.font.Poppins_SemiBold, FontWeight.SemiBold),
-        Font(Res.font.Poppins_Bold, FontWeight.Bold),
-        Font(Res.font.Poppins_Black, FontWeight.Black),
+        Font(Res.font.Inter_24pt_Light, FontWeight.Light),
+        Font(Res.font.Inter_24pt_Regular, FontWeight.Normal),
+        Font(Res.font.Inter_24pt_Medium, FontWeight.Medium),
+        Font(Res.font.Inter_24pt_SemiBold, FontWeight.SemiBold),
+        Font(Res.font.Inter_24pt_Bold, FontWeight.Bold),
+        Font(Res.font.Inter_24pt_Black, FontWeight.Black),
     )
 
 val baseline = Typography()
@@ -50,11 +50,11 @@ val AppTypography
         titleLarge = baseline.titleLarge.copy(fontFamily = jetbrainsMonoFontFamily),
         titleMedium = baseline.titleMedium.copy(fontFamily = jetbrainsMonoFontFamily),
         titleSmall = baseline.titleSmall.copy(fontFamily = jetbrainsMonoFontFamily),
-        bodyLarge = baseline.bodyLarge.copy(fontFamily = poppinsFontFamily),
-        bodyMedium = baseline.bodyMedium.copy(fontFamily = poppinsFontFamily),
-        bodySmall = baseline.bodySmall.copy(fontFamily = poppinsFontFamily),
-        labelLarge = baseline.labelLarge.copy(fontFamily = poppinsFontFamily),
-        labelMedium = baseline.labelMedium.copy(fontFamily = poppinsFontFamily),
-        labelSmall = baseline.labelSmall.copy(fontFamily = poppinsFontFamily),
+        bodyLarge = baseline.bodyLarge.copy(fontFamily = interFontFamily),
+        bodyMedium = baseline.bodyMedium.copy(fontFamily = interFontFamily),
+        bodySmall = baseline.bodySmall.copy(fontFamily = interFontFamily),
+        labelLarge = baseline.labelLarge.copy(fontFamily = interFontFamily),
+        labelMedium = baseline.labelMedium.copy(fontFamily = interFontFamily),
+        labelSmall = baseline.labelSmall.copy(fontFamily = interFontFamily),
     )
 
