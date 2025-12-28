@@ -34,6 +34,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import githubstore.composeapp.generated.resources.Res
+import githubstore.composeapp.generated.resources.by_author
+import githubstore.composeapp.generated.resources.installed
+import githubstore.composeapp.generated.resources.installed_version
+import githubstore.composeapp.generated.resources.no_description
+import githubstore.composeapp.generated.resources.update_available
+import githubstore.composeapp.generated.resources.verifying
+import org.jetbrains.compose.resources.stringResource
 import zed.rainxch.githubstore.core.data.local.db.entities.InstalledApp
 import zed.rainxch.githubstore.core.domain.model.GithubRelease
 import zed.rainxch.githubstore.core.domain.model.GithubRepoSummary
@@ -137,7 +145,7 @@ fun AppHeader(
                 }
 
                 Text(
-                    text = "by ${author?.login}",
+                    text = stringResource(Res.string.by_author, author?.login.toString()),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary,
                 )
@@ -156,15 +164,17 @@ fun AppHeader(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text(
-                        text = "${release?.tagName}",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.secondary,
-                    )
+                    release?.tagName?.let {
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.secondary,
+                        )
+                    }
 
                     if (installedApp != null && installedApp.installedVersion != release?.tagName) {
                         Text(
-                            text = "• Installed: ${installedApp.installedVersion}",
+                            text = stringResource(Res.string.installed_version, installedApp.installedVersion),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -176,7 +186,7 @@ fun AppHeader(
         Spacer(Modifier.height(16.dp))
 
         Text(
-            text = repository.description ?: "No description provided.",
+            text = repository.description ?: stringResource(Res.string.no_description),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -207,9 +217,9 @@ fun InstallStatusBadge(
     }
 
     val text = if (isUpdateAvailable) {
-        "Update Available"
+        stringResource(Res.string.update_available)
     } else {
-        "Installed"
+        stringResource(Res.string.installed)
     }
 
     Surface(

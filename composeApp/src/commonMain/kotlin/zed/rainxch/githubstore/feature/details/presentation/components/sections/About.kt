@@ -18,8 +18,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.mikepenz.markdown.compose.Markdown
+import githubstore.composeapp.generated.resources.Res
+import githubstore.composeapp.generated.resources.about_this_app
+import githubstore.composeapp.generated.resources.error_loading_details
 import io.github.fletchmckee.liquid.liquefiable
 import org.intellij.markdown.flavours.gfm.GFMFlavourDescriptor
+import org.jetbrains.compose.resources.stringResource
 import zed.rainxch.githubstore.feature.details.presentation.utils.LocalTopbarLiquidState
 import zed.rainxch.githubstore.feature.details.presentation.utils.MarkdownImageTransformer
 import zed.rainxch.githubstore.feature.details.presentation.utils.rememberMarkdownColors
@@ -44,7 +48,7 @@ fun LazyListScope.about(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = "About this app",
+                text = stringResource(Res.string.about_this_app),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.Bold,

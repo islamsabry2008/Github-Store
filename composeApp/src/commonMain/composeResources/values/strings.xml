@@ -27,8 +27,6 @@
     <string name="cancel">Cancel</string>
 
     <!-- Apps feature - Update states -->
-    <string name="downloading">Downloading…</string>
-    <string name="installing">Installing…</string>
     <string name="checking">Checking…</string>
     <string name="updated_successfully">Updated successfully</string>
     <string name="error_with_message">Error: %1$s</string>
@@ -38,7 +36,7 @@
     <string name="currently_updating">Currently: %1$s</string>
 
     <!-- Apps feature - Progress -->
-    <string name="percent">%1$d%%</string>
+    <string name="percent">%1$d%</string>
 
 
     <!-- Auth general -->
@@ -79,8 +77,6 @@
     <!-- Results -->
     <string name="results_found">%1$d results were found</string>
 
-    <!-- Loading / errors -->
-    <string name="retry">Retry</string>
 
     <!-- Sorting -->
     <string name="sort_by">Sort by</string>
@@ -144,5 +140,82 @@
     <string name="theme_forest">Forest</string>
     <string name="theme_slate">Slate</string>
     <string name="theme_amber">Amber</string>
+
+    <!-- Navigation & actions -->
+    <string name="open_repository">Open repository</string>
+    <string name="open_in_browser">Open in browser</string>
+    <string name="cancel_download">Cancel download</string>
+    <string name="show_install_options">Show install options</string>
+
+    <!-- Errors & states -->
+    <string name="error_loading_details">Error loading details</string>
+    <string name="retry">Retry</string>
+    <string name="no_description">No description provided.</string>
+    <string name="no_release_notes">No release notes.</string>
+
+    <!-- Headers -->
+    <string name="about_this_app">About this app</string>
+    <string name="install_logs">Install logs</string>
+    <string name="author">Author</string>
+    <string name="whats_new">What’s New</string>
+
+    <!-- Install status -->
+    <string name="installed">Installed</string>
+    <string name="update_available">Update available</string>
+    <string name="not_available">Not available</string>
+    <string name="install_latest">Install latest</string>
+    <string name="reinstall">Reinstall</string>
+    <string name="update_app">Update app</string>
+
+    <!-- Download stages -->
+    <string name="downloading">Downloading</string>
+    <string name="updating">Updating</string>
+    <string name="verifying">Verifying</string>
+    <string name="installing">Installing</string>
+
+    <!-- Install helpers -->
+    <string name="open_in_obtainium">Open in Obtainium</string>
+    <string name="obtainium_description">Manage updates automatically</string>
+    <string name="inspect_with_appmanager">Inspect with AppManager</string>
+    <string name="appmanager_description">Check permissions, trackers &amp; security</string>
+
+    <!-- Author -->
+    <string name="profile">Profile</string>
+
+    <!-- Stats -->
+    <string name="forks">Forks</string>
+    <string name="stars">Stars</string>
+    <string name="issues">Issues</string>
+
+    <!-- Misc -->
+    <string name="by_author">by %1$s</string>
+    <string name="installed_version">• Installed: %1$s</string>
+    <string name="architecture_compatible">Architecture compatible</string>
+    <string name="update_to_version">Update to %1$s</string>
+
+    <!-- General -->
+    <string name="error_load_details">Failed to load details</string>
+    <string name="installer_saved_downloads">Installer was saved into the Downloads folder</string>
+
+    <!-- Download / install states -->
+    <string name="log_download_started">Download started</string>
+    <string name="log_downloaded">Downloaded</string>
+    <string name="log_update_started">Update started</string>
+    <string name="log_installed">Installed</string>
+    <string name="log_updated">Updated</string>
+    <string name="log_cancelled">Cancelled</string>
+    <string name="log_install_started">Installation started</string>
+    <string name="log_error">Error</string>
+    <string name="log_error_with_message">Error: %1$s</string>
+
+    <!-- External tools -->
+    <string name="log_prepare_appmanager">Preparing for AppManager</string>
+    <string name="log_opened_appmanager">Opened in AppManager</string>
+
+    <!-- Errors -->
+    <string name="error_generic">Error: %1$s</string>
+    <string name="error_asset_not_supported">Asset type .%1$s not supported</string>
+    <string name="error_file_not_found">Downloaded file not found</string>
+
 
 </resources>

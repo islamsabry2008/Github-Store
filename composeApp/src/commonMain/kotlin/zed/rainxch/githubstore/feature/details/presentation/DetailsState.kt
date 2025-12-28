@@ -7,13 +7,14 @@ import zed.rainxch.githubstore.core.domain.model.GithubRelease
 import zed.rainxch.githubstore.core.domain.model.GithubAsset
 import zed.rainxch.githubstore.core.domain.model.GithubUserProfile
 import zed.rainxch.githubstore.feature.details.domain.model.RepoStats
+import zed.rainxch.githubstore.feature.details.presentation.model.LogResult
 
 data class InstallLogItem(
     val timeIso: String,
     val assetName: String,
     val assetSizeBytes: Long,
     val releaseTag: String,
-    val result: String
+    val result: LogResult
 )
 
 data class DetailsState(

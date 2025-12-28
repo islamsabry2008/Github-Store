@@ -33,10 +33,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import githubstore.composeapp.generated.resources.Res
+import githubstore.composeapp.generated.resources.navigate_back
+import githubstore.composeapp.generated.resources.open_repository
 import io.github.fletchmckee.liquid.liquefiable
 import io.github.fletchmckee.liquid.liquid
 import io.github.fletchmckee.liquid.rememberLiquidState
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import zed.rainxch.githubstore.core.presentation.theme.GithubStoreTheme
@@ -125,7 +129,7 @@ fun DetailsScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Navigate Back",
+                                contentDescription = stringResource(Res.string.navigate_back),
                                 modifier = Modifier.size(24.dp)
                             )
                         }
@@ -140,7 +144,7 @@ fun DetailsScreen(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.OpenInBrowser,
-                                    contentDescription = "Open repository",
+                                    contentDescription = stringResource(Res.string.open_repository),
                                     modifier = Modifier.size(24.dp)
                                 )
                             }

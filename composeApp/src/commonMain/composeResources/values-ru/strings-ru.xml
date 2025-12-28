@@ -20,8 +20,6 @@
     <string name="open">Открыть</string>
     <string name="cancel">Отмена</string>
 
-    <string name="downloading">Загрузка…</string>
-    <string name="installing">Установка…</string>
     <string name="checking">Проверка…</string>
     <string name="updated_successfully">Успешно обновлено</string>
     <string name="error_with_message">Ошибка: %1$s</string>
@@ -62,8 +60,6 @@
     <string name="filter_by_language">Фильтр по языку</string>
 
     <string name="results_found">Найдено результатов: %1$d</string>
-
-    <string name="retry">Повторить</string>
 
     <string name="sort_by">Сортировать по</string>
     <string name="close">Закрыть</string>
@@ -117,5 +113,66 @@
     <string name="theme_forest">Лесная</string>
     <string name="theme_slate">Сланцевая</string>
     <string name="theme_amber">Янтарная</string>
+
+    <string name="open_repository">Открыть репозиторий</string>
+    <string name="cancel_download">Отменить загрузку</string>
+
+    <string name="error_loading_details">Ошибка загрузки данных</string>
+    <string name="retry">Повторить</string>
+    <string name="no_description">Описание отсутствует.</string>
+
+    <string name="about_this_app">Об этом приложении</string>
+    <string name="install_logs">Журнал установки</string>
+    <string name="author">Автор</string>
+    <string name="whats_new">Что нового</string>
+
+    <string name="installed">Установлено</string>
+    <string name="update_available">Доступно обновление</string>
+    <string name="not_available">Недоступно</string>
+    <string name="install_latest">Установить последнюю</string>
+    <string name="reinstall">Переустановить</string>
+    <string name="update_app">Обновить приложение</string>
+
+    <string name="downloading">Загрузка</string>
+    <string name="updating">Обновление</string>
+    <string name="verifying">Проверка</string>
+    <string name="installing">Установка</string>
+
+    <string name="open_in_obtainium">Открыть в Obtainium</string>
+    <string name="obtainium_description">Автоматическое управление обновлениями</string>
+    <string name="inspect_with_appmanager">Проверить в AppManager</string>
+    <string name="appmanager_description">Разрешения, трекеры и безопасность</string>
+
+    <string name="profile">Профиль</string>
+
+    <string name="forks">Форки</string>
+    <string name="stars">Звёзды</string>
+    <string name="issues">Проблемы</string>
+
+    <string name="by_author">от %1$s</string>
+    <string name="installed_version">• Установлено: %1$s</string>
+    <string name="architecture_compatible">Совместимо с архитектурой</string>
+    <string name="update_to_version">Обновить до %1$s</string>
+
+    <string name="error_load_details">Не удалось загрузить данные</string>
+    <string name="installer_saved_downloads">Установщик сохранён в папку Загрузки</string>
+
+    <string name="log_download_started">Загрузка начата</string>
+    <string name="log_downloaded">Загружено</string>
+    <string name="log_update_started">Обновление начато</string>
+    <string name="log_installed">Установлено</string>
+    <string name="log_updated">Обновлено</string>
+    <string name="log_cancelled">Отменено</string>
+    <string name="log_install_started">Установка началась</string>
+    <string name="log_error">Ошибка</string>
+    <string name="log_error_with_message">Ошибка: %1$s</string>
+
+
+    <string name="log_prepare_appmanager">Подготовка для AppManager</string>
+    <string name="log_opened_appmanager">Открыто в AppManager</string>
+
+    <string name="error_generic">Ошибка: %1$s</string>
+    <string name="error_asset_not_supported">Тип файла .%1$s не поддерживается</string>
+    <string name="error_file_not_found">Загруженный файл не найден</string>
 
 </resources>

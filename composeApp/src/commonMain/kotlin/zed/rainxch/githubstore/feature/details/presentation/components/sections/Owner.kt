@@ -29,9 +29,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import githubstore.composeapp.generated.resources.Res
+import githubstore.composeapp.generated.resources.author
+import githubstore.composeapp.generated.resources.error_loading_details
 import githubstore.composeapp.generated.resources.ic_github
+import githubstore.composeapp.generated.resources.navigate_back
+import githubstore.composeapp.generated.resources.profile
 import io.github.fletchmckee.liquid.liquefiable
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import zed.rainxch.githubstore.core.domain.model.GithubUserProfile
 import zed.rainxch.githubstore.feature.details.presentation.DetailsAction
 import zed.rainxch.githubstore.feature.details.presentation.utils.LocalTopbarLiquidState
@@ -48,7 +53,7 @@ fun LazyListScope.author(
         Spacer(Modifier.height(16.dp))
 
         Text(
-            text = "Author",
+            text = stringResource(Res.string.author),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
@@ -129,7 +134,7 @@ fun LazyListScope.author(
                             )
 
                             Text(
-                                text = "Profile",
+                                text = stringResource(Res.string.profile),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.primary,
                             )
@@ -151,7 +156,7 @@ fun LazyListScope.author(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                            contentDescription = "Navigate Back",
+                            contentDescription = stringResource(Res.string.navigate_back),
                             modifier = Modifier.size(24.dp)
                         )
                     }

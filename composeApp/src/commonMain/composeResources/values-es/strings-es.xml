@@ -20,8 +20,6 @@
     <string name="open">Abrir</string>
     <string name="cancel">Cancelar</string>
 
-    <string name="downloading">Descargando…</string>
-    <string name="installing">Instalando…</string>
     <string name="checking">Comprobando…</string>
     <string name="updated_successfully">Actualizado correctamente</string>
     <string name="error_with_message">Error: %1$s</string>
@@ -117,5 +115,52 @@
     <string name="theme_forest">Bosque</string>
     <string name="theme_slate">Pizarra</string>
     <string name="theme_amber">Ámbar</string>
+
+    <string name="error_loading_details">Error al cargar detalles</string>
+    <string name="about_this_app">Acerca de esta app</string>
+    <string name="install_logs">Registros de instalación</string>
+    <string name="author">Autor</string>
+    <string name="whats_new">Novedades</string>
+
+    <string name="installed">Instalado</string>
+    <string name="update_available">Actualización disponible</string>
+    <string name="install_latest">Instalar última versión</string>
+    <string name="reinstall">Reinstalar</string>
+
+    <string name="downloading">Descargando</string>
+    <string name="updating">Actualizando</string>
+    <string name="verifying">Verificando</string>
+    <string name="installing">Instalando</string>
+
+    <string name="profile">Perfil</string>
+    <string name="forks">Bifurcaciones</string>
+    <string name="stars">Estrellas</string>
+    <string name="issues">Problemas</string>
+
+    <string name="by_author">por %1$s</string>
+    <string name="installed_version">• Instalado: %1$s</string>
+    <string name="architecture_compatible">Arquitectura compatible</string>
+    <string name="update_to_version">Actualizar a %1$s</string>
+
+    <string name="error_load_details">No se pudieron cargar los detalles</string>
+    <string name="installer_saved_downloads">El instalador se guardó en Descargas</string>
+
+    <string name="log_download_started">Descarga iniciada</string>
+    <string name="log_downloaded">Descargado</string>
+    <string name="log_update_started">Actualización iniciada</string>
+    <string name="log_installed">Instalado</string>
+    <string name="log_updated">Actualizado</string>
+    <string name="log_cancelled">Cancelado</string>
+    <string name="log_install_started">Instalación iniciada</string>
+    <string name="log_error">Error</string>
+    <string name="log_error_with_message">Error: %1$s</string>
+
+
+    <string name="log_prepare_appmanager">Preparando para AppManager</string>
+    <string name="log_opened_appmanager">Abierto en AppManager</string>
+
+    <string name="error_generic">Error: %1$s</string>
+    <string name="error_asset_not_supported">Tipo de archivo .%1$s no compatible</string>
+    <string name="error_file_not_found">Archivo descargado no encontrado</string>
 
 </resources>

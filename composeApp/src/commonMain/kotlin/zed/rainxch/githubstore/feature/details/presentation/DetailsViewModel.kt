@@ -3,6 +3,8 @@ package zed.rainxch.githubstore.feature.details.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
+import githubstore.composeapp.generated.resources.Res
+import githubstore.composeapp.generated.resources.installer_saved_downloads
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
@@ -19,6 +21,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format
 import kotlinx.datetime.format.char
 import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.compose.resources.getString
 import zed.rainxch.githubstore.core.data.services.PackageMonitor
 import zed.rainxch.githubstore.core.data.local.db.entities.FavoriteRepo
 import zed.rainxch.githubstore.core.data.local.db.entities.InstallSource
@@ -31,6 +34,7 @@ import zed.rainxch.githubstore.core.presentation.utils.BrowserHelper
 import zed.rainxch.githubstore.core.data.services.Downloader
 import zed.rainxch.githubstore.core.data.services.Installer
 import zed.rainxch.githubstore.feature.details.domain.repository.DetailsRepository
+import zed.rainxch.githubstore.feature.details.presentation.model.LogResult
 import java.io.File
 import kotlin.time.Clock.System
 import kotlin.time.ExperimentalTime
@@ -191,7 +195,7 @@ class DetailsViewModel(
                                                         if (latestInfo != null) {
                                                             val normalizedLatestName =
                                                                 normalizeVersion(
-                                                                    latestInfo.versionName ?: ""
+                                                                    latestInfo.versionName
                                                                 )
                                                             if (normalizedSystemName == normalizedLatestName &&
                                                                 systemInfo.versionCode == latestInfo.versionCode
@@ -392,7 +396,7 @@ class DetailsViewModel(
                                 assetName = assetName,
                                 size = 0L,
                                 tag = _state.value.latestRelease?.tagName ?: "",
-                                result = "Cancelled"
+                                result = LogResult.Cancelled
                             )
                         } catch (t: Throwable) {
                             Logger.e { "Failed to cancel download: ${t.message}" }
@@ -520,10 +524,10 @@ class DetailsViewModel(
                             currentAssetName = primary.name
 
                             appendLog(
-                                primary.name,
-                                primary.size,
-                                release.tagName,
-                                "Preparing for AppManager"
+                                assetName = primary.name,
+                                size = primary.size,
+                                tag = release.tagName,
+                                result = LogResult.PreparingForAppManager
                             )
 
                             _state.value = _state.value.copy(
@@ -545,7 +549,12 @@ class DetailsViewModel(
                             val filePath = downloader.getDownloadedFilePath(primary.name)
                                 ?: throw IllegalStateException("Downloaded file not found")
 
-                            appendLog(primary.name, primary.size, release.tagName, "Downloaded")
+                            appendLog(
+                                assetName = primary.name,
+                                size = primary.size,
+                                tag = release.tagName,
+                                result = LogResult.Downloaded
+                            )
 
                             _state.value = _state.value.copy(downloadStage = DownloadStage.IDLE)
                             currentAssetName = null
@@ -565,7 +574,7 @@ class DetailsViewModel(
                                 assetName = primary.name,
                                 size = primary.size,
                                 tag = release.tagName,
-                                result = "Opened in AppManager"
+                                result = LogResult.OpenedInAppManager
                             )
                         }
                     } catch (t: Throwable) {
@@ -579,10 +588,10 @@ class DetailsViewModel(
                         _state.value.primaryAsset?.let { asset ->
                             _state.value.latestRelease?.let { release ->
                                 appendLog(
-                                    asset.name,
-                                    asset.size,
-                                    release.tagName,
-                                    "Error: ${t.message}"
+                                    assetName = asset.name,
+                                    size = asset.size,
+                                    tag = release.tagName,
+                                    result = LogResult.Error(t.message)
                                 )
                             }
                         }
@@ -620,10 +629,12 @@ class DetailsViewModel(
                 currentAssetName = assetName
 
                 appendLog(
-                    assetName,
-                    sizeBytes,
-                    releaseTag,
-                    if (isUpdate) "Update Started" else "Download Started"
+                    assetName = assetName,
+                    size = sizeBytes,
+                    tag = releaseTag,
+                    result = if (isUpdate) {
+                        LogResult.UpdateStarted
+                    } else LogResult.DownloadStarted
                 )
                 _state.value = _state.value.copy(
                     downloadError = null,
@@ -646,7 +657,12 @@ class DetailsViewModel(
                 val filePath = downloader.getDownloadedFilePath(assetName)
                     ?: throw IllegalStateException("Downloaded file not found")
 
-                appendLog(assetName, sizeBytes, releaseTag, "Downloaded")
+                appendLog(
+                    assetName = assetName,
+                    size = sizeBytes,
+                    tag = releaseTag,
+                    result = LogResult.Downloaded
+                )
 
                 _state.value = _state.value.copy(downloadStage = DownloadStage.INSTALLING)
                 val ext = assetName.substringAfterLast('.', "").lowercase()
@@ -666,7 +682,7 @@ class DetailsViewModel(
                     )
                 } else {
                     viewModelScope.launch {
-                        _events.send(DetailsEvent.OnMessage("Installer was saved into the Downloads folder"))
+                        _events.send(DetailsEvent.OnMessage(getString(Res.string.installer_saved_downloads)))
                     }
                 }
 
@@ -675,10 +691,12 @@ class DetailsViewModel(
                 _state.value = _state.value.copy(downloadStage = DownloadStage.IDLE)
                 currentAssetName = null
                 appendLog(
-                    assetName,
-                    sizeBytes,
-                    releaseTag,
-                    if (isUpdate) "Updated" else "Installed"
+                    assetName = assetName,
+                    size = sizeBytes,
+                    tag = releaseTag,
+                    result = if (isUpdate) {
+                        LogResult.Updated
+                    } else LogResult.Installed
                 )
 
             } catch (t: Throwable) {
@@ -689,7 +707,12 @@ class DetailsViewModel(
                     installError = t.message
                 )
                 currentAssetName = null
-                appendLog(assetName, sizeBytes, releaseTag, "Error: ${t.message}")
+                appendLog(
+                    assetName = assetName,
+                    size = sizeBytes,
+                    tag = releaseTag,
+                    result = LogResult.Error(t.message)
+                )
             }
         }
     }
@@ -804,7 +827,12 @@ class DetailsViewModel(
             try {
                 currentAssetName = assetName
 
-                appendLog(assetName, sizeBytes, releaseTag, "DownloadStarted")
+                appendLog(
+                    assetName = assetName,
+                    size = sizeBytes,
+                    tag = releaseTag,
+                    result = LogResult.DownloadStarted
+                )
                 _state.value = _state.value.copy(
                     isDownloading = true,
                     downloadError = null,
@@ -818,7 +846,12 @@ class DetailsViewModel(
 
                 _state.value = _state.value.copy(isDownloading = false)
                 currentAssetName = null
-                appendLog(assetName, sizeBytes, releaseTag, "Downloaded")
+                appendLog(
+                    assetName = assetName,
+                    size = sizeBytes,
+                    tag = releaseTag,
+                    result = LogResult.Downloaded
+                )
 
             } catch (t: Throwable) {
                 _state.value = _state.value.copy(
@@ -826,13 +859,23 @@ class DetailsViewModel(
                     downloadError = t.message
                 )
                 currentAssetName = null
-                appendLog(assetName, sizeBytes, releaseTag, "Error: ${t.message}")
+                appendLog(
+                    assetName = assetName,
+                    size = sizeBytes,
+                    tag = releaseTag,
+                    result = LogResult.Error(t.message)
+                )
             }
         }
     }
 
     @OptIn(ExperimentalTime::class)
-    private fun appendLog(assetName: String, size: Long, tag: String, result: String) {
+    private fun appendLog(
+        assetName: String,
+        size: Long,
+        tag: String,
+        result: LogResult
+    ) {
         val now = System.now().toLocalDateTime(TimeZone.currentSystemDefault())
             .format(LocalDateTime.Format {
                 year()

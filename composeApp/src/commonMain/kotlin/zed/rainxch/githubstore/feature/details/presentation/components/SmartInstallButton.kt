@@ -32,7 +32,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import githubstore.composeapp.generated.resources.Res
+import githubstore.composeapp.generated.resources.architecture_compatible
+import githubstore.composeapp.generated.resources.cancel_download
+import githubstore.composeapp.generated.resources.downloading
+import githubstore.composeapp.generated.resources.install_latest
+import githubstore.composeapp.generated.resources.installing
+import githubstore.composeapp.generated.resources.not_available
+import githubstore.composeapp.generated.resources.percent
+import githubstore.composeapp.generated.resources.reinstall
+import githubstore.composeapp.generated.resources.show_install_options
+import githubstore.composeapp.generated.resources.update_app
+import githubstore.composeapp.generated.resources.update_to_version
+import githubstore.composeapp.generated.resources.updating
+import githubstore.composeapp.generated.resources.verifying
 import io.github.fletchmckee.liquid.liquefiable
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import zed.rainxch.githubstore.core.domain.model.GithubAsset
 import zed.rainxch.githubstore.core.domain.model.GithubUser
@@ -75,11 +90,18 @@ fun SmartInstallButton(
     }
 
     val buttonText = when {
-        !enabled && primaryAsset == null -> "Not Available"
-        installedApp != null && installedApp.installedVersion != state.latestRelease?.tagName -> "Update app"
-        isUpdateAvailable -> "Update to ${installedApp?.latestVersion}"
-        isInstalled -> "Reinstall"
-        else -> "Install latest"
+        !enabled && primaryAsset == null -> stringResource(Res.string.not_available)
+        installedApp != null && installedApp.installedVersion != state.latestRelease?.tagName -> stringResource(
+            Res.string.update_app
+        )
+
+        isUpdateAvailable -> stringResource(
+            Res.string.update_to_version,
+            installedApp.latestVersion.toString()
+        )
+
+        isInstalled -> stringResource(Res.string.reinstall)
+        else -> stringResource(Res.string.install_latest)
     }
 
     Row(
@@ -132,14 +154,16 @@ fun SmartInstallButton(
                         when (state.downloadStage) {
                             DownloadStage.DOWNLOADING -> {
                                 Text(
-                                    text = if (isUpdateAvailable) "Updating" else "Downloading",
+                                    text = if (isUpdateAvailable) stringResource(Res.string.updating) else stringResource(
+                                        Res.string.downloading
+                                    ),
                                     style = MaterialTheme.typography.titleMedium,
                                     color = MaterialTheme.colorScheme.onPrimary,
                                     fontWeight = FontWeight.Bold
                                 )
 
                                 Text(
-                                    text = "${progress ?: 0}%",
+                                    text = stringResource(Res.string.percent, progress ?: 0),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f)
                                 )
@@ -147,7 +171,7 @@ fun SmartInstallButton(
 
                             DownloadStage.VERIFYING -> {
                                 Text(
-                                    text = "Verifying",
+                                    text = stringResource(Res.string.verifying),
                                     style = MaterialTheme.typography.titleMedium,
                                     color = MaterialTheme.colorScheme.onPrimary,
                                     fontWeight = FontWeight.Bold
@@ -156,7 +180,9 @@ fun SmartInstallButton(
 
                             DownloadStage.INSTALLING -> {
                                 Text(
-                                    text = if (isUpdateAvailable) "Updating" else "Installing",
+                                    text = if (isUpdateAvailable) stringResource(Res.string.updating) else stringResource(
+                                        Res.string.installing
+                                    ),
                                     style = MaterialTheme.typography.titleMedium,
                                     color = MaterialTheme.colorScheme.onPrimary,
                                     fontWeight = FontWeight.Bold
@@ -219,8 +245,14 @@ fun SmartInstallButton(
                                     text = assetArch ?: systemArch.name.lowercase(),
                                     color = if (enabled) {
                                         when {
-                                            isUpdateAvailable -> MaterialTheme.colorScheme.onTertiary.copy(alpha = 0.8f)
-                                            isInstalled -> MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.8f)
+                                            isUpdateAvailable -> MaterialTheme.colorScheme.onTertiary.copy(
+                                                alpha = 0.8f
+                                            )
+
+                                            isInstalled -> MaterialTheme.colorScheme.onSecondary.copy(
+                                                alpha = 0.8f
+                                            )
+
                                             else -> MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f)
                                         }
                                     } else {
@@ -238,12 +270,20 @@ fun SmartInstallButton(
 
                                     Icon(
                                         imageVector = Icons.Default.CheckCircle,
-                                        contentDescription = "Architecture compatible",
+                                        contentDescription = stringResource(Res.string.architecture_compatible),
                                         tint = if (enabled) {
                                             when {
-                                                isUpdateAvailable -> MaterialTheme.colorScheme.onTertiary.copy(alpha = 0.8f)
-                                                isInstalled -> MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.8f)
-                                                else -> MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f)
+                                                isUpdateAvailable -> MaterialTheme.colorScheme.onTertiary.copy(
+                                                    alpha = 0.8f
+                                                )
+
+                                                isInstalled -> MaterialTheme.colorScheme.onSecondary.copy(
+                                                    alpha = 0.8f
+                                                )
+
+                                                else -> MaterialTheme.colorScheme.onPrimary.copy(
+                                                    alpha = 0.8f
+                                                )
                                             }
                                         } else {
                                             MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
@@ -276,7 +316,7 @@ fun SmartInstallButton(
             ) {
                 Icon(
                     imageVector = Icons.Default.Close,
-                    contentDescription = "Cancel download",
+                    contentDescription = stringResource(Res.string.cancel_download),
                     modifier = Modifier.size(24.dp),
                     tint = MaterialTheme.colorScheme.onErrorContainer
                 )
@@ -301,7 +341,7 @@ fun SmartInstallButton(
             ) {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowDown,
-                    contentDescription = "Show install options",
+                    contentDescription = stringResource(Res.string.show_install_options),
                     modifier = Modifier.size(24.dp),
                     tint = if (enabled) {
                         when {

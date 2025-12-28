@@ -9,6 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import githubstore.composeapp.generated.resources.Res
+import githubstore.composeapp.generated.resources.error_loading_details
+import githubstore.composeapp.generated.resources.retry
+import githubstore.composeapp.generated.resources.update_available
+import org.jetbrains.compose.resources.stringResource
 import zed.rainxch.githubstore.core.presentation.components.GithubStoreButton
 import zed.rainxch.githubstore.feature.details.presentation.DetailsAction
 
@@ -23,7 +28,7 @@ fun ErrorState(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Error loading details",
+            text = stringResource(Res.string.error_loading_details),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center
@@ -36,7 +41,7 @@ fun ErrorState(
         )
 
         GithubStoreButton(
-            text = "Retry",
+            text = stringResource(Res.string.retry),
             onClick = {
                 onAction(DetailsAction.Retry)
             }

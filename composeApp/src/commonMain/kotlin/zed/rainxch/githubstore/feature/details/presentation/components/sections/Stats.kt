@@ -8,7 +8,13 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import githubstore.composeapp.generated.resources.Res
+import githubstore.composeapp.generated.resources.error_loading_details
+import githubstore.composeapp.generated.resources.forks
+import githubstore.composeapp.generated.resources.issues
+import githubstore.composeapp.generated.resources.stars
 import io.github.fletchmckee.liquid.liquefiable
+import org.jetbrains.compose.resources.stringResource
 import zed.rainxch.githubstore.feature.details.domain.model.RepoStats
 import zed.rainxch.githubstore.feature.details.presentation.components.StatItem
 import zed.rainxch.githubstore.feature.details.presentation.utils.LocalTopbarLiquidState
@@ -26,7 +32,7 @@ fun LazyListScope.stats(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             StatItem(
-                label = "Forks",
+                label = stringResource(Res.string.forks),
                 stat = repoStats.forks,
                 modifier = Modifier
                     .weight(1.5f)
@@ -34,7 +40,7 @@ fun LazyListScope.stats(
             )
 
             StatItem(
-                label = "Stars",
+                label = stringResource(Res.string.stars),
                 stat = repoStats.stars,
                 modifier = Modifier
                     .weight(2f)
@@ -42,7 +48,7 @@ fun LazyListScope.stats(
             )
 
             StatItem(
-                label = "Issues",
+                label = stringResource(Res.string.issues),
                 stat = repoStats.openIssues,
                 modifier = Modifier
                     .weight(1f)

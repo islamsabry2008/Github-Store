@@ -20,8 +20,6 @@
     <string name="open">開く</string>
     <string name="cancel">キャンセル</string>
 
-    <string name="downloading">ダウンロード中…</string>
-    <string name="installing">インストール中…</string>
     <string name="checking">確認中…</string>
     <string name="updated_successfully">更新完了</string>
     <string name="error_with_message">エラー：%1$s</string>
@@ -117,5 +115,52 @@
     <string name="theme_forest">フォレスト</string>
     <string name="theme_slate">スレート</string>
     <string name="theme_amber">アンバー</string>
+
+    <string name="error_loading_details">詳細の読み込みに失敗しました</string>
+    <string name="about_this_app">このアプリについて</string>
+    <string name="install_logs">インストールログ</string>
+    <string name="author">作者</string>
+    <string name="whats_new">新機能</string>
+
+    <string name="installed">インストール済み</string>
+    <string name="update_available">更新あり</string>
+    <string name="install_latest">最新版をインストール</string>
+    <string name="reinstall">再インストール</string>
+
+    <string name="downloading">ダウンロード中</string>
+    <string name="updating">更新中</string>
+    <string name="verifying">検証中</string>
+    <string name="installing">インストール中</string>
+
+    <string name="profile">プロフィール</string>
+    <string name="forks">フォーク</string>
+    <string name="stars">スター</string>
+    <string name="issues">課題</string>
+
+    <string name="by_author">%1$s 作</string>
+    <string name="installed_version">• インストール済み: %1$s</string>
+    <string name="architecture_compatible">アーキテクチャ互換</string>
+    <string name="update_to_version">%1$s に更新</string>
+
+    <string name="error_load_details">詳細を読み込めませんでした</string>
+    <string name="installer_saved_downloads">インストーラーはダウンロードに保存されました</string>
+
+    <string name="log_download_started">ダウンロード開始</string>
+    <string name="log_downloaded">ダウンロード完了</string>
+    <string name="log_update_started">更新開始</string>
+    <string name="log_installed">インストール済み</string>
+    <string name="log_updated">更新済み</string>
+    <string name="log_cancelled">キャンセルされました</string>
+    <string name="log_install_started">インストールを開始しました</string>
+    <string name="log_error">エラー</string>
+    <string name="log_error_with_message">エラー: %1$s</string>
+
+
+    <string name="log_prepare_appmanager">AppManager 用に準備中</string>
+    <string name="log_opened_appmanager">AppManager で開きました</string>
+
+    <string name="error_generic">エラー: %1$s</string>
+    <string name="error_asset_not_supported">ファイル形式 .%1$s は未対応です</string>
+    <string name="error_file_not_found">ダウンロードしたファイルが見つかりません</string>
 
 </resources>

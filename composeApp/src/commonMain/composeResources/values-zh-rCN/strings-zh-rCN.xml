@@ -20,8 +20,6 @@
     <string name="open">打开</string>
     <string name="cancel">取消</string>
 
-    <string name="downloading">正在下载…</string>
-    <string name="installing">正在安装…</string>
     <string name="checking">正在检查…</string>
     <string name="updated_successfully">更新成功</string>
     <string name="error_with_message">错误：%1$s</string>
@@ -117,5 +115,51 @@
     <string name="theme_forest">森林</string>
     <string name="theme_slate">石板</string>
     <string name="theme_amber">琥珀</string>
+
+    <string name="error_loading_details">加载详情失败</string>
+    <string name="about_this_app">关于此应用</string>
+    <string name="install_logs">安装日志</string>
+    <string name="author">作者</string>
+    <string name="whats_new">更新内容</string>
+
+    <string name="installed">已安装</string>
+    <string name="update_available">有可用更新</string>
+    <string name="install_latest">安装最新版本</string>
+    <string name="reinstall">重新安装</string>
+
+    <string name="downloading">正在下载</string>
+    <string name="updating">正在更新</string>
+    <string name="verifying">正在验证</string>
+    <string name="installing">正在安装</string>
+
+    <string name="profile">个人资料</string>
+    <string name="forks">分支</string>
+    <string name="stars">星标</string>
+    <string name="issues">问题</string>
+
+    <string name="by_author">由 %1$s</string>
+    <string name="installed_version">• 已安装：%1$s</string>
+    <string name="architecture_compatible">架构兼容</string>
+    <string name="update_to_version">更新到 %1$s</string>
+
+    <string name="error_load_details">无法加载详情</string>
+    <string name="installer_saved_downloads">安装程序已保存到下载文件夹</string>
+
+    <string name="log_download_started">开始下载</string>
+    <string name="log_downloaded">已下载</string>
+    <string name="log_update_started">开始更新</string>
+    <string name="log_installed">已安装</string>
+    <string name="log_updated">已更新</string>
+    <string name="log_cancelled">已取消</string>
+    <string name="log_install_started">开始安装</string>
+    <string name="log_error">错误</string>
+    <string name="log_error_with_message">错误：%1$s</string>
+
+    <string name="log_prepare_appmanager">正在为 AppManager 准备</string>
+    <string name="log_opened_appmanager">已在 AppManager 中打开</string>
+
+    <string name="error_generic">错误：%1$s</string>
+    <string name="error_asset_not_supported">不支持的文件类型 .%1$s</string>
+    <string name="error_file_not_found">未找到下载的文件</string>
 
 </resources>

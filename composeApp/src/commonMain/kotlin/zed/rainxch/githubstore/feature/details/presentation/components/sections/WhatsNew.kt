@@ -20,8 +20,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.mikepenz.markdown.coil3.Coil3ImageTransformerImpl
 import com.mikepenz.markdown.compose.Markdown
+import githubstore.composeapp.generated.resources.Res
+import githubstore.composeapp.generated.resources.error_loading_details
+import githubstore.composeapp.generated.resources.no_release_notes
+import githubstore.composeapp.generated.resources.whats_new
 import io.github.fletchmckee.liquid.liquefiable
 import org.intellij.markdown.flavours.gfm.GFMFlavourDescriptor
+import org.jetbrains.compose.resources.stringResource
 import zed.rainxch.githubstore.core.domain.model.GithubRelease
 import zed.rainxch.githubstore.feature.details.presentation.utils.LocalTopbarLiquidState
 import zed.rainxch.githubstore.feature.details.presentation.utils.rememberMarkdownColors
@@ -36,7 +41,7 @@ fun LazyListScope.whatsNew(latestRelease: GithubRelease) {
         Spacer(Modifier.height(16.dp))
 
         Text(
-            text = "What's New",
+            text = stringResource(Res.string.whats_new),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
@@ -85,7 +90,7 @@ fun LazyListScope.whatsNew(latestRelease: GithubRelease) {
                 val flavour = remember { GFMFlavourDescriptor() }
 
                 Markdown(
-                    content = latestRelease.description ?: "No release notes.",
+                    content = latestRelease.description ?: stringResource(Res.string.no_release_notes),
                     colors = colors,
                     typography = typography,
                     flavour = flavour,

@@ -18,8 +18,15 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import githubstore.composeapp.generated.resources.Res
+import githubstore.composeapp.generated.resources.appmanager_description
+import githubstore.composeapp.generated.resources.error_loading_details
+import githubstore.composeapp.generated.resources.inspect_with_appmanager
+import githubstore.composeapp.generated.resources.obtainium_description
+import githubstore.composeapp.generated.resources.open_in_obtainium
 import io.github.fletchmckee.liquid.LiquidState
 import io.github.fletchmckee.liquid.liquefiable
+import org.jetbrains.compose.resources.stringResource
 import zed.rainxch.githubstore.feature.details.presentation.DetailsAction
 import zed.rainxch.githubstore.feature.details.presentation.DetailsState
 import zed.rainxch.githubstore.feature.details.presentation.components.AppHeader
@@ -72,12 +79,12 @@ fun LazyListScope.header(
                     text = {
                         Column {
                             Text(
-                                text = "Open in Obtainium",
+                                text = stringResource(Res.string.open_in_obtainium),
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
-                                text = "Manage updates automatically",
+                                text = stringResource(Res.string.obtainium_description),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -102,12 +109,12 @@ fun LazyListScope.header(
                     text = {
                         Column {
                             Text(
-                                text = "Inspect with AppManager",
+                                text = stringResource(Res.string.inspect_with_appmanager),
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
-                                text = "Check permissions, trackers & security",
+                                text = stringResource(Res.string.appmanager_description),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )

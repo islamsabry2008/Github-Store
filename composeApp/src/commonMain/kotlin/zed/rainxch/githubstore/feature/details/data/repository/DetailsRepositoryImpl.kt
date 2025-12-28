@@ -184,7 +184,7 @@ class DetailsRepositoryImpl(
                             return Triple(processed, detectedLang, attempt.path)
                         }
 
-                        if (primaryLang == "en" && detectedLang != null && detectedLang != "en") {
+                        if (primaryLang == "en" && detectedLang != null) {
                             Logger.d { "Default README is $detectedLang, continuing search for English version" }
                             continue
                         }

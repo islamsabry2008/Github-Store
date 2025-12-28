@@ -10,8 +10,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import githubstore.composeapp.generated.resources.Res
+import githubstore.composeapp.generated.resources.error_loading_details
+import githubstore.composeapp.generated.resources.install_logs
 import io.github.fletchmckee.liquid.liquefiable
+import org.jetbrains.compose.resources.stringResource
 import zed.rainxch.githubstore.feature.details.presentation.DetailsState
+import zed.rainxch.githubstore.feature.details.presentation.model.LogResult
+import zed.rainxch.githubstore.feature.details.presentation.model.asText
 import zed.rainxch.githubstore.feature.details.presentation.utils.LocalTopbarLiquidState
 
 fun LazyListScope.logs(state: DetailsState) {
@@ -21,7 +27,7 @@ fun LazyListScope.logs(state: DetailsState) {
         HorizontalDivider()
 
         Text(
-            text = "Install logs",
+            text = stringResource(Res.string.install_logs),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
@@ -35,11 +41,11 @@ fun LazyListScope.logs(state: DetailsState) {
         val liquidState = LocalTopbarLiquidState.current
 
         Text(
-            text = "> ${log.result}: ${log.assetName}",
+            text = "> ${log.result.asText()}: ${log.assetName}",
             style = MaterialTheme.typography.labelSmall.copy(
                 fontStyle = FontStyle.Italic
             ),
-            color = if (log.result.startsWith("Error")) {
+            color = if (log.result is LogResult.Error) {
                 MaterialTheme.colorScheme.error
             } else MaterialTheme.colorScheme.outline,
             modifier = Modifier.liquefiable(liquidState)

@@ -20,8 +20,6 @@
     <string name="open">Ouvrir</string>
     <string name="cancel">Annuler</string>
 
-    <string name="downloading">Téléchargement…</string>
-    <string name="installing">Installation…</string>
     <string name="checking">Vérification…</string>
     <string name="updated_successfully">Mise à jour réussie</string>
     <string name="error_with_message">Erreur : %1$s</string>
@@ -117,5 +115,52 @@
     <string name="theme_forest">Forêt</string>
     <string name="theme_slate">Ardoise</string>
     <string name="theme_amber">Ambre</string>
+
+    <string name="error_loading_details">Erreur de chargement</string>
+    <string name="about_this_app">À propos de cette application</string>
+    <string name="install_logs">Journaux d’installation</string>
+    <string name="author">Auteur</string>
+    <string name="whats_new">Nouveautés</string>
+
+    <string name="installed">Installé</string>
+    <string name="update_available">Mise à jour disponible</string>
+    <string name="install_latest">Installer la dernière version</string>
+    <string name="reinstall">Réinstaller</string>
+
+    <string name="downloading">Téléchargement</string>
+    <string name="updating">Mise à jour</string>
+    <string name="verifying">Vérification</string>
+    <string name="installing">Installation</string>
+
+    <string name="profile">Profil</string>
+    <string name="forks">Forks</string>
+    <string name="stars">Étoiles</string>
+    <string name="issues">Tickets</string>
+
+    <string name="by_author">par %1$s</string>
+    <string name="installed_version">• Installé : %1$s</string>
+    <string name="architecture_compatible">Architecture compatible</string>
+    <string name="update_to_version">Mettre à jour vers %1$s</string>
+
+    <string name="error_load_details">Impossible de charger les détails</string>
+    <string name="installer_saved_downloads">L’installateur a été enregistré dans Téléchargements</string>
+
+    <string name="log_download_started">Téléchargement démarré</string>
+    <string name="log_downloaded">Téléchargé</string>
+    <string name="log_update_started">Mise à jour démarrée</string>
+    <string name="log_installed">Installé</string>
+    <string name="log_updated">Mis à jour</string>
+    <string name="log_cancelled">Annulé</string>
+    <string name="log_install_started">Installation démarrée</string>
+    <string name="log_error">Erreur</string>
+    <string name="log_error_with_message">Erreur : %1$s</string>
+
+
+    <string name="log_prepare_appmanager">Préparation pour AppManager</string>
+    <string name="log_opened_appmanager">Ouvert dans AppManager</string>
+
+    <string name="error_generic">Erreur : %1$s</string>
+    <string name="error_asset_not_supported">Type de fichier .%1$s non pris en charge</string>
+    <string name="error_file_not_found">Fichier téléchargé introuvable</string>
 
 </resources>
