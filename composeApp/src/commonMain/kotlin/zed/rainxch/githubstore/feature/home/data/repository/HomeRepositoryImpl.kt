@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalTime::class)
+
 package zed.rainxch.githubstore.feature.home.data.repository
 
 import co.touchlab.kermit.Logger
@@ -12,6 +14,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.sync.Semaphore
@@ -28,6 +31,7 @@ import zed.rainxch.githubstore.core.data.model.GithubRepoNetworkModel
 import zed.rainxch.githubstore.core.data.model.GithubRepoSearchResponse
 import zed.rainxch.githubstore.core.domain.Platform
 import zed.rainxch.githubstore.core.domain.model.PlatformType
+import zed.rainxch.githubstore.feature.home.data.data_source.CachedTrendingDataSource
 import zed.rainxch.githubstore.feature.home.domain.repository.HomeRepository
 import zed.rainxch.githubstore.feature.home.domain.model.PaginatedRepos
 import zed.rainxch.githubstore.network.RateLimitException
@@ -39,23 +43,181 @@ import kotlin.time.ExperimentalTime
 class HomeRepositoryImpl(
     private val githubNetworkClient: HttpClient,
     private val platform: Platform,
-    private val appStateManager: AppStateManager
+    private val appStateManager: AppStateManager,
+    private val cachedDataSource: CachedTrendingDataSource
 ) : HomeRepository {
 
     @OptIn(ExperimentalTime::class)
-    override fun getTrendingRepositories(page: Int): Flow<PaginatedRepos> {
+    override fun getTrendingRepositories(page: Int): Flow<PaginatedRepos> = flow {
+        if (page == 1) {
+            Logger.d { "Attempting to load cached trending repositories..." }
+
+            val cachedData = cachedDataSource.getCachedTrendingRepos()
+
+            if (cachedData != null && cachedData.repositories.isNotEmpty()) {
+                Logger.d { "Using cached data: ${cachedData.repositories.size} repos" }
+
+                emit(
+                    PaginatedRepos(
+                        repos = cachedData.repositories,
+                        hasMore = false,
+                        nextPageIndex = 2
+                    )
+                )
+
+                return@flow
+            } else {
+                Logger.d { "No cached data available, falling back to live API" }
+            }
+        }
+
+        emitAll(searchReposWithInstallersFlow(page))
+
+    }.flowOn(Dispatchers.IO)
+
+    private fun searchReposWithInstallersFlow(startPage: Int): Flow<PaginatedRepos> = flow {
         val oneWeekAgo = Clock.System.now()
             .minus(7.days)
             .toLocalDateTime(TimeZone.UTC)
             .date
 
-        return searchReposWithInstallersFlow(
-            baseQuery = "stars:>500 archived:false pushed:>=$oneWeekAgo",
-            sort = "stars",
-            order = "desc",
-            startPage = page
-        )
-    }
+        val results = mutableListOf<GithubRepoSummary>()
+        var currentApiPage = startPage
+        val perPage = 100
+        val semaphore = Semaphore(25)
+        val maxPagesToFetch = 5
+        var pagesFetchedCount = 0
+        var lastEmittedCount = 0
+        val desiredCount = 10
+
+        val query = buildSimplifiedQuery("stars:>500 archived:false pushed:>=$oneWeekAgo")
+        Logger.d { "Live API Query: $query | Page: $startPage" }
+
+        while (results.size < desiredCount && pagesFetchedCount < maxPagesToFetch) {
+            currentCoroutineContext().ensureActive()
+
+            try {
+                val response = githubNetworkClient.safeApiCall<GithubRepoSearchResponse>(
+                    rateLimitHandler = appStateManager.rateLimitHandler,
+                    autoRetryOnRateLimit = false
+                ) {
+                    get("/search/repositories") {
+                        parameter("q", query)
+                        parameter("sort", "stars")
+                        parameter("order", "desc")
+                        parameter("per_page", perPage)
+                        parameter("page", currentApiPage)
+                    }
+                }.getOrElse { error ->
+                    Logger.e { "Search request failed: ${error.message}" }
+
+                    if (error is RateLimitException) {
+                        appStateManager.updateRateLimit(error.rateLimitInfo)
+                    }
+
+                    throw error
+                }
+
+                Logger.d { "API Page $currentApiPage: Got ${response.items.size} repos" }
+
+                if (response.items.isEmpty()) {
+                    Logger.d { "No more items from API, breaking" }
+                    break
+                }
+
+                val candidates = response.items
+                    .map { repo -> repo to calculatePlatformScore(repo) }
+                    .filter { it.second > 0 }
+                    .take(50)
+                    .map { it.first }
+
+                Logger.d { "Checking ${candidates.size} candidates for installers" }
+
+                coroutineScope {
+                    val deferredResults = candidates.map { repo ->
+                        async {
+                            semaphore.withPermit {
+                                withTimeoutOrNull(5000) {
+                                    checkRepoHasInstallers(repo)
+                                }
+                            }
+                        }
+                    }
+
+                    for (deferred in deferredResults) {
+                        currentCoroutineContext().ensureActive()
+
+                        val result = deferred.await()
+                        if (result != null) {
+                            results.add(result)
+                            Logger.d { "Found installer repo: ${result.fullName} (${results.size}/$desiredCount)" }
+
+                            if (results.size % 3 == 0 || results.size >= desiredCount) {
+                                val newItems = results.subList(lastEmittedCount, results.size)
+
+                                if (newItems.isNotEmpty()) {
+                                    emit(
+                                        PaginatedRepos(
+                                            repos = newItems.toList(),
+                                            hasMore = true,
+                                            nextPageIndex = currentApiPage + 1
+                                        )
+                                    )
+                                    Logger.d { "Emitted ${newItems.size} repos (total: ${results.size})" }
+                                    lastEmittedCount = results.size
+                                }
+                            }
+
+                            if (results.size >= desiredCount) {
+                                Logger.d { "Reached desired count, breaking" }
+                                break
+                            }
+                        }
+                    }
+                }
+
+                if (results.size >= desiredCount || response.items.size < perPage) {
+                    Logger.d { "Breaking: results=${results.size}, response size=${response.items.size}" }
+                    break
+                }
+
+                currentApiPage++
+                pagesFetchedCount++
+
+            } catch (e: RateLimitException) {
+                Logger.e { "Rate limited during search" }
+                break
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Logger.e { "Search failed: ${e.message}" }
+                e.printStackTrace()
+                break
+            }
+        }
+
+        if (results.size > lastEmittedCount) {
+            val finalBatch = results.subList(lastEmittedCount, results.size)
+            val finalHasMore = pagesFetchedCount < maxPagesToFetch && results.size >= desiredCount
+            emit(
+                PaginatedRepos(
+                    repos = finalBatch.toList(),
+                    hasMore = finalHasMore,
+                    nextPageIndex = if (finalHasMore) currentApiPage + 1 else currentApiPage
+                )
+            )
+            Logger.d { "Final emit: ${finalBatch.size} repos (total: ${results.size})" }
+        } else if (results.isEmpty()) {
+            emit(
+                PaginatedRepos(
+                    repos = emptyList(),
+                    hasMore = false,
+                    nextPageIndex = currentApiPage
+                )
+            )
+            Logger.d { "No results found" }
+        }
+    }.flowOn(Dispatchers.IO)
 
     @OptIn(ExperimentalTime::class)
     override fun getNew(page: Int): Flow<PaginatedRepos> {

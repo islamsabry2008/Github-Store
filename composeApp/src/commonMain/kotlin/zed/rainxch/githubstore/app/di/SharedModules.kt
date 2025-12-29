@@ -33,6 +33,7 @@ import zed.rainxch.githubstore.feature.details.domain.repository.DetailsReposito
 import zed.rainxch.githubstore.feature.details.presentation.DetailsViewModel
 import zed.rainxch.githubstore.core.data.services.Downloader
 import zed.rainxch.githubstore.core.data.services.Installer
+import zed.rainxch.githubstore.feature.home.data.data_source.CachedTrendingDataSource
 import zed.rainxch.githubstore.feature.home.data.repository.HomeRepositoryImpl
 import zed.rainxch.githubstore.feature.home.domain.repository.HomeRepository
 import zed.rainxch.githubstore.feature.home.presentation.HomeViewModel
@@ -145,7 +146,14 @@ val homeModule: Module = module {
         HomeRepositoryImpl(
             githubNetworkClient = get(),
             platform = get(),
-            appStateManager = get()
+            appStateManager = get(),
+            cachedDataSource = get()
+        )
+    }
+
+    single<CachedTrendingDataSource> {
+        CachedTrendingDataSource(
+            platform = get()
         )
     }
 
