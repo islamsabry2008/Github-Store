@@ -2,7 +2,7 @@
 <img src="https://github.com/XDdevv/Github-Store/blob/main/composeApp/src/commonMain/composeResources/drawable/app-icon.png" width="200" alt="Project logo"/>
 </div>
 
-<h1 align="center">Github Store</h1>
+<h1 align="center">GitHub Store</h1>
 
 <p align="center">
   <a href="https://opensource.org/licenses/Apache-2.0"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"/></a>
@@ -19,7 +19,7 @@
 </p>
 
 <p align="center">
-Github Store is a cross‑platform “play store” for GitHub releases.
+GitHub Store is a cross‑platform “play store” for GitHub releases.
 It discovers repositories that ship real installable binaries and lets you install, track, and update them across platforms from one place.
 </p>
 
@@ -33,9 +33,9 @@ It discovers repositories that ship real installable binaries and lets you insta
 
 <img src="/screenshots/preview.gif" align="right" width="320"/>
 
-## ✨ What is Github Store?
+## ✨ What is GitHub Store?
 
-Github Store is a Kotlin Multiplatform app (Android + Desktop) that turns GitHub releases into a
+GitHub Store is a Kotlin Multiplatform app (Android + Desktop) that turns GitHub releases into a
 clean, app‑store style experience:
 
 - Only shows repositories that actually provide installable assets (APK, EXE, DMG, AppImage, DEB, RPM, etc.).
@@ -56,7 +56,7 @@ clean, app‑store style experience:
    </a>
    
 > [!IMPORTANT]
-> On macOS, you may see a warning that Apple cannot verify Github Store is free of malware. This
+> On macOS, you may see a warning that Apple cannot verify GitHub Store is free of malware. This
 > happens because the app is distributed outside the App Store and is not notarized yet. You can allow
 > it via System Settings → Privacy & Security → Open Anyway.
 
@@ -95,9 +95,9 @@ clean, app‑store style experience:
 
 ---
 
-## 🔍 How does my app appear in Github Store?
+## 🔍 How does my app appear in GitHub Store?
 
-Github Store does not use any private indexing or manual curation rules.  
+GitHub Store does not use any private indexing or manual curation rules.  
 Your project can appear automatically if it follows these conditions:
 
 1. **Public repository on GitHub**
@@ -113,7 +113,7 @@ Your project can appear automatically if it follows these conditions:
         - Windows: `.exe`, `.msi`
         - macOS: `.dmg`, `.pkg`
         - Linux: `.deb`, `.rpm`, `.AppImage`
-    - Github Store ignores GitHub’s auto‑generated source artifacts (`Source code (zip)` /
+    - GitHub Store ignores GitHub’s auto‑generated source artifacts (`Source code (zip)` /
       `Source code (tar.gz)`).
 
 4. **Discoverable by search / topics**
@@ -124,12 +124,12 @@ Your project can appear automatically if it follows these conditions:
           `electron`.
     - Having at least a few stars makes it more likely to appear under Popular/Updated/New sections.
 
-If your repo meets these conditions, Github Store can find it through search and show it
+If your repo meets these conditions, GitHub Store can find it through search and show it
 automatically—no manual submission required.
 
 ---
 
-## 🧭 How Github Store works (high‑level)
+## 🧭 How GitHub Store works (high‑level)
 
 1. **Search**
     - Uses GitHub’s `/search/repositories` endpoint with platform‑aware queries.
@@ -200,13 +200,13 @@ automatically—no manual submission required.
 
 ---
 
-## ✅ Pros / Why use Github Store?
+## ✅ Pros / Why use GitHub Store?
 
 - **No more hunting through GitHub releases**
   See only repos that actually ship binaries for your platform.
 
 - **Knows what you installed**
-  Tracks apps installed via Github Store (Android) and highlights when new releases are available, so you can update them without hunting through GitHub again.
+  Tracks apps installed via GitHub Store (Android) and highlights when new releases are available, so you can update them without hunting through GitHub again.
 
 - **Always the latest release**  
   Installs are guaranteed to come from the latest published release; the changelog you see is
@@ -241,7 +241,7 @@ And [follow me](https://github.com/rainxchzed/) to keep up with future updates a
 
 ## 🔑 Configuration
 
-Github Store uses a GitHub OAuth app for authentication and API rate‑limit isolation.
+GitHub Store uses a GitHub OAuth app for authentication and API rate‑limit isolation.
 
 1. Create a GitHub OAuth app at **GitHub → Settings → Developer settings → OAuth Apps**.
 2. Set the callback URL to `githubstore://callback` (_Not quite important_).
@@ -252,7 +252,7 @@ Github Store uses a GitHub OAuth app for authentication and API rate‑limit iso
 
 ## ⚠️ Disclaimer
 
-Github Store only helps you discover and download release assets that are already published on
+GitHub Store only helps you discover and download release assets that are already published on
 GitHub by third‑party developers.  
 The contents, safety, and behavior of those downloads are entirely the responsibility of their
 respective authors and distributors, not this project.
@@ -264,7 +264,7 @@ fit for any particular purpose.
 
 ## 📄 License
 
-Github Store will be released under the **Apache License, Version 2.0**.
+GitHub Store will be released under the **Apache License, Version 2.0**.
 
 ```
 Copyright 2025 rainxchzed
