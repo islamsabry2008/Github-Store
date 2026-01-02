@@ -35,9 +35,6 @@
     <string name="updating_x_of_y">Updating %1$d of %2$d</string>
     <string name="currently_updating">Currently: %1$s</string>
 
-    <!-- Apps feature - Progress -->
-    <string name="percent">%1$d%%</string>
-
 
     <!-- Auth general -->
     <string name="waiting_for_authorization">Waiting for authorization…</string>

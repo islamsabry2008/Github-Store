@@ -427,10 +427,7 @@ fun AppItemCard(
                             )
                             if (appItem.downloadProgress != null) {
                                 Text(
-                                    text = stringResource(
-                                        Res.string.percent,
-                                        appItem.downloadProgress
-                                    ),
+                                    text = "${appItem.downloadProgress ?: 0}%",
                                     style = MaterialTheme.typography.bodySmall
                                 )
                             }

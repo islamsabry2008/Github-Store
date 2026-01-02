@@ -27,8 +27,6 @@
     <string name="updating_x_of_y">%2$d 件中 %1$d 件を更新中</string>
     <string name="currently_updating">現在：%1$s</string>
 
-    <string name="percent">%1$d%%</string>
-
     <string name="waiting_for_authorization">認証を待機中…</string>
     <string name="signed_in">ログイン完了！</string>
     <string name="redirecting_message">アプリを使用できます。リダイレクト中…</string>

@@ -27,8 +27,6 @@
     <string name="updating_x_of_y">Actualizando %1$d de %2$d</string>
     <string name="currently_updating">Actual: %1$s</string>
 
-    <string name="percent">%1$d%%</string>
-
     <string name="waiting_for_authorization">Esperando autorización…</string>
     <string name="signed_in">¡Sesión iniciada!</string>
     <string name="redirecting_message">Ya puedes usar la aplicación. Redirigiendo…</string>

@@ -27,8 +27,6 @@
     <string name="updating_x_of_y">Mise à jour %1$d sur %2$d</string>
     <string name="currently_updating">Actuellement : %1$s</string>
 
-    <string name="percent">%1$d%%</string>
-
     <string name="waiting_for_authorization">En attente d’autorisation…</string>
     <string name="signed_in">Connecté !</string>
     <string name="redirecting_message">Vous pouvez maintenant utiliser l’application. Redirection…</string>
