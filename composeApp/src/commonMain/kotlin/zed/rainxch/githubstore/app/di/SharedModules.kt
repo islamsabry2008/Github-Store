@@ -247,7 +247,8 @@ val appsModule: Module = module {
             installer = get(),
             downloader = get(),
             packageMonitor = get(),
-            detailsRepository = get()
+            detailsRepository = get(),
+            platform = get()
         )
     }
 }
