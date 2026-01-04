@@ -12,7 +12,7 @@
     <string name="cannot_launch">Impossibile lanciare %1$s</string>
     <string name="failed_to_open">Impossibile aprire %1$s</string>
     <string name="failed_to_update">Impossibile aggiornare %1$s: %2$s</string>
-    <string name="update_all_failed">Aggiorna tutte fallito: %1$s</string>
+    <string name="update_all_failed">Aggiornamento generale fallito: %1$s</string>
     <string name="all_apps_updated_successfully">Tutte le app sono state aggiornate con successo</string>
     <string name="no_updates_available">Nessun aggiornamento disponibile</string>
 
@@ -33,7 +33,7 @@
 
     <!-- Apps feature - Update all progress -->
     <string name="updating_x_of_y">Aggiornando %1$d di %2$d</string>
-    <string name="currently_updating">Correntemente: %1$s</string>
+    <string name="currently_updating">Attualmente: %1$s</string>
 
 
     <!-- Auth general -->
@@ -51,11 +51,11 @@
     <string name="open_github">Apri GitHub</string>
 
     <!-- Logged out -->
-    <string name="unlock_full_experience">Sblocca l'esperienza\nCompleta</string>
+    <string name="unlock_full_experience">Sblocca l'esperienza\ncompleta</string>
 
     <string name="more_requests">Più richieste</string>
     <string name="more_requests_description">
-        Effettua l'accesso per ottenere limite API più alti e evitare interruzioni.
+        Effettua l'accesso per ottenere limiti API più alti e evitare interruzioni.
     </string>
 
     <string name="sign_in_with_github">Accedi con GitHub</string>
@@ -124,7 +124,7 @@
     <string name="logout">Esci</string>
 
     <!-- Snackbar -->
-    <string name="logout_success">Uscito con successo, eindirizzamento…</string>
+    <string name="logout_success">Uscito con successo, reindirizzamento…</string>
 
     <!-- Dialog -->
     <string name="warning">Attenzione!</string>
@@ -233,8 +233,8 @@
 
     <string name="rate_limit_exceeded">Superato limite di richieste</string>
     <string name="rate_limit_used_all">Hai usato tutte le %1$d richieste API.</string>
-    <string name="rate_limit_used_all_free">Hai usato tutte le %1$d richieste API gratis.</string>
-    <string name="rate_limit_resets_in_minutes">Resetta in %1$d minuti</string>
+    <string name="rate_limit_used_all_free">Hai usato tutte le %1$d richieste API gratuite.</string>
+    <string name="rate_limit_resets_in_minutes">Si resetta tra %1$d minuti</string>
     <string name="rate_limit_tip_sign_in">💡 Effettua l'accesso per ottenere 5,000 richieste all'ora invece di 60!</string>
     <string name="rate_limit_sign_in">Accesso</string>
     <string name="rate_limit_ok">OK</string>
