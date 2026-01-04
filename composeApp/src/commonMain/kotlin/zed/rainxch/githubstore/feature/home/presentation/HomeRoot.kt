@@ -36,6 +36,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -62,6 +63,7 @@ import githubstore.composeapp.generated.resources.search_repositories_hint
 import githubstore.composeapp.generated.resources.settings_title
 import io.github.fletchmckee.liquid.LiquidState
 import io.github.fletchmckee.liquid.liquefiable
+import io.github.fletchmckee.liquid.rememberLiquidState
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -449,9 +451,15 @@ private fun TopbarActions(
 @Composable
 private fun Preview() {
     GithubStoreTheme {
-        HomeScreen(
-            state = HomeState(),
-            onAction = {}
-        )
+        val liquidState = rememberLiquidState()
+
+        CompositionLocalProvider(
+            value = LocalBottomNavigationLiquid provides liquidState
+        ) {
+            HomeScreen(
+                state = HomeState(),
+                onAction = {}
+            )
+        }
     }
 }

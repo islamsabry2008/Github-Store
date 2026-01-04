@@ -8,13 +8,12 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.snapshots.toInt
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -31,7 +30,6 @@ import zed.rainxch.githubstore.feature.details.presentation.DetailsRoot
 import zed.rainxch.githubstore.feature.home.presentation.HomeRoot
 import zed.rainxch.githubstore.feature.search.presentation.SearchRoot
 import zed.rainxch.githubstore.feature.settings.presentation.SettingsRoot
-import kotlin.Boolean
 
 @Composable
 fun AppNavigation(
@@ -178,7 +176,7 @@ fun AppNavigation(
                 },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .statusBarsPadding()
+                    .navigationBarsPadding()
                     .padding(bottom = 24.dp)
             )
         }
