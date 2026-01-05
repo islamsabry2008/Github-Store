@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import zed.rainxch.githubstore.core.domain.Platform
 import zed.rainxch.githubstore.core.domain.model.PlatformType
-import zed.rainxch.githubstore.core.domain.repository.FavoritesRepository
+import zed.rainxch.githubstore.core.domain.repository.FavouritesRepository
 import zed.rainxch.githubstore.core.domain.repository.InstalledAppsRepository
 import zed.rainxch.githubstore.core.domain.use_cases.SyncInstalledAppsUseCase
 import zed.rainxch.githubstore.core.presentation.model.DiscoveryRepository
@@ -30,7 +30,7 @@ class HomeViewModel(
     private val installedAppsRepository: InstalledAppsRepository,
     private val platform: Platform,
     private val syncInstalledAppsUseCase: SyncInstalledAppsUseCase,
-    private val favoritesRepository: FavoritesRepository
+    private val favouritesRepository: FavouritesRepository
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false
@@ -140,7 +140,7 @@ class HomeViewModel(
                         .first()
                         .associateBy { it.repoId }
 
-                    val favoritesMap = favoritesRepository
+                    val favoritesMap = favouritesRepository
                         .getAllFavorites()
                         .first()
                         .associateBy { it.repoId }

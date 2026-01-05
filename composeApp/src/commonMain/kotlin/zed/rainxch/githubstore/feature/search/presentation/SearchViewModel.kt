@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
-import zed.rainxch.githubstore.core.domain.repository.FavoritesRepository
+import zed.rainxch.githubstore.core.domain.repository.FavouritesRepository
 import zed.rainxch.githubstore.core.domain.repository.InstalledAppsRepository
 import zed.rainxch.githubstore.core.domain.use_cases.SyncInstalledAppsUseCase
 import zed.rainxch.githubstore.core.presentation.model.DiscoveryRepository
@@ -25,7 +25,7 @@ class SearchViewModel(
     private val searchRepository: SearchRepository,
     private val installedAppsRepository: InstalledAppsRepository,
     private val syncInstalledAppsUseCase: SyncInstalledAppsUseCase,
-    private val favoritesRepository: FavoritesRepository
+    private val favouritesRepository: FavouritesRepository
 ) : ViewModel() {
 
     private var currentSearchJob: Job? = null
@@ -105,7 +105,7 @@ class SearchViewModel(
                     .getAllInstalledApps()
                     .first()
                     .associateBy { it.repoId }
-                val favoritesMap = favoritesRepository
+                val favoritesMap = favouritesRepository
                     .getAllFavorites()
                     .first()
                     .associateBy { it.repoId }

@@ -33,7 +33,7 @@ import zed.rainxch.githubstore.core.data.local.db.entities.InstallSource
 import zed.rainxch.githubstore.core.data.local.db.entities.InstalledApp
 import zed.rainxch.githubstore.core.domain.Platform
 import zed.rainxch.githubstore.core.domain.model.PlatformType
-import zed.rainxch.githubstore.core.domain.repository.FavoritesRepository
+import zed.rainxch.githubstore.core.domain.repository.FavouritesRepository
 import zed.rainxch.githubstore.core.domain.repository.InstalledAppsRepository
 import zed.rainxch.githubstore.core.presentation.utils.BrowserHelper
 import zed.rainxch.githubstore.core.data.services.Downloader
@@ -52,7 +52,7 @@ class DetailsViewModel(
     private val platform: Platform,
     private val helper: BrowserHelper,
     private val installedAppsRepository: InstalledAppsRepository,
-    private val favoritesRepository: FavoritesRepository,
+    private val favouritesRepository: FavouritesRepository,
     private val packageMonitor: PackageMonitor,
     private val syncInstalledAppsUseCase: SyncInstalledAppsUseCase
 ) : ViewModel() {
@@ -92,7 +92,7 @@ class DetailsViewModel(
                 val repo = detailsRepository.getRepositoryById(repositoryId.toLong())
                 val isFavoriteDeferred = async {
                     try {
-                        favoritesRepository.isFavoriteSync(repo.id)
+                        favouritesRepository.isFavoriteSync(repo.id)
                     } catch (t: Throwable) {
                         Logger.e { "Failed to load if repo is favourite: ${t.localizedMessage}" }
                         false
@@ -357,9 +357,9 @@ class DetailsViewModel(
                             lastSyncedAt = System.now().toEpochMilliseconds()
                         )
 
-                        favoritesRepository.toggleFavorite(favoriteRepo)
+                        favouritesRepository.toggleFavorite(favoriteRepo)
 
-                        val newFavoriteState = favoritesRepository.isFavoriteSync(repo.id)
+                        val newFavoriteState = favouritesRepository.isFavoriteSync(repo.id)
                         _state.value = _state.value.copy(isFavorite = newFavoriteState)
 
                         _events.send(
@@ -736,7 +736,7 @@ class DetailsViewModel(
             }
 
             if (_state.value.isFavorite) {
-                favoritesRepository.updateFavoriteInstallStatus(
+                favouritesRepository.updateFavoriteInstallStatus(
                     repoId = repo.id,
                     installed = true,
                     packageName = packageName

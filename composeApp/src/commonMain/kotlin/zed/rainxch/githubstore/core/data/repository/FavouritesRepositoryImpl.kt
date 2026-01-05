@@ -5,14 +5,14 @@ import kotlinx.coroutines.flow.first
 import zed.rainxch.githubstore.core.data.local.db.dao.FavoriteRepoDao
 import zed.rainxch.githubstore.core.data.local.db.dao.InstalledAppDao
 import zed.rainxch.githubstore.core.data.local.db.entities.FavoriteRepo
-import zed.rainxch.githubstore.core.domain.repository.FavoritesRepository
+import zed.rainxch.githubstore.core.domain.repository.FavouritesRepository
 import zed.rainxch.githubstore.feature.details.domain.repository.DetailsRepository
 
-class FavoritesRepositoryImpl(
+class FavouritesRepositoryImpl(
     private val dao: FavoriteRepoDao,
     private val installedAppsDao: InstalledAppDao,
     private val detailsRepository: DetailsRepository
-) : FavoritesRepository {
+) : FavouritesRepository {
     
     override fun getAllFavorites(): Flow<List<FavoriteRepo>> = dao.getAllFavorites()
     

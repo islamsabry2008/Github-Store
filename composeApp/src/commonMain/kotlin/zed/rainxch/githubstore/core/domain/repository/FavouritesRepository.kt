@@ -3,7 +3,7 @@ package zed.rainxch.githubstore.core.domain.repository
 import kotlinx.coroutines.flow.Flow
 import zed.rainxch.githubstore.core.data.local.db.entities.FavoriteRepo
 
-interface FavoritesRepository {
+interface FavouritesRepository {
     fun getAllFavorites(): Flow<List<FavoriteRepo>>
     fun isFavorite(repoId: Long): Flow<Boolean>
     suspend fun isFavoriteSync(repoId: Long): Boolean

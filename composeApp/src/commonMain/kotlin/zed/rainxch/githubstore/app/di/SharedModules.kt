@@ -12,11 +12,11 @@ import zed.rainxch.githubstore.core.data.services.PackageMonitor
 import zed.rainxch.githubstore.core.data.data_source.DefaultTokenDataSource
 import zed.rainxch.githubstore.core.data.data_source.TokenDataSource
 import zed.rainxch.githubstore.core.data.local.db.AppDatabase
-import zed.rainxch.githubstore.core.data.repository.FavoritesRepositoryImpl
+import zed.rainxch.githubstore.core.data.repository.FavouritesRepositoryImpl
 import zed.rainxch.githubstore.core.data.repository.InstalledAppsRepositoryImpl
 import zed.rainxch.githubstore.core.data.repository.ThemesRepositoryImpl
 import zed.rainxch.githubstore.core.domain.getPlatform
-import zed.rainxch.githubstore.core.domain.repository.FavoritesRepository
+import zed.rainxch.githubstore.core.domain.repository.FavouritesRepository
 import zed.rainxch.githubstore.core.domain.repository.InstalledAppsRepository
 import zed.rainxch.githubstore.core.domain.repository.ThemesRepository
 import zed.rainxch.githubstore.feature.apps.data.repository.AppsRepositoryImpl
@@ -100,8 +100,8 @@ val coreModule: Module = module {
     }
 
     // Repositories
-    single<FavoritesRepository> {
-        FavoritesRepositoryImpl(
+    single<FavouritesRepository> {
+        FavouritesRepositoryImpl(
             dao = get(),
             installedAppsDao = get(),
             detailsRepository = get()
@@ -173,7 +173,7 @@ val homeModule: Module = module {
             installedAppsRepository = get(),
             platform = get(),
             syncInstalledAppsUseCase = get(),
-            favoritesRepository = get()
+            favouritesRepository = get()
         )
     }
 }
@@ -194,7 +194,7 @@ val searchModule: Module = module {
             searchRepository = get(),
             installedAppsRepository = get(),
             syncInstalledAppsUseCase = get(),
-            favoritesRepository = get()
+            favouritesRepository = get()
         )
     }
 }
@@ -225,7 +225,7 @@ val detailsModule: Module = module {
             platform = get(),
             helper = get(),
             installedAppsRepository = get(),
-            favoritesRepository = get(),
+            favouritesRepository = get(),
             packageMonitor = get<PackageMonitor>(),
             syncInstalledAppsUseCase = get()
         )
