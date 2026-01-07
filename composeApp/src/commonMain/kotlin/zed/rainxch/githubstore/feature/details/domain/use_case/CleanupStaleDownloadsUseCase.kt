@@ -4,14 +4,15 @@ import co.touchlab.kermit.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import zed.rainxch.githubstore.core.data.services.Downloader
+import java.util.concurrent.atomic.AtomicBoolean
 
 class CleanupStaleDownloadsUseCase(
     private val downloader: Downloader
 ) {
-    private var hasRunThisSession = false
+    private val hasRunThisSession = AtomicBoolean(false)
     
     suspend operator fun invoke() {
-        if (hasRunThisSession) {
+        if (!hasRunThisSession.compareAndSet(false, true)) {
             Logger.d { "Stale downloads cleanup already ran this session" }
             return
         }
@@ -42,8 +43,6 @@ class CleanupStaleDownloadsUseCase(
                 } else {
                     Logger.d { "No stale files to clean up" }
                 }
-                
-                hasRunThisSession = true
             } catch (t: Throwable) {
                 Logger.e { "Failed to cleanup stale files: ${t.message}" }
             }
