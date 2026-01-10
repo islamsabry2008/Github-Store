@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
     <id>zed.rainxch.githubstore</id>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>Apache-2.0</project_license>
     <name>GitHub Store</name>
     <summary>An app store for GitHub releases</summary>
     <description>
@@ -16,23 +18,21 @@
         </ul>
         <p>Built with Kotlin Multiplatform and Compose Multiplatform.</p>
     </description>
-    <project-license>Apache-2.0</project-license>
+    <developer id="zed.rainxch">
+        <name>rainxchzed</name>
+    </developer>
     <url type="homepage">https://github.com/rainxchzed/Github-Store</url>
     <url type="bugtracker">https://github.com/rainxchzed/Github-Store/issues</url>
     <launchable type="desktop-id">zed.rainxch.githubstore.desktop</launchable>
-    <screenshots>
-        <screenshot type="default">
-            <image>https://github.com/rainxchzed/Github-Store/raw/main/screenshots/screenshot1.png</image> <!-- Replace with real URL -->
-            <caption>Main discovery screen</caption>
-        </screenshot>
-        <screenshot>
-            <image>https://github.com/rainxchzed/Github-Store/raw/main/screenshots/screenshot2.png</image> <!-- Replace with real URL -->
-            <caption>App details view</caption>
-        </screenshot>
-    </screenshots>
+    <provides>
+        <binary>GitHub-Store</binary>
+    </provides>
+    <content_rating type="oars-1.1" />
     <releases>
         <release version="1.5.1" date="2026-01-10">
-            <description><p>Latest updates and bug fixes.</p></description>
+            <description>
+                <p>Latest updates and bug fixes.</p>
+            </description>
         </release>
     </releases>
 </component>

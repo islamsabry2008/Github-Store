@@ -311,6 +311,7 @@ tasks.register<Exec>("packageFlatpak") {
         "--install-deps-from=flathub",
         "--repo=${repoDir.get().absolutePath}",
         "--force-clean",
+        "--disable-rofiles-fuse",
         "build/${appId}",
         "$appId.yml"
     )
