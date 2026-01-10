@@ -45,6 +45,7 @@ modules:
       - type: file
         path: zed.rainxch.githubstore.appdata.xml
     build-commands:
+      - chmod +x gradlew
       - export GRADLE_USER_HOME=$PWD/.gradle
       - ./gradlew --offline --no-daemon packageAppImage
       - mkdir -p /app/bin /app/lib
