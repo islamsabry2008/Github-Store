@@ -5,18 +5,15 @@ package zed.rainxch.githubstore.core.data.repository
 import co.touchlab.kermit.Logger
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.parameter
-import io.ktor.client.request.put
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
@@ -29,7 +26,6 @@ import zed.rainxch.githubstore.core.data.model.GitHubStarredResponse
 import zed.rainxch.githubstore.core.domain.Platform
 import zed.rainxch.githubstore.core.domain.model.PlatformType
 import zed.rainxch.githubstore.core.domain.repository.StarredRepository
-import zed.rainxch.githubstore.feature.details.domain.repository.DetailsRepository
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
@@ -47,7 +43,7 @@ class StarredRepositoryImpl(
 
     override fun getAllStarred(): Flow<List<StarredRepo>> = dao.getAllStarred()
 
-    override fun isStarred(repoId: Long): Flow<Boolean> = dao.isStarred(repoId)
+    override suspend fun isStarred(repoId: Long): Boolean = dao.isStarred(repoId)
 
     override suspend fun isStarredSync(repoId: Long): Boolean = dao.isStarredSync(repoId)
 

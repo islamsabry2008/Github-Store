@@ -1,5 +1,7 @@
 package zed.rainxch.githubstore.feature.details.presentation
 
+import org.jetbrains.compose.resources.StringResource
+
 sealed interface DetailsAction {
     data object Retry : DetailsAction
     data object InstallPrimary : DetailsAction
@@ -21,8 +23,9 @@ sealed interface DetailsAction {
 
     data object OnNavigateBackClick : DetailsAction
 
-    // NEW ACTIONS
     data object OnToggleFavorite : DetailsAction
     data object CheckForUpdates : DetailsAction
     data object UpdateApp : DetailsAction
+
+    data class OnMessage(val messageText: StringResource) : DetailsAction
 }

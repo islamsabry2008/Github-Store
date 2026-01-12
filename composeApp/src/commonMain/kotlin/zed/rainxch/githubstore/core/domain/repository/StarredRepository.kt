@@ -5,7 +5,7 @@ import zed.rainxch.githubstore.core.data.local.db.entities.StarredRepo
 
 interface StarredRepository {
     fun getAllStarred(): Flow<List<StarredRepo>>
-    fun isStarred(repoId: Long): Flow<Boolean>
+    suspend fun isStarred(repoId: Long): Boolean
     suspend fun isStarredSync(repoId: Long): Boolean
 
     suspend fun syncStarredRepos(forceRefresh: Boolean = false): Result<Unit>

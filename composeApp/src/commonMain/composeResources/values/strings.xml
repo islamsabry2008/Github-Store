@@ -260,5 +260,9 @@
     <string name="added_on_date">added on %1$s</string>
 
     <string name="starred_repositories">Starred Repositories</string>
+    <string name="repository_starred">Repository is starred</string>
+    <string name="repository_not_starred">Repository is not starred</string>
+    <string name="star_from_github">You can star repository from GitHub</string>
+    <string name="unstar_from_github">You can unstar repository from GitHub</string>
 
 </resources>

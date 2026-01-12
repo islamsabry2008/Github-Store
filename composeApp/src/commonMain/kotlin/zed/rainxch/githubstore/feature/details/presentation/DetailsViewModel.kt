@@ -35,6 +35,7 @@ import zed.rainxch.githubstore.core.domain.repository.InstalledAppsRepository
 import zed.rainxch.githubstore.core.presentation.utils.BrowserHelper
 import zed.rainxch.githubstore.core.data.services.Downloader
 import zed.rainxch.githubstore.core.data.services.Installer
+import zed.rainxch.githubstore.core.domain.repository.StarredRepository
 import zed.rainxch.githubstore.core.domain.use_cases.SyncInstalledAppsUseCase
 import zed.rainxch.githubstore.feature.details.domain.repository.DetailsRepository
 import zed.rainxch.githubstore.feature.details.presentation.model.LogResult
@@ -50,6 +51,7 @@ class DetailsViewModel(
     private val helper: BrowserHelper,
     private val installedAppsRepository: InstalledAppsRepository,
     private val favouritesRepository: FavouritesRepository,
+    private val starredRepository: StarredRepository,
     private val packageMonitor: PackageMonitor,
     private val syncInstalledAppsUseCase: SyncInstalledAppsUseCase
 ) : ViewModel() {
@@ -96,11 +98,24 @@ class DetailsViewModel(
                     }
                 }
                 val isFavorite = isFavoriteDeferred.await()
+                val isStarredDeferred = async {
+                    try {
+                        starredRepository.isStarred(repo.id)
+                    } catch (t: Throwable) {
+                        Logger.e { "Failed to load if repo is starred: ${t.localizedMessage}" }
+                        false
+                    }
+                }
+                val isStarred = isStarredDeferred.await()
 
                 val owner = repo.owner.login
                 val name = repo.name
 
-                _state.value = _state.value.copy(repository = repo, isFavorite = isFavorite)
+                _state.value = _state.value.copy(
+                    repository = repo,
+                    isFavourite = isFavorite,
+                    isStarred = isStarred,
+                )
 
                 val latestReleaseDeferred = async {
                     try {
@@ -302,7 +317,7 @@ class DetailsViewModel(
                         favouritesRepository.toggleFavorite(favoriteRepo)
 
                         val newFavoriteState = favouritesRepository.isFavoriteSync(repo.id)
-                        _state.value = _state.value.copy(isFavorite = newFavoriteState)
+                        _state.value = _state.value.copy(isFavourite = newFavoriteState)
 
                         _events.send(
                             element = DetailsEvent.OnMessage(
@@ -483,16 +498,22 @@ class DetailsViewModel(
                 }
             }
 
-            DetailsAction.OnNavigateBackClick -> { /* handled in UI host */
-            }
-
-            is DetailsAction.OpenAuthorInApp -> { /* handled in UI host */
-            }
-
             DetailsAction.OnToggleInstallDropdown -> {
                 _state.update {
                     it.copy(isInstallDropdownExpanded = !it.isInstallDropdownExpanded)
                 }
+            }
+
+            DetailsAction.OnNavigateBackClick -> {
+                // Handled in composable
+            }
+
+            is DetailsAction.OpenAuthorInApp -> {
+                // Handled in composable
+            }
+
+            is DetailsAction.OnMessage -> {
+                // Handled in composable
             }
         }
     }
@@ -677,7 +698,7 @@ class DetailsViewModel(
                 installedAppsRepository.saveInstalledApp(installedApp)
             }
 
-            if (_state.value.isFavorite) {
+            if (_state.value.isFavourite) {
                 favouritesRepository.updateFavoriteInstallStatus(
                     repoId = repo.id,
                     installed = true,
@@ -795,7 +816,7 @@ class DetailsViewModel(
     }
 
     private companion object {
-        const val OBTAINIUM_REPO_ID : Long = 523534328
-        const val APP_MANAGER_REPO_ID : Long = 268006778
+        const val OBTAINIUM_REPO_ID: Long = 523534328
+        const val APP_MANAGER_REPO_ID: Long = 268006778
     }
 }

@@ -14,6 +14,8 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.OpenInBrowser
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -34,21 +36,23 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import githubstore.composeapp.generated.resources.Res
 import githubstore.composeapp.generated.resources.add_to_favourites
-import githubstore.composeapp.generated.resources.added_to_favourites
 import githubstore.composeapp.generated.resources.navigate_back
 import githubstore.composeapp.generated.resources.open_repository
 import githubstore.composeapp.generated.resources.remove_from_favourites
-import githubstore.composeapp.generated.resources.removed_from_favourites
+import githubstore.composeapp.generated.resources.repository_not_starred
+import githubstore.composeapp.generated.resources.repository_starred
+import githubstore.composeapp.generated.resources.star_from_github
+import githubstore.composeapp.generated.resources.unstar_from_github
 import io.github.fletchmckee.liquid.LiquidState
 import io.github.fletchmckee.liquid.liquefiable
 import io.github.fletchmckee.liquid.liquid
 import io.github.fletchmckee.liquid.rememberLiquidState
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
@@ -105,6 +109,12 @@ fun DetailsRoot(
                     // TODO will be implemented in future
                 }
 
+                is DetailsAction.OnMessage -> {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(getString(action.messageText))
+                    }
+                }
+
                 else -> {
                     viewModel.onAction(action)
                 }
@@ -127,13 +137,17 @@ fun DetailsScreen(
     ) {
         Scaffold(
             topBar = {
-                DetailsTopbar(onAction, state, liquidTopbarState)
+                DetailsTopbar(
+                    state = state,
+                    onAction = onAction,
+                    liquidTopbarState = liquidTopbarState
+                )
             },
-            containerColor = MaterialTheme.colorScheme.background,
-            modifier = Modifier.liquefiable(liquidTopbarState),
             snackbarHost = {
                 SnackbarHost(snackbarHostState)
-            }
+            },
+            containerColor = MaterialTheme.colorScheme.background,
+            modifier = Modifier.liquefiable(liquidTopbarState)
         ) { innerPadding ->
 
             if (state.isLoading) {
@@ -199,8 +213,8 @@ fun DetailsScreen(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun DetailsTopbar(
-    onAction: (DetailsAction) -> Unit,
     state: DetailsState,
+    onAction: (DetailsAction) -> Unit,
     liquidTopbarState: LiquidState
 ) {
     TopAppBar(
@@ -227,6 +241,39 @@ private fun DetailsTopbar(
                 if (state.repository != null) {
                     IconButton(
                         onClick = {
+                            onAction(
+                                DetailsAction.OnMessage(
+                                    messageText = if (state.isStarred) {
+                                        Res.string.unstar_from_github
+                                    } else {
+                                        Res.string.star_from_github
+                                    }
+                                )
+                            )
+                        },
+                        shapes = IconButtonDefaults.shapes(),
+                        colors = IconButtonDefaults.iconButtonColors(
+                            contentColor = MaterialTheme.colorScheme.onSurface
+                        )
+                    ) {
+                        Icon(
+                            imageVector = if (state.isStarred) {
+                                Icons.Default.Star
+                            } else Icons.Default.StarBorder,
+                            contentDescription = stringResource(
+                                resource = if (state.isStarred) {
+                                    Res.string.repository_starred
+                                } else {
+                                    Res.string.repository_not_starred
+                                }
+                            ),
+                        )
+                    }
+                }
+
+                if (state.repository != null) {
+                    IconButton(
+                        onClick = {
                             onAction(DetailsAction.OnToggleFavorite)
                         },
                         shapes = IconButtonDefaults.shapes(),
@@ -235,11 +282,11 @@ private fun DetailsTopbar(
                         )
                     ) {
                         Icon(
-                            imageVector = if (state.isFavorite) {
+                            imageVector = if (state.isFavourite) {
                                 Icons.Default.Favorite
                             } else Icons.Default.FavoriteBorder,
                             contentDescription = stringResource(
-                                resource = if (state.isFavorite) {
+                                resource = if (state.isFavourite) {
                                     Res.string.remove_from_favourites
                                 } else {
                                     Res.string.add_to_favourites

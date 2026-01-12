@@ -17,8 +17,11 @@ interface StarredRepoDao {
     suspend fun getStarredById(repoId: Long): StarredRepo?
     
     @Query("SELECT EXISTS(SELECT 1 FROM starred_repos WHERE repoId = :repoId)")
-    fun isStarred(repoId: Long): Flow<Boolean>
-    
+    suspend fun isStarred(repoId: Long): Boolean
+
+    @Query("SELECT EXISTS(SELECT 1 FROM starred_repos WHERE repoId = :repoId)")
+    fun isStarredFlow(repoId: Long): Flow<Boolean>
+
     @Query("SELECT EXISTS(SELECT 1 FROM starred_repos WHERE repoId = :repoId)")
     suspend fun isStarredSync(repoId: Long): Boolean
     

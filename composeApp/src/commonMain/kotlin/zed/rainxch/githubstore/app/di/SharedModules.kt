@@ -235,7 +235,8 @@ val detailsModule: Module = module {
             installedAppsRepository = get(),
             favouritesRepository = get(),
             packageMonitor = get<PackageMonitor>(),
-            syncInstalledAppsUseCase = get()
+            syncInstalledAppsUseCase = get(),
+            starredRepository = get()
         )
     }
 }
