@@ -4,4 +4,5 @@ sealed interface DetailsEvent {
     data class OnOpenRepositoryInApp(val repositoryId: Long) : DetailsEvent
     data class InstallTrackingFailed(val message: String) : DetailsEvent
     data class OnMessage(val message: String) : DetailsEvent
+    data object OnNavigateToShizukuSetup : DetailsEvent
 }
