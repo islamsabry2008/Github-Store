@@ -31,9 +31,17 @@ It discovers repositories that ship real installable binaries and lets you insta
   <img src="screenshots/banner.png" />
 </p>
 
+#### All screenshots can be found in [screenshots/](screenshots/) folder.
+
 ---
 
-### All screenshots can be found in [screenshots/](screenshots/) folder.
+## 📋 Legal
+
+**Privacy Policy:** [openhub-store.github.io/privacy-policy](https://openhub-store.github.io/privacy-policy/)
+
+**Disclaimer:** GitHub Store is an independent, open-source project not affiliated with GitHub, Inc. The name describes the app's functionality (discovering GitHub releases from the GitHub platform) and does not imply trademark ownership or association. GitHub® is a registered trademark of GitHub, Inc.
+
+---
 
 <img src="/screenshots/preview.gif" align="right" width="320"/>
 
