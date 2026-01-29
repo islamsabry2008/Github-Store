@@ -292,17 +292,15 @@ automatically—no manual submission required.
 
 ---
 
-## ☕ Keep GitHub Store Free & Maintained
+## ☕ Support the project
 
-**GitHub Store** has reached **42,000+ active users** and **4,500+ GitHub stars** — and it's **100% free** with no ads, no tracking, and no premium features.
+**GitHub Store** has reached **48,000+ active users** and **5,500+ GitHub stars** — and it's **100% free** with no ads, no tracking, and no premium features.
 
-I'm **Usmon, a 16-year-old student from Uzbekistan**, and I built and maintain this entirely on my own while finishing high school. Your support (even $3) helps me:
+I built and maintain this entirely on my own while finishing high school. Your support (even $3) helps me:
 
 ✅ **Keep the app bug-free** — respond to issues and ship fixes quickly  
 ✅ **Add community-requested features** — implement what users actually need  
-✅ **Maintain infrastructure** — servers, APIs, and deployment costs  
-✅ **Build more free tools** — KMP plugins and educational content  
-✅ **Support my family** — helping them while pursuing my passion for coding  
+✅ **Maintain infrastructure** — servers, APIs, and deployment costs
 
 ### 💖 Ways to Support
 
