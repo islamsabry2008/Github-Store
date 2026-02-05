@@ -1,3 +1,5 @@
 package zed.rainxch.core.domain
 
-expect fun platform(): String
+import zed.rainxch.core.domain.model.Platform
+
+expect fun getPlatform(): Platform
