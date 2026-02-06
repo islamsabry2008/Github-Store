@@ -292,7 +292,7 @@ automatically—no manual submission required.
 
 ---
 
-## 🔐 Github-Store APK Signing Certificate
+## 🔐 GitHub Store APK Signing Certificate
 
 All official GitHub Store releases are signed with the following certificate fingerprint:
 
