@@ -66,6 +66,8 @@ projectVersionCode = "10"
 desktopPackageName = "GitHub-Store"
 desktopPackageVersion = "1.5.1"
 
+jetbrainsMarkdown = "0.7.3"
+
 [libraries]
 # Kotlin
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
@@ -173,9 +175,7 @@ jetbrains-lifecycle-viewmodel-savedstate = { module = "org.jetbrains.androidx.li
 jetbrains-savedstate = { module = "org.jetbrains.androidx.savedstate:savedstate", version.ref = "jetbrains-savedstate" }
 jetbrains-bundle = { module = "org.jetbrains.androidx.core:core-bundle", version.ref = "jetbrains-core-bundle" }
 
-# Markdown
-markdown-renderer = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "markdownRenderer" }
-markdown-renderer-coil3 = { module = "com.mikepenz:multiplatform-markdown-renderer-coil3", version.ref = "markdownRenderer" }
+jetbrains-markdown = { module = "org.jetbrains:markdown", version.ref = "jetbrainsMarkdown" }
 
 # Liquid effect
 liquid = { module = "io.github.fletchmckee.liquid:liquid", version.ref = "liquid" }

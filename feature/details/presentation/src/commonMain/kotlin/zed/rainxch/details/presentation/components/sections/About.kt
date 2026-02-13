@@ -1,5 +1,6 @@
 package zed.rainxch.details.presentation.components.sections
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,30 +10,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.mikepenz.markdown.compose.Markdown
 import githubstore.feature.details.presentation.generated.resources.Res
 import githubstore.feature.details.presentation.generated.resources.about_this_app
 import io.github.fletchmckee.liquid.liquefiable
-import org.intellij.markdown.flavours.gfm.GFMFlavourDescriptor
 import org.jetbrains.compose.resources.stringResource
+import zed.rainxch.details.presentation.components.MarkdownWebView
+import zed.rainxch.details.presentation.components.rememberGitHubHtml
 import zed.rainxch.details.presentation.utils.LocalTopbarLiquidState
-import zed.rainxch.details.presentation.utils.MarkdownImageTransformer
-import zed.rainxch.details.presentation.utils.rememberMarkdownColors
-import zed.rainxch.details.presentation.utils.rememberMarkdownTypography
 
 fun LazyListScope.about(
     readmeMarkdown: String,
     readmeLanguage: String?,
 ) {
-    item {
+    item(key = "about_header") {
         val liquidState = LocalTopbarLiquidState.current
 
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
@@ -66,27 +63,32 @@ fun LazyListScope.about(
         }
     }
 
-    item {
-        val liquidState = LocalTopbarLiquidState.current
-
-        Surface(
-            color = Color.Transparent,
-            contentColor = MaterialTheme.colorScheme.onBackground
-        ) {
-            val colors = rememberMarkdownColors()
-            val typography = rememberMarkdownTypography()
-            val flavour = remember { GFMFlavourDescriptor() }
-
-            Markdown(
-                content = readmeMarkdown,
-                colors = colors,
-                typography = typography,
-                flavour = flavour,
-                imageTransformer = MarkdownImageTransformer,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .liquefiable(liquidState),
-            )
-        }
+    item(key = "about_content") {
+        ReadmeWebView(
+            markdown = readmeMarkdown
+        )
     }
+}
+
+@Composable
+private fun ReadmeWebView(markdown: String) {
+    val liquidState = LocalTopbarLiquidState.current
+
+    val isDarkTheme = isSystemInDarkTheme()
+    val uriHandler = LocalUriHandler.current
+
+    val html = rememberGitHubHtml(
+        markdown = markdown,
+        isDarkTheme = isDarkTheme,
+    )
+
+    MarkdownWebView(
+        html = html,
+        modifier = Modifier
+            .fillMaxWidth()
+            .liquefiable(liquidState),
+        onLinkClick = { url ->
+            uriHandler.openUri(url)
+        }
+    )
 }

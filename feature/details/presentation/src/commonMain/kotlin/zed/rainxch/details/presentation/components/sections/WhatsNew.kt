@@ -1,5 +1,6 @@
 package zed.rainxch.details.presentation.components.sections
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,23 +14,20 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.mikepenz.markdown.coil3.Coil3ImageTransformerImpl
-import com.mikepenz.markdown.compose.Markdown
 import githubstore.feature.details.presentation.generated.resources.Res
 import githubstore.feature.details.presentation.generated.resources.no_release_notes
 import githubstore.feature.details.presentation.generated.resources.whats_new
 import io.github.fletchmckee.liquid.liquefiable
-import org.intellij.markdown.flavours.gfm.GFMFlavourDescriptor
 import org.jetbrains.compose.resources.stringResource
 import zed.rainxch.core.domain.model.GithubRelease
+import zed.rainxch.details.presentation.components.MarkdownWebView
+import zed.rainxch.details.presentation.components.rememberGitHubHtml
 import zed.rainxch.details.presentation.utils.LocalTopbarLiquidState
-import zed.rainxch.details.presentation.utils.rememberMarkdownColors
-import zed.rainxch.details.presentation.utils.rememberMarkdownTypography
 
 fun LazyListScope.whatsNew(latestRelease: GithubRelease) {
     item {
@@ -84,22 +82,26 @@ fun LazyListScope.whatsNew(latestRelease: GithubRelease) {
 
                 Spacer(Modifier.height(12.dp))
 
-                val colors = rememberMarkdownColors()
-                val typography = rememberMarkdownTypography()
-                val flavour = remember { GFMFlavourDescriptor() }
-
-                Markdown(
-                    content = latestRelease.description ?: stringResource(Res.string.no_release_notes),
-                    colors = colors,
-                    typography = typography,
-                    flavour = flavour,
-                    imageTransformer = Coil3ImageTransformerImpl,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .liquefiable(liquidState),
+                ReleaseNotesWebView(
+                    description = latestRelease.description,
                 )
             }
         }
     }
 }
 
+@Composable
+private fun ReleaseNotesWebView(description: String?) {
+    val isDarkTheme = isSystemInDarkTheme()
+    val content = description ?: stringResource(Res.string.no_release_notes)
+
+    val html = rememberGitHubHtml(
+        markdown = content,
+        isDarkTheme = isDarkTheme,
+    )
+
+    MarkdownWebView(
+        html = html,
+        modifier = Modifier.fillMaxWidth(),
+    )
+}

@@ -12,8 +12,7 @@ kotlin {
                 implementation(projects.core.presentation)
                 implementation(projects.feature.details.domain)
 
-                implementation(libs.markdown.renderer)
-                implementation(libs.markdown.renderer.coil3)
+                implementation(libs.jetbrains.markdown)
 
                 implementation(compose.components.resources)
                 implementation(libs.liquid)
@@ -32,7 +31,18 @@ kotlin {
 
         jvmMain {
             dependencies {
-
+                val javafxVersion = "21.0.2"
+                val currentOS = org.gradle.internal.os.OperatingSystem.current()
+                val platform = when {
+                    currentOS.isWindows -> "win"
+                    currentOS.isMacOsX -> "mac"
+                    else -> "linux"
+                }
+                implementation("org.openjfx:javafx-base:$javafxVersion:$platform")
+                implementation("org.openjfx:javafx-graphics:$javafxVersion:$platform")
+                implementation("org.openjfx:javafx-controls:$javafxVersion:$platform")
+                implementation("org.openjfx:javafx-web:$javafxVersion:$platform")
+                implementation("org.openjfx:javafx-swing:$javafxVersion:$platform")
             }
         }
     }
