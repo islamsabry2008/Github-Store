@@ -8,15 +8,15 @@ fun NavBackStackEntry?.getCurrentScreen(): GithubStoreGraph? {
     val route = destination.route ?: return null
 
     return when {
-        route.startsWith("HomeScreen") -> GithubStoreGraph.HomeScreen
-        route.startsWith("SearchScreen") -> GithubStoreGraph.SearchScreen
-        route.startsWith("AuthenticationScreen") -> GithubStoreGraph.AuthenticationScreen
-        route.startsWith("DetailsScreen") -> toRoute<GithubStoreGraph.DetailsScreen>()
-        route.startsWith("DeveloperProfileScreen") -> toRoute<GithubStoreGraph.DeveloperProfileScreen>()
-        route.startsWith("SettingsScreen") -> GithubStoreGraph.SettingsScreen
-        route.startsWith("FavouritesScreen") -> GithubStoreGraph.FavouritesScreen
-        route.startsWith("StarredReposScreen") -> GithubStoreGraph.StarredReposScreen
-        route.startsWith("AppsScreen") -> GithubStoreGraph.AppsScreen
+        route.contains("HomeScreen") -> GithubStoreGraph.HomeScreen
+        route.contains("SearchScreen") -> GithubStoreGraph.SearchScreen
+        route.contains("AuthenticationScreen") -> GithubStoreGraph.AuthenticationScreen
+        route.contains("DetailsScreen") -> toRoute<GithubStoreGraph.DetailsScreen>()
+        route.contains("DeveloperProfileScreen") -> toRoute<GithubStoreGraph.DeveloperProfileScreen>()
+        route.contains("SettingsScreen") -> GithubStoreGraph.SettingsScreen
+        route.contains("FavouritesScreen") -> GithubStoreGraph.FavouritesScreen
+        route.contains("StarredReposScreen") -> GithubStoreGraph.StarredReposScreen
+        route.contains("AppsScreen") -> GithubStoreGraph.AppsScreen
         else -> null
     }
 }
