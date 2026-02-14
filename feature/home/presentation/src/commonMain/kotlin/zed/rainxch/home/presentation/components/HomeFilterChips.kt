@@ -299,11 +299,7 @@ private fun LiquidGlassCategoryChip(
 
     val textColor by animateColorAsState(
         targetValue = if (isSelected) {
-            if (isDarkTheme) {
-                MaterialTheme.colorScheme.onPrimaryContainer
-            } else {
-                MaterialTheme.colorScheme.onPrimaryContainer
-            }
+            MaterialTheme.colorScheme.onPrimaryContainer
         } else {
             MaterialTheme.colorScheme.onSurface.copy(alpha = .65f)
         },
