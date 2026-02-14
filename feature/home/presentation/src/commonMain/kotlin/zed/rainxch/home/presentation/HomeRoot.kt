@@ -1,7 +1,6 @@
 package zed.rainxch.home.presentation
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -60,8 +59,9 @@ import zed.rainxch.core.presentation.components.RepositoryCard
 import zed.rainxch.core.presentation.locals.LocalBottomNavigationLiquid
 import zed.rainxch.core.presentation.theme.GithubStoreTheme
 import zed.rainxch.core.presentation.utils.ObserveAsEvents
-import zed.rainxch.home.presentation.components.HomeFilterChips
 import zed.rainxch.home.domain.model.HomeCategory
+import zed.rainxch.home.presentation.components.LiquidGlassCategoryChips
+import zed.rainxch.home.presentation.locals.LocalHomeTopBarLiquid
 
 @Composable
 fun HomeRoot(
@@ -151,32 +151,40 @@ fun HomeScreen(
         }
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar()
-        },
-        containerColor = MaterialTheme.colorScheme.background
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 8.dp)
-                .liquefiable(liquidState)
-        ) {
-            FilterChips(state, onAction)
+    val homeTopbarLiquidState = rememberLiquidState()
 
-            Box(Modifier.fillMaxSize()) {
-                LoadingState(state)
+    CompositionLocalProvider(
+        LocalHomeTopBarLiquid provides homeTopbarLiquidState
+    ) {
+        Scaffold(
+            topBar = {
+                TopAppBar()
+            },
+            containerColor = MaterialTheme.colorScheme.background
+        ) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 8.dp)
+                    .liquefiable(liquidState)
+                    .liquefiable(homeTopbarLiquidState)
+            ) {
+                FilterChips(state, onAction)
 
-                ErrorState(state, onAction)
+                Box(Modifier.fillMaxSize()) {
+                    LoadingState(state)
 
-                MainState(
-                    state = state,
-                    listState = listState,
-                    onAction = onAction,
-                    liquidState = liquidState
-                )
+                    ErrorState(state, onAction)
+
+                    MainState(
+                        state = state,
+                        listState = listState,
+                        onAction = onAction,
+                        bottomNavLiquidState = liquidState,
+                        homeTopBarLiquidState = homeTopbarLiquidState
+                    )
+                }
             }
         }
     }
@@ -187,7 +195,8 @@ private fun MainState(
     state: HomeState,
     listState: LazyStaggeredGridState,
     onAction: (HomeAction) -> Unit,
-    liquidState: LiquidState
+    bottomNavLiquidState: LiquidState,
+    homeTopBarLiquidState: LiquidState
 ) {
     if (state.repos.isNotEmpty()) {
         LazyVerticalStaggeredGrid(
@@ -213,7 +222,8 @@ private fun MainState(
                     },
                     modifier = Modifier
                         .animateItem()
-                        .liquefiable(liquidState)
+                        .liquefiable(bottomNavLiquidState)
+                        .liquefiable(homeTopBarLiquidState)
                 )
             }
 
@@ -323,25 +333,13 @@ private fun FilterChips(
     state: HomeState,
     onAction: (HomeAction) -> Unit
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                MaterialTheme.colorScheme.primaryContainer, CircleShape
-            )
-            .padding(horizontal = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        HomeCategory.entries.forEach { category ->
-            HomeFilterChips(
-                selectedCategory = state.currentCategory,
-                category = category,
-                onClick = {
-                    onAction(HomeAction.SwitchCategory(category))
-                }
-            )
+    LiquidGlassCategoryChips(
+        categories = HomeCategory.entries.toList(),
+        selectedCategory = state.currentCategory,
+        onCategorySelected = { category ->
+            onAction(HomeAction.SwitchCategory(category))
         }
-    }
+    )
 }
 
 @Composable
