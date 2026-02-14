@@ -37,7 +37,9 @@ fun App(deepLinkUri: String? = null) {
                         )
                     )
                 }
-                DeepLinkDestination.None -> { /* ignore unrecognized deep links */ }
+
+                DeepLinkDestination.None -> { /* ignore unrecognized deep links */
+                }
             }
         }
     }
@@ -50,19 +52,21 @@ fun App(deepLinkUri: String? = null) {
     ) {
         ApplyAndroidSystemBars(state.isDarkTheme)
 
-        if (state.showRateLimitDialog && state.rateLimitInfo != null) {
-            RateLimitDialog(
-                rateLimitInfo = state.rateLimitInfo,
-                isAuthenticated = state.isLoggedIn,
-                onDismiss = {
-                    viewModel.onAction(MainAction.DismissRateLimitDialog)
-                },
-                onSignIn = {
-                    viewModel.onAction(MainAction.DismissRateLimitDialog)
+        if (state.showRateLimitDialog) {
+            state.rateLimitInfo?.let {
+                RateLimitDialog(
+                    rateLimitInfo = it,
+                    isAuthenticated = state.isLoggedIn,
+                    onDismiss = {
+                        viewModel.onAction(MainAction.DismissRateLimitDialog)
+                    },
+                    onSignIn = {
+                        viewModel.onAction(MainAction.DismissRateLimitDialog)
 
-                    navBackStack.navigate(GithubStoreGraph.AuthenticationScreen)
-                }
-            )
+                        navBackStack.navigate(GithubStoreGraph.AuthenticationScreen)
+                    }
+                )
+            }
         }
 
         AppNavigation(
