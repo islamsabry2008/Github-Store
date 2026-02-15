@@ -7,7 +7,6 @@ object AssetArchitectureMatcher {
     private val x86_64Regex = Regex(
         pattern = """(^|[^a-z0-9])(x86[_-]64|amd64|x64)([^a-z0-9]|$)"""
     )
-    )
     private val arm64Regex = Regex(
         pattern = """(^|[^a-z0-9])(aarch64|arm64|arm64-v8a|armv8a|armv8l|armv8|arm-v8|v8a)([^a-z0-9]|$)"""
     )
