@@ -78,7 +78,7 @@ fun SmartInstallButton(
 
     val buttonText = when {
         !enabled && primaryAsset == null -> stringResource(Res.string.not_available)
-        installedApp != null && installedApp.installedVersion != state.latestRelease?.tagName -> stringResource(
+        installedApp != null && installedApp.installedVersion != state.selectedRelease?.tagName -> stringResource(
             Res.string.update_app
         )
 

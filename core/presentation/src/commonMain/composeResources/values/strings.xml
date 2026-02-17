@@ -335,4 +335,13 @@
     <string name="bottom_nav_search_title">Search</string>
     <string name="bottom_nav_apps_title">Apps</string>
     <string name="bottom_nav_profile_title">Profile</string>
+
+    <!-- Version picker -->
+    <string name="category_stable">Stable</string>
+    <string name="category_pre_release">Pre-release</string>
+    <string name="category_all">All</string>
+    <string name="select_version">Select version</string>
+    <string name="pre_release_badge">Pre-release</string>
+    <string name="no_version_selected">No version</string>
+    <string name="versions_title">Versions</string>
 </resources>
