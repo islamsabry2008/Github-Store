@@ -73,16 +73,15 @@ class SyncInstalledAppsUseCase(
                     try {
                         val systemInfo = packageMonitor.getInstalledPackageInfo(app.packageName)
                         if (systemInfo != null) {
-                            app.latestVersionCode?.let { latestVersionCode ->
-                                installedAppsRepository.updateApp(
-                                    app.copy(
-                                        isPendingInstall = false,
-                                        installedVersionName = systemInfo.versionName,
-                                        installedVersionCode = systemInfo.versionCode,
-                                        isUpdateAvailable = latestVersionCode > systemInfo.versionCode
-                                    )
+                            val latestVersionCode = app.latestVersionCode ?: 0L
+                            installedAppsRepository.updateApp(
+                                app.copy(
+                                    isPendingInstall = false,
+                                    installedVersionName = systemInfo.versionName,
+                                    installedVersionCode = systemInfo.versionCode,
+                                    isUpdateAvailable = latestVersionCode > systemInfo.versionCode
                                 )
-                            }
+                            )
                             logger.info("Resolved pending install: ${app.packageName} (v${systemInfo.versionName}, code=${systemInfo.versionCode})")
                         } else {
                             installedAppsRepository.updatePendingStatus(app.packageName, false)

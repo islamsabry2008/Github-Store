@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -55,20 +56,25 @@ fun VersionPicker(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            ReleaseCategory.entries.forEach { category ->
-                FilterChip(
-                    selected = category == selectedCategory,
-                    onClick = { onAction(DetailsAction.SelectReleaseCategory(category)) },
-                    label = {
-                        Text(
-                            text = when (category) {
-                                ReleaseCategory.STABLE -> stringResource(Res.string.category_stable)
-                                ReleaseCategory.PRE_RELEASE -> stringResource(Res.string.category_pre_release)
-                                ReleaseCategory.ALL -> stringResource(Res.string.category_all)
-                            }
-                        )
-                    }
-                )
+            LazyRow (
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(ReleaseCategory.entries) { category ->
+                    FilterChip(
+                        selected = category == selectedCategory,
+                        onClick = { onAction(DetailsAction.SelectReleaseCategory(category)) },
+                        label = {
+                            Text(
+                                text = when (category) {
+                                    ReleaseCategory.STABLE -> stringResource(Res.string.category_stable)
+                                    ReleaseCategory.PRE_RELEASE -> stringResource(Res.string.category_pre_release)
+                                    ReleaseCategory.ALL -> stringResource(Res.string.category_all)
+                                }
+                            )
+                        }
+                    )
+                }
             }
         }
 

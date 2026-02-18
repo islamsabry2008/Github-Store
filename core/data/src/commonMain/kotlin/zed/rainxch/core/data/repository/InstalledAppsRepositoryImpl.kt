@@ -192,7 +192,7 @@ class InstalledAppsRepositoryImpl(
                             latestVersionName = latestRelease.tagName
                         }
                     } catch (e: Exception) {
-                        Logger.w { "Failed to download APK for version check of ${app.packageName}: ${e.message}" }
+                        Logger.w { "Failed to download or extract APK for version check of ${app.packageName}: ${e.message}" }
                         downloader.getDownloadedFilePath(tempAssetName)?.let { File(it).delete() }
                         latestVersionName = latestRelease.tagName
                     }
