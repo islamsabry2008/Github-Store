@@ -61,6 +61,9 @@ GitHub Store is a cross-platform app store for GitHub releases, designed to simp
 
 Built with Kotlin Multiplatform and Compose Multiplatform for Android and Desktop platforms.
 
+> [!CAUTION]
+> Free and Open-Source Android is under threat. Google will turn Android into a locked-down platform, restricting your essential freedom to install apps of your choice. Make your voice heard – [LINK](https://keepandroidopen.org/).
+
 </div>
 
 <p align="middle">
