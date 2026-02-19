@@ -298,7 +298,29 @@ class DetailsViewModel(
             DetailsAction.InstallPrimary -> {
                 val primary = _state.value.primaryAsset
                 val release = _state.value.selectedRelease
+                val installedApp = _state.value.installedApp
+
                 if (primary != null && release != null) {
+                    // Downgrade detection: if app is installed, selected version differs,
+                    // and it's NOT flagged as an update, it might be a downgrade
+                    if (installedApp != null &&
+                        !installedApp.isPendingInstall &&
+                        !installedApp.isUpdateAvailable &&
+                        normalizeVersion(release.tagName) != normalizeVersion(installedApp.installedVersion) &&
+                        platform == Platform.ANDROID
+                    ) {
+                        viewModelScope.launch {
+                            _events.send(
+                                DetailsEvent.ShowDowngradeWarning(
+                                    packageName = installedApp.packageName,
+                                    currentVersion = installedApp.installedVersion,
+                                    targetVersion = release.tagName
+                                )
+                            )
+                        }
+                        return
+                    }
+
                     installAsset(
                         downloadUrl = primary.downloadUrl,
                         assetName = primary.name,
@@ -428,6 +450,29 @@ class DetailsViewModel(
                             sizeBytes = latestAsset.size,
                             releaseTag = selectedRelease.tagName,
                             isUpdate = true
+                        )
+                    }
+                }
+            }
+
+            DetailsAction.UninstallApp -> {
+                val installedApp = _state.value.installedApp ?: return
+                logger.debug("Uninstalling app: ${installedApp.packageName}")
+                installer.uninstall(installedApp.packageName)
+            }
+
+            DetailsAction.OpenApp -> {
+                val installedApp = _state.value.installedApp ?: return
+                val launched = installer.openApp(installedApp.packageName)
+                if (!launched) {
+                    viewModelScope.launch {
+                        _events.send(
+                            DetailsEvent.OnMessage(
+                                getString(
+                                    Res.string.failed_to_open_app,
+                                    arrayOf(installedApp.appName)
+                                )
+                            )
                         )
                     }
                 }
@@ -908,6 +953,10 @@ class DetailsViewModel(
                 downloader.cancelDownload(assetName)
             }
         }
+    }
+
+    private fun normalizeVersion(version: String): String {
+        return version.removePrefix("v").removePrefix("V").trim()
     }
 
     private companion object {
