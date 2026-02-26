@@ -2,6 +2,7 @@ package zed.rainxch.profile.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -29,6 +30,8 @@ class ProfileViewModel(
     private val proxyRepository: ProxyRepository
 ) : ViewModel() {
 
+    private var userProfileJob: Job? = null
+
     private var hasLoadedInitialData = false
 
     private val _state = MutableStateFlow(ProfileState())
@@ -37,6 +40,7 @@ class ProfileViewModel(
             if (!hasLoadedInitialData) {
                 loadCurrentTheme()
                 collectIsUserLoggedIn()
+                loadUserProfile()
                 loadVersionName()
                 loadProxyConfig()
 
@@ -67,7 +71,22 @@ class ProfileViewModel(
             profileRepository.isUserLoggedIn
                 .collect { isLoggedIn ->
                     _state.update { it.copy(isUserLoggedIn = isLoggedIn) }
+                    if (isLoggedIn) {
+                        loadUserProfile()
+                    } else {
+                        _state.update { it.copy(userProfile = null) }
+                    }
                 }
+        }
+    }
+
+    private fun loadUserProfile() {
+        userProfileJob?.cancel()
+
+        userProfileJob = viewModelScope.launch {
+            profileRepository.getUser().collect { profile ->
+                _state.update { it.copy(userProfile = profile) }
+            }
         }
     }
 
@@ -170,7 +189,7 @@ class ProfileViewModel(
                     runCatching {
                         profileRepository.logout()
                     }.onSuccess {
-                        _state.update { it.copy(isLogoutDialogVisible = false) }
+                        _state.update { it.copy(isLogoutDialogVisible = false, userProfile = null) }
                         _events.send(ProfileEvent.OnLogoutSuccessful)
                     }.onFailure { error ->
                         _state.update { it.copy(isLogoutDialogVisible = false) }
@@ -190,6 +209,18 @@ class ProfileViewModel(
             }
 
             ProfileAction.OnNavigateBackClick -> {
+                /* Handed in composable */
+            }
+
+            ProfileAction.OnLoginClick -> {
+                /* Handed in composable */
+            }
+
+            ProfileAction.OnFavouriteReposClick -> {
+                /* Handed in composable */
+            }
+
+            ProfileAction.OnStarredReposClick -> {
                 /* Handed in composable */
             }
 

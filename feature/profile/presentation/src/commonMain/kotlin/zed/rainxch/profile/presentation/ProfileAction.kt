@@ -10,8 +10,11 @@ sealed interface ProfileAction {
     data class OnDarkThemeChange(val isDarkTheme: Boolean?) : ProfileAction
     data object OnLogoutClick : ProfileAction
     data object OnLogoutConfirmClick : ProfileAction
+    data object OnStarredReposClick : ProfileAction
+    data object OnFavouriteReposClick : ProfileAction
     data object OnLogoutDismiss : ProfileAction
     data object OnHelpClick : ProfileAction
+    data object OnLoginClick : ProfileAction
     data class OnFontThemeSelected(val fontTheme: FontTheme) : ProfileAction
     data class OnProxyTypeSelected(val type: ProxyType) : ProfileAction
     data class OnProxyHostChanged(val host: String) : ProfileAction

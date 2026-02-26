@@ -213,6 +213,15 @@ fun AppNavigation(
                     ProfileRoot(
                         onNavigateBack = {
                             navController.navigateUp()
+                        },
+                        onNavigateToAuthentication = {
+                            navController.navigate(GithubStoreGraph.AuthenticationScreen)
+                        },
+                        onNavigateToStarredRepos = {
+                            navController.navigate(GithubStoreGraph.StarredReposScreen)
+                        },
+                        onNavigateToFavouriteRepos = {
+                            navController.navigate(GithubStoreGraph.FavouritesScreen)
                         }
                     )
                 }
