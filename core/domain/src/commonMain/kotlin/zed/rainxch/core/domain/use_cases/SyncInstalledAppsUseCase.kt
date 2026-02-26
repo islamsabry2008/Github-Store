@@ -17,6 +17,7 @@ import zed.rainxch.core.domain.system.PackageMonitor
  * 2. Migrate legacy apps missing versionName/versionCode fields
  * 3. Resolve pending installs once they appear in the system package manager
  * 4. Clean up stale pending installs (older than 24 hours)
+ * 5. Detect external version changes (downgrades on rooted devices, sideloads, etc.)
  *
  * This should be called before loading or refreshing app data to ensure consistency.
  */
@@ -44,6 +45,7 @@ class SyncInstalledAppsUseCase(
             val toMigrate = mutableListOf<Pair<String, MigrationResult>>()
             val toResolvePending = mutableListOf<InstalledApp>()
             val toDeleteStalePending = mutableListOf<String>()
+            val toSyncVersions = mutableListOf<InstalledApp>()
 
             appsInDb.forEach { app ->
                 val isOnSystem = installedPackageNames.contains(app.packageName)
@@ -63,6 +65,11 @@ class SyncInstalledAppsUseCase(
                     app.installedVersionName == null -> {
                         val migrationResult = determineMigrationData(app)
                         toMigrate.add(app.packageName to migrationResult)
+                    }
+
+                    // Detect external version changes (downgrades on rooted devices, sideloads, etc.)
+                    isOnSystem && platform == Platform.ANDROID -> {
+                        toSyncVersions.add(app)
                     }
                 }
             }
@@ -130,11 +137,42 @@ class SyncInstalledAppsUseCase(
                         logger.error("Failed to migrate $packageName: ${e.message}")
                     }
                 }
+
+                toSyncVersions.forEach { app ->
+                    try {
+                        val systemInfo = packageMonitor.getInstalledPackageInfo(app.packageName)
+                        if (systemInfo != null && systemInfo.versionCode != app.installedVersionCode) {
+                            val wasDowngrade = systemInfo.versionCode < app.installedVersionCode
+                            val latestVersionCode = app.latestVersionCode ?: 0L
+                            val isUpdateAvailable = latestVersionCode > systemInfo.versionCode
+
+                            installedAppsRepository.updateApp(
+                                app.copy(
+                                    installedVersionName = systemInfo.versionName,
+                                    installedVersionCode = systemInfo.versionCode,
+                                    installedVersion = systemInfo.versionName,
+                                    isUpdateAvailable = isUpdateAvailable
+                                )
+                            )
+
+                            val action = if (wasDowngrade) "downgrade" else "external update"
+                            logger.info(
+                                "Detected $action for ${app.packageName}: " +
+                                        "DB v${app.installedVersionName}(${app.installedVersionCode}) → " +
+                                        "System v${systemInfo.versionName}(${systemInfo.versionCode}), " +
+                                        "updateAvailable=$isUpdateAvailable"
+                            )
+                        }
+                    } catch (e: Exception) {
+                        logger.error("Failed to sync version for ${app.packageName}: ${e.message}")
+                    }
+                }
             }
 
             logger.info(
                 "Sync completed: ${toDelete.size} deleted, ${toDeleteStalePending.size} stale pending removed, " +
-                        "${toResolvePending.size} pending resolved, ${toMigrate.size} migrated"
+                        "${toResolvePending.size} pending resolved, ${toMigrate.size} migrated, " +
+                        "${toSyncVersions.size} version-checked"
             )
 
             Result.success(Unit)

@@ -23,6 +23,8 @@ sealed interface DetailsAction {
     data object OpenInAppManager : DetailsAction
     data object OnToggleInstallDropdown : DetailsAction
 
+    data object TrackExistingApp : DetailsAction
+
     data object OnNavigateBackClick : DetailsAction
 
     data object OnToggleFavorite : DetailsAction
