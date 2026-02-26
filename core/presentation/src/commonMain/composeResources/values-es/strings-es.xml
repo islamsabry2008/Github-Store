@@ -91,6 +91,7 @@
 
     <string name="section_appearance">APARIENCIA</string>
     <string name="section_about">ACERCA DE</string>
+    <string name="section_network">RED</string>
 
     <string name="theme_color">Color del tema</string>
     <string name="amoled_black_theme">Tema negro AMOLED</string>
@@ -334,5 +335,21 @@
     <string name="last_checked_minutes_ago">hace %1$d min</string>
     <string name="last_checked_hours_ago">hace %1$d h</string>
     <string name="checking_for_updates">Comprobando actualizaciones…</string>
+
+    <!-- Proxy -->
+    <string name="proxy_type">Tipo de proxy</string>
+    <string name="proxy_none">Ninguno</string>
+    <string name="proxy_system">Sistema</string>
+    <string name="proxy_http">HTTP</string>
+    <string name="proxy_socks">SOCKS</string>
+    <string name="proxy_host">Host</string>
+    <string name="proxy_port">Puerto</string>
+    <string name="proxy_username">Nombre de usuario (opcional)</string>
+    <string name="proxy_password">Contraseña (opcional)</string>
+    <string name="proxy_save">Guardar Proxy</string>
+    <string name="proxy_saved">Configuración de proxy guardada</string>
+    <string name="proxy_system_description">Usa la configuración proxy del dispositivo</string>
+    <string name="proxy_port_error">El puerto debe ser 1–65535</string>
+    <string name="proxy_none_description">Conexión directa, sin proxy</string>
 
 </resources>

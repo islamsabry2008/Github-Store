@@ -91,6 +91,7 @@
 
     <string name="section_appearance">外観</string>
     <string name="section_about">情報</string>
+    <string name="section_network">ネットワーク</string>
 
     <string name="theme_color">テーマカラー</string>
     <string name="amoled_black_theme">AMOLED ブラックテーマ</string>
@@ -334,5 +335,21 @@
     <string name="last_checked_minutes_ago">%1$d分前</string>
     <string name="last_checked_hours_ago">%1$d時間前</string>
     <string name="checking_for_updates">アップデートを確認中…</string>
+
+    <!-- Proxy -->
+    <string name="proxy_type">プロキシの種類</string>
+    <string name="proxy_none">なし</string>
+    <string name="proxy_system">システム</string>
+    <string name="proxy_http">HTTP</string>
+    <string name="proxy_socks">SOCKS</string>
+    <string name="proxy_host">ホスト</string>
+    <string name="proxy_port">ポート</string>
+    <string name="proxy_username">ユーザー名（任意）</string>
+    <string name="proxy_password">パスワード（任意）</string>
+    <string name="proxy_save">プロキシを保存</string>
+    <string name="proxy_saved">プロキシ設定を保存しました</string>
+    <string name="proxy_system_description">デバイスのプロキシ設定を使用します</string>
+    <string name="proxy_port_error">ポートは1〜65535の範囲で指定してください</string>
+    <string name="proxy_none_description">直接接続、プロキシなし</string>
 
 </resources>

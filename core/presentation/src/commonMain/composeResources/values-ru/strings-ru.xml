@@ -91,6 +91,7 @@
 
     <string name="section_appearance">ВНЕШНИЙ ВИД</string>
     <string name="section_about">О ПРИЛОЖЕНИИ</string>
+    <string name="section_network">СЕТЬ</string>
 
     <string name="theme_color">Цвет темы</string>
     <string name="amoled_black_theme">AMOLED чёрная тема</string>
@@ -334,5 +335,21 @@
     <string name="last_checked_minutes_ago">%1$d мин назад</string>
     <string name="last_checked_hours_ago">%1$d ч назад</string>
     <string name="checking_for_updates">Проверка обновлений…</string>
+
+    <!-- Proxy -->
+    <string name="proxy_type">Тип прокси</string>
+    <string name="proxy_none">Нет</string>
+    <string name="proxy_system">Системный</string>
+    <string name="proxy_http">HTTP</string>
+    <string name="proxy_socks">SOCKS</string>
+    <string name="proxy_host">Хост</string>
+    <string name="proxy_port">Порт</string>
+    <string name="proxy_username">Имя пользователя (необязательно)</string>
+    <string name="proxy_password">Пароль (необязательно)</string>
+    <string name="proxy_save">Сохранить прокси</string>
+    <string name="proxy_saved">Настройки прокси сохранены</string>
+    <string name="proxy_system_description">Использует прокси-настройки устройства</string>
+    <string name="proxy_port_error">Порт должен быть 1–65535</string>
+    <string name="proxy_none_description">Прямое подключение, без прокси</string>
 
 </resources>

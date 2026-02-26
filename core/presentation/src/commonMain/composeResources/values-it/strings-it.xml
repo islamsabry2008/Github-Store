@@ -109,6 +109,7 @@
     <!-- Sections -->
     <string name="section_appearance">ASPETTO</string>
     <string name="section_about">INFORMAZIONI</string>
+    <string name="section_network">RETE</string>
 
     <!-- Appearance -->
     <string name="theme_color">Colore del Tema</string>
@@ -370,5 +371,21 @@
     <string name="last_checked_minutes_ago">%1$d min fa</string>
     <string name="last_checked_hours_ago">%1$d h fa</string>
     <string name="checking_for_updates">Controllo aggiornamenti…</string>
+
+    <!-- Proxy -->
+    <string name="proxy_type">Tipo di proxy</string>
+    <string name="proxy_none">Nessuno</string>
+    <string name="proxy_system">Sistema</string>
+    <string name="proxy_http">HTTP</string>
+    <string name="proxy_socks">SOCKS</string>
+    <string name="proxy_host">Host</string>
+    <string name="proxy_port">Porta</string>
+    <string name="proxy_username">Nome utente (facoltativo)</string>
+    <string name="proxy_password">Password (facoltativo)</string>
+    <string name="proxy_save">Salva Proxy</string>
+    <string name="proxy_saved">Impostazioni proxy salvate</string>
+    <string name="proxy_system_description">Usa le impostazioni proxy del dispositivo</string>
+    <string name="proxy_port_error">La porta deve essere 1–65535</string>
+    <string name="proxy_none_description">Connessione diretta, nessun proxy</string>
 
 </resources>
