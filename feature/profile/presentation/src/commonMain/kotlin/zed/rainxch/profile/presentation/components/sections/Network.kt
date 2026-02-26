@@ -5,8 +5,6 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,6 +24,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -34,11 +33,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import zed.rainxch.githubstore.core.presentation.res.*
@@ -131,54 +130,29 @@ private fun ProxyTypeCard(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 ProxyType.entries.forEach { type ->
-                    ProxyTypeChip(
-                        label = when (type) {
-                            ProxyType.NONE -> stringResource(Res.string.proxy_none)
-                            ProxyType.SYSTEM -> stringResource(Res.string.proxy_system)
-                            ProxyType.HTTP -> stringResource(Res.string.proxy_http)
-                            ProxyType.SOCKS -> stringResource(Res.string.proxy_socks)
-                        },
-                        isSelected = selectedType == type,
+                    FilterChip(
+                        selected = selectedType == type,
                         onClick = { onTypeSelected(type) },
+                        label = {
+                            Text(
+                                text = when (type) {
+                                    ProxyType.NONE -> stringResource(Res.string.proxy_none)
+                                    ProxyType.SYSTEM -> stringResource(Res.string.proxy_system)
+                                    ProxyType.HTTP -> stringResource(Res.string.proxy_http)
+                                    ProxyType.SOCKS -> stringResource(Res.string.proxy_socks)
+                                },
+                                fontWeight = if (selectedType == type) FontWeight.Bold else FontWeight.Normal,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        },
                         modifier = Modifier.weight(1f)
                     )
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun ProxyTypeChip(
-    label: String,
-    isSelected: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(
-                if (isSelected) {
-                    MaterialTheme.colorScheme.primaryContainer
-                } else {
-                    MaterialTheme.colorScheme.surface
-                }
-            )
-            .clickable(onClick = onClick)
-            .padding(vertical = 10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelLarge,
-            color = if (isSelected) {
-                MaterialTheme.colorScheme.onPrimaryContainer
-            } else {
-                MaterialTheme.colorScheme.onSurfaceVariant
-            },
-            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-        )
     }
 }
 
@@ -268,7 +242,12 @@ private fun ProxyDetailsCard(
                             } else {
                                 Icons.Default.Visibility
                             },
-                            contentDescription = null,
+                            contentDescription = if (state.isProxyPasswordVisible) {
+                                stringResource(Res.string.proxy_hide_password)
+                            } else {
+                                stringResource(Res.string.proxy_show_password)
+                            },
+
                             modifier = Modifier.size(20.dp)
                         )
                     }

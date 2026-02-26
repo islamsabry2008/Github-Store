@@ -10,10 +10,16 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import zed.rainxch.core.domain.model.ProxyConfig
 import zed.rainxch.core.domain.repository.ProxyRepository
 import zed.rainxch.core.domain.repository.ThemesRepository
 import zed.rainxch.core.domain.utils.BrowserHelper
+import zed.rainxch.githubstore.core.presentation.res.Res
+import zed.rainxch.githubstore.core.presentation.res.failed_to_save_proxy_settings
+import zed.rainxch.githubstore.core.presentation.res.invalid_proxy_port
+import zed.rainxch.githubstore.core.presentation.res.proxy_host_required
 import zed.rainxch.profile.domain.repository.ProfileRepository
 
 class ProfileViewModel(
@@ -208,7 +214,18 @@ class ProfileViewModel(
                         else -> return
                     }
                     viewModelScope.launch {
-                        proxyRepository.setProxyConfig(config)
+                        runCatching {
+                            proxyRepository.setProxyConfig(config)
+                        }.onSuccess {
+                            _events.send(ProfileEvent.OnProxySaved)
+                        }.onFailure { error ->
+                            _events.send(
+                                ProfileEvent.OnProxySaveError(
+                                    error.message ?: getString(Res.string.failed_to_save_proxy_settings)
+                                )
+                            )
+                        }
+
                     }
                 }
             }
@@ -237,8 +254,19 @@ class ProfileViewModel(
                 val currentState = _state.value
                 val port = currentState.proxyPort.toIntOrNull()
                     ?.takeIf { it in 1..65535 }
-                    ?: return
-                val host = currentState.proxyHost.trim().takeIf { it.isNotBlank() } ?: return
+                    ?: run {
+                        viewModelScope.launch {
+                            _events.send(ProfileEvent.OnProxySaveError(getString(Res.string.invalid_proxy_port)))
+                        }
+                        return
+                    }
+                val host = currentState.proxyHost.trim().takeIf { it.isNotBlank() } ?: run {
+                    viewModelScope.launch {
+                        _events.send(ProfileEvent.OnProxySaveError(getString(Res.string.proxy_host_required)))
+                    }
+                    return
+                }
+
                 val username = currentState.proxyUsername.takeIf { it.isNotBlank() }
                 val password = currentState.proxyPassword.takeIf { it.isNotBlank() }
 
@@ -257,7 +285,7 @@ class ProfileViewModel(
                     }.onFailure { error ->
                         _events.send(
                             ProfileEvent.OnProxySaveError(
-                                error.message ?: "Failed to save proxy settings"
+                                error.message ?: getString(Res.string.failed_to_save_proxy_settings)
                             )
                         )
                     }

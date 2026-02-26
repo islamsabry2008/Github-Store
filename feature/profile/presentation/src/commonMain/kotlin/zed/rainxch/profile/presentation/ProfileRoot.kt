@@ -2,6 +2,7 @@ package zed.rainxch.profile.presentation
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -34,6 +35,7 @@ import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
+import zed.rainxch.core.presentation.locals.LocalBottomNavigationHeight
 import zed.rainxch.core.presentation.locals.LocalBottomNavigationLiquid
 import zed.rainxch.core.presentation.theme.GithubStoreTheme
 import zed.rainxch.core.presentation.utils.ObserveAsEvents
@@ -119,9 +121,13 @@ fun ProfileScreen(
     snackbarState: SnackbarHostState
 ) {
     val liquidState = LocalBottomNavigationLiquid.current
+    val bottomNavHeight = LocalBottomNavigationHeight.current
     Scaffold(
         snackbarHost = {
-            SnackbarHost(hostState = snackbarState)
+            SnackbarHost(
+                hostState = snackbarState,
+                modifier = Modifier.padding(bottom = bottomNavHeight)
+            )
         },
         topBar = {
             TopAppBar(onAction)
