@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
@@ -31,8 +32,10 @@ import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.CircularWavyProgressIndicator
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -69,6 +72,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import zed.rainxch.apps.presentation.model.AppItem
 import zed.rainxch.apps.presentation.model.UpdateAllProgress
 import zed.rainxch.apps.presentation.model.UpdateState
+import zed.rainxch.core.presentation.locals.LocalBottomNavigationHeight
 import zed.rainxch.core.presentation.locals.LocalBottomNavigationLiquid
 import zed.rainxch.core.presentation.theme.GithubStoreTheme
 import zed.rainxch.core.presentation.utils.ObserveAsEvents
@@ -127,19 +131,11 @@ fun AppsScreen(
     snackbarHostState: SnackbarHostState
 ) {
     val liquidState = LocalBottomNavigationLiquid.current
+    val bottomNavHeight = LocalBottomNavigationHeight.current
+
     Scaffold(
         topBar = {
             TopAppBar(
-                navigationIcon = {
-                    IconButton(
-                        onClick = { onAction(AppsAction.OnNavigateBackClick) }
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(Res.string.navigate_back)
-                        )
-                    }
-                },
                 title = {
                     Text(
                         text = stringResource(Res.string.installed_apps),
@@ -161,7 +157,10 @@ fun AppsScreen(
             )
         },
         snackbarHost = {
-            SnackbarHost(snackbarHostState)
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.padding(bottomNavHeight + 16.dp)
+            )
         },
         modifier = Modifier.liquefiable(liquidState)
     ) { innerPadding ->
@@ -247,7 +246,9 @@ fun AppsScreen(
                 if (state.isUpdatingAll && state.updateAllProgress != null) {
                     UpdateAllProgressCard(
                         progress = state.updateAllProgress,
-                        onCancel = { onAction(AppsAction.OnCancelUpdateAll) }
+                        onCancel = {
+                            onAction(AppsAction.OnCancelUpdateAll)
+                        }
                     )
                 }
 
@@ -266,7 +267,11 @@ fun AppsScreen(
                             modifier = Modifier.fillMaxSize(),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(stringResource(Res.string.no_apps_found))
+                            Text(
+                                text = stringResource(Res.string.no_apps_found),
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
                         }
                     }
 
@@ -289,6 +294,10 @@ fun AppsScreen(
                                     onRepoClick = { onAction(AppsAction.OnNavigateToRepo(appItem.installedApp.repoId)) },
                                     modifier = Modifier.liquefiable(liquidState)
                                 )
+                            }
+
+                            item {
+                                Spacer(Modifier.height(bottomNavHeight + 32.dp))
                             }
                         }
                     }
@@ -365,22 +374,20 @@ fun AppItemCard(
 ) {
     val app = appItem.installedApp
 
-    Card(
-        modifier = modifier.fillMaxWidth()
-    ) {
+    ExpressiveCard {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = modifier
+                .padding(16.dp)
+                .clickable { onRepoClick() }
         ) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onRepoClick() },
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 CoilImage(
                     imageModel = { app.repoOwnerAvatarUrl },
                     modifier = Modifier
-                        .size(48.dp)
+                        .size(64.dp)
                         .clip(CircleShape),
                     loading = {
                         Box(
@@ -395,7 +402,9 @@ fun AppItemCard(
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = app.appName,
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Bold
                     )
 
                     Text(
@@ -412,6 +421,7 @@ fun AppItemCard(
                                 color = MaterialTheme.colorScheme.tertiary
                             )
                         }
+
                         app.isUpdateAvailable -> {
                             Text(
                                 text = "${app.installedVersion} → ${app.latestVersion}",
@@ -419,6 +429,7 @@ fun AppItemCard(
                                 color = MaterialTheme.colorScheme.primary
                             )
                         }
+
                         else -> {
                             Text(
                                 text = app.installedVersion,
@@ -435,7 +446,7 @@ fun AppItemCard(
 
                 Text(
                     text = app.repoDescription!!,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyMediumEmphasized,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -528,8 +539,7 @@ fun AppItemCard(
                     )
                 }
 
-                UpdateState.Idle -> {
-                }
+                UpdateState.Idle -> {}
             }
 
             Spacer(Modifier.height(12.dp))
@@ -556,6 +566,7 @@ fun AppItemCard(
                 }
 
                 Button(
+                    shapes = ButtonDefaults.shapes(),
                     onClick = onOpenClick,
                     modifier = Modifier.weight(1f),
                     enabled = !app.isPendingInstall &&
@@ -633,6 +644,21 @@ private fun formatLastChecked(timestamp: Long): String {
         minutes < 60 -> stringResource(Res.string.last_checked_minutes_ago, minutes.toInt())
         else -> stringResource(Res.string.last_checked_hours_ago, hours.toInt())
     }
+}
+
+@Composable
+private fun ExpressiveCard(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    ElevatedCard(
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainer
+        ),
+        shape = RoundedCornerShape(32.dp),
+        content = { content() }
+    )
 }
 
 @Preview
