@@ -49,6 +49,7 @@ import zed.rainxch.profile.presentation.components.sections.settings
 @Composable
 fun ProfileRoot(
     onNavigateBack: () -> Unit,
+    onNavigateToDevProfile: (username: String) -> Unit,
     onNavigateToAuthentication: () -> Unit,
     onNavigateToStarredRepos: () -> Unit,
     onNavigateToFavouriteRepos: () -> Unit,
@@ -106,6 +107,10 @@ fun ProfileRoot(
 
                 ProfileAction.OnStarredReposClick -> {
                     onNavigateToStarredRepos()
+                }
+                
+                is ProfileAction.OnRepositoriesClick -> {
+                    onNavigateToDevProfile(action.username)
                 }
 
                 else -> {

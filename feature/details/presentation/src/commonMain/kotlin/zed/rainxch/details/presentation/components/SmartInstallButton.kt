@@ -130,7 +130,6 @@ fun SmartInstallButton(
                 modifier = Modifier
                     .weight(1f)
                     .height(52.dp)
-                    .clickable { onAction(DetailsAction.OpenApp) }
                     .liquefiable(liquidState),
                 colors = CardDefaults.elevatedCardColors(
                     containerColor = MaterialTheme.colorScheme.primary
@@ -140,7 +139,10 @@ fun SmartInstallButton(
                     bottomStart = 6.dp,
                     topEnd = 24.dp,
                     bottomEnd = 24.dp
-                )
+                ),
+                onClick = {
+                    onAction(DetailsAction.OpenApp)
+                }
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize(),

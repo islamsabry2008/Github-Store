@@ -77,9 +77,9 @@ import zed.rainxch.core.presentation.utils.ObserveAsEvents
 fun AppsRoot(
     onNavigateBack: () -> Unit,
     onNavigateToRepo: (repoId: Long) -> Unit,
-    viewModel: AppsViewModel = koinViewModel()
+    viewModel: AppsViewModel = koinViewModel(),
+    state: AppsState,
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
@@ -251,23 +251,6 @@ fun AppsScreen(
                     )
                 }
 
-                val filteredApps = remember(state.apps, state.searchQuery) {
-                    if (state.searchQuery.isBlank()) {
-                        state.apps
-                    } else {
-                        state.apps.filter { appItem ->
-                            appItem.installedApp.appName.contains(
-                                state.searchQuery,
-                                ignoreCase = true
-                            ) ||
-                                    appItem.installedApp.repoOwner.contains(
-                                        state.searchQuery,
-                                        ignoreCase = true
-                                    )
-                        }
-                    }
-                }
-
                 when {
                     state.isLoading -> {
                         Box(
@@ -278,7 +261,7 @@ fun AppsScreen(
                         }
                     }
 
-                    filteredApps.isEmpty() -> {
+                    state.filteredApps.isEmpty() -> {
                         Box(
                             modifier = Modifier.fillMaxSize(),
                             contentAlignment = Alignment.Center
@@ -294,7 +277,7 @@ fun AppsScreen(
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             items(
-                                items = filteredApps,
+                                items = state.filteredApps,
                                 key = { it.installedApp.packageName }
                             ) { appItem ->
                                 AppItemCard(

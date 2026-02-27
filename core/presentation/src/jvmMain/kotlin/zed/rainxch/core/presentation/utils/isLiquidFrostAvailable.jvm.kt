@@ -1,4 +1,4 @@
-package zed.rainxch.details.presentation.utils
+package zed.rainxch.core.presentation.utils
 
 actual fun isLiquidFrostAvailable(): Boolean {
     return true

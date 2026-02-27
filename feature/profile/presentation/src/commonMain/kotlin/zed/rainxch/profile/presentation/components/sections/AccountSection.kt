@@ -134,7 +134,10 @@ fun LazyListScope.accountSection(
                     StatCard(
                         label = stringResource(Res.string.profile_repos),
                         value = state.userProfile.repositoryCount.toString(),
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        onClick = {
+                            onAction(ProfileAction.OnRepositoriesClick(state.userProfile.username))
+                        }
                     )
 
                     StatCard(
@@ -174,7 +177,8 @@ fun LazyListScope.accountSection(
 private fun StatCard(
     label: String,
     value: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null
 ) {
     Card(
         modifier = modifier,
@@ -186,7 +190,8 @@ private fun StatCard(
         border = BorderStroke(
             width = 1.dp,
             color = MaterialTheme.colorScheme.secondary
-        )
+        ),
+        onClick = { onClick?.invoke() }
     ) {
         Column(
             modifier = Modifier

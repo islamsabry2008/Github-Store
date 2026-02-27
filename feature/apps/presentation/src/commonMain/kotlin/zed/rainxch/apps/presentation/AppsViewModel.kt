@@ -1,5 +1,6 @@
 package zed.rainxch.apps.presentation
 
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import zed.rainxch.githubstore.core.presentation.res.*
@@ -96,6 +97,8 @@ class AppsViewModel(
                             }
                         )
                     }
+
+                    filterApps()
                 }
             } catch (e: Exception) {
                 logger.error("Failed to load apps: ${e.message}")
@@ -157,7 +160,11 @@ class AppsViewModel(
             }
 
             is AppsAction.OnSearchChange -> {
-                _state.update { it.copy(searchQuery = action.query) }
+                _state.update {
+                    it.copy(searchQuery = action.query)
+                }
+
+                filterApps()
             }
 
             is AppsAction.OnOpenApp -> {
@@ -198,6 +205,28 @@ class AppsViewModel(
                 uninstallApp(action.app)
             }
         }
+    }
+
+    private fun filterApps() {
+        _state.update {
+            it.copy(
+                filteredApps = if (_state.value.searchQuery.isBlank()) {
+                    _state.value.apps.sortedBy { it.installedApp.isUpdateAvailable }
+                } else {
+                    _state.value.apps.filter { appItem ->
+                        appItem.installedApp.appName.contains(
+                            _state.value.searchQuery,
+                            ignoreCase = true
+                        ) ||
+                                appItem.installedApp.repoOwner.contains(
+                                    _state.value.searchQuery,
+                                    ignoreCase = true
+                                )
+                    }.sortedBy { it.installedApp.isUpdateAvailable }
+                }
+            )
+        }
+
     }
 
     private fun uninstallApp(app: InstalledApp) {

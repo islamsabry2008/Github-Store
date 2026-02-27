@@ -48,6 +48,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.fletchmckee.liquid.liquid
 import kotlinx.coroutines.launch
+import zed.rainxch.core.presentation.utils.isLiquidFrostAvailable
 import zed.rainxch.home.domain.model.HomeCategory
 import zed.rainxch.home.presentation.locals.LocalHomeTopBarLiquid
 import zed.rainxch.home.presentation.utils.displayText
@@ -61,7 +62,6 @@ fun LiquidGlassCategoryChips(
 ) {
     val liquidState = LocalHomeTopBarLiquid.current
     val density = LocalDensity.current
-    val scope = rememberCoroutineScope()
 
     val isDarkTheme = !MaterialTheme.colorScheme.background.luminance().let { it > 0.5f }
 
@@ -125,15 +125,17 @@ fun LiquidGlassCategoryChips(
                     MaterialTheme.colorScheme.primaryContainer.copy(alpha = .45f)
                 }
             )
-            .liquid(liquidState) {
-                this.shape = containerShape
-                this.frost = if (isDarkTheme) 14.dp else 12.dp
-                this.curve = if (isDarkTheme) .30f else .40f
-                this.refraction = if (isDarkTheme) .06f else .10f
-                this.dispersion = if (isDarkTheme) .15f else .22f
-                this.saturation = if (isDarkTheme) .35f else .50f
-                this.contrast = if (isDarkTheme) 1.7f else 1.5f
-            }
+            .then(if(isLiquidFrostAvailable()) {
+                Modifier.liquid(liquidState) {
+                    this.shape = containerShape
+                    this.frost = if (isDarkTheme) 14.dp else 12.dp
+                    this.curve = if (isDarkTheme) .30f else .40f
+                    this.refraction = if (isDarkTheme) .06f else .10f
+                    this.dispersion = if (isDarkTheme) .15f else .22f
+                    this.saturation = if (isDarkTheme) .35f else .50f
+                    this.contrast = if (isDarkTheme) 1.7f else 1.5f
+                }
+            } else Modifier.background(MaterialTheme.colorScheme.surfaceContainerHighest))
     ) {
         Box(
             modifier = Modifier

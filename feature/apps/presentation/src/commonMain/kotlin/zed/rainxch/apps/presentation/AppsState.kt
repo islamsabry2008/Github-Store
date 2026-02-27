@@ -5,6 +5,7 @@ import zed.rainxch.apps.presentation.model.UpdateAllProgress
 
 data class AppsState(
     val apps: List<AppItem> = emptyList(),
+    val filteredApps: List<AppItem> = emptyList(),
     val searchQuery: String = "",
     val isLoading: Boolean = false,
     val isUpdatingAll: Boolean = false,

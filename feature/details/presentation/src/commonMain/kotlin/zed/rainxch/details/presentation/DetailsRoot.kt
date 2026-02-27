@@ -61,6 +61,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import zed.rainxch.core.presentation.theme.GithubStoreTheme
 import zed.rainxch.core.presentation.utils.ObserveAsEvents
+import zed.rainxch.core.presentation.utils.isLiquidFrostAvailable
 import zed.rainxch.details.presentation.components.sections.about
 import zed.rainxch.details.presentation.components.sections.author
 import zed.rainxch.details.presentation.components.sections.header
@@ -69,7 +70,6 @@ import zed.rainxch.details.presentation.components.sections.stats
 import zed.rainxch.details.presentation.components.sections.whatsNew
 import zed.rainxch.details.presentation.components.states.ErrorState
 import zed.rainxch.details.presentation.utils.LocalTopbarLiquidState
-import zed.rainxch.details.presentation.utils.isLiquidFrostAvailable
 
 @Composable
 fun DetailsRoot(
@@ -385,15 +385,18 @@ private fun DetailsTopbar(
                     1f to MaterialTheme.colorScheme.surface.copy(alpha = 0.85f)
                 )
             )
-            .liquid(liquidTopbarState) {
-                this.shape = CutCornerShape(0.dp)
+            .then(
                 if (isLiquidFrostAvailable()) {
-                    this.frost = 5.dp
+                Modifier.liquid(liquidTopbarState) {
+                    this.shape = CutCornerShape(0.dp)
+                    if (isLiquidFrostAvailable()) {
+                        this.frost = 5.dp
+                    }
+                    this.curve = .25f
+                    this.refraction = .05f
+                    this.dispersion = .1f
                 }
-                this.curve = .25f
-                this.refraction = .05f
-                this.dispersion = .1f
-            }
+            } else Modifier.background(MaterialTheme.colorScheme.surfaceContainerHighest))
     )
 }
 
