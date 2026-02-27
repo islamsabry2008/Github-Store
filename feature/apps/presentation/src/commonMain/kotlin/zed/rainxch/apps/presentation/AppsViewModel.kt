@@ -208,26 +208,24 @@ class AppsViewModel(
     }
 
     private fun filterApps() {
-        _state.update {
-            it.copy(
-                filteredApps = if (_state.value.searchQuery.isBlank()) {
-                    _state.value.apps.sortedBy { it.installedApp.isUpdateAvailable }
-                } else {
-                    _state.value.apps.filter { appItem ->
-                        appItem.installedApp.appName.contains(
-                            _state.value.searchQuery,
-                            ignoreCase = true
-                        ) ||
-                                appItem.installedApp.repoOwner.contains(
-                                    _state.value.searchQuery,
-                                    ignoreCase = true
-                                )
-                    }.sortedBy { it.installedApp.isUpdateAvailable }
-                }
+        _state.update { current ->
+            current.copy(
+                filteredApps = computeFilteredApps(current.apps, current.searchQuery)
             )
         }
-
     }
+
+    private fun computeFilteredApps(apps: List<AppItem>, query: String): List<AppItem> {
+        return if (query.isBlank()) {
+            apps.sortedBy { it.installedApp.isUpdateAvailable }
+        } else {
+            apps.filter { appItem ->
+                appItem.installedApp.appName.contains(query, ignoreCase = true) ||
+                        appItem.installedApp.repoOwner.contains(query, ignoreCase = true)
+            }.sortedBy { it.installedApp.isUpdateAvailable }
+        }
+    }
+
 
     private fun uninstallApp(app: InstalledApp) {
         viewModelScope.launch {
@@ -566,6 +564,8 @@ class AppsViewModel(
                 }
             )
         }
+
+        filterApps()
     }
 
     private fun updateAppProgress(packageName: String, progress: Int?) {
@@ -580,6 +580,8 @@ class AppsViewModel(
                 }
             )
         }
+
+        filterApps()
     }
 
     private suspend fun markPendingUpdate(app: InstalledApp) {

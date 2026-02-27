@@ -1,6 +1,5 @@
 package zed.rainxch.search.presentation
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -59,7 +58,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.fletchmckee.liquid.liquefiable
-import zed.rainxch.githubstore.core.presentation.res.*
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -71,6 +69,11 @@ import zed.rainxch.core.presentation.locals.LocalBottomNavigationLiquid
 import zed.rainxch.core.presentation.theme.GithubStoreTheme
 import zed.rainxch.domain.model.ProgrammingLanguage
 import zed.rainxch.domain.model.SearchPlatform
+import zed.rainxch.githubstore.core.presentation.res.Res
+import zed.rainxch.githubstore.core.presentation.res.language_label
+import zed.rainxch.githubstore.core.presentation.res.results_found
+import zed.rainxch.githubstore.core.presentation.res.retry
+import zed.rainxch.githubstore.core.presentation.res.search_repositories_hint
 import zed.rainxch.search.presentation.components.LanguageFilterBottomSheet
 import zed.rainxch.search.presentation.utils.label
 
@@ -120,7 +123,7 @@ fun SearchRoot(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SearchScreen(
     state: SearchState,
@@ -382,7 +385,6 @@ fun SearchScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalFoundationApi::class)
 @Composable
 private fun SearchTopbar(
     onAction: (SearchAction) -> Unit,
