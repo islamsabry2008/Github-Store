@@ -33,9 +33,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.resources.stringResource
 import zed.rainxch.core.presentation.components.GitHubStoreImage
 import zed.rainxch.core.presentation.components.GithubStoreButton
 import zed.rainxch.core.presentation.theme.GithubStoreTheme
+import zed.rainxch.githubstore.core.presentation.res.*
 import zed.rainxch.profile.domain.model.UserProfile
 import zed.rainxch.profile.presentation.ProfileAction
 import zed.rainxch.profile.presentation.ProfileState
@@ -105,7 +107,7 @@ fun LazyListScope.accountSection(
                 Spacer(Modifier.height(8.dp))
 
                 Text(
-                    text = "Sign in to GitHub",
+                    text = stringResource(Res.string.profile_sign_in_title),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center
@@ -114,7 +116,7 @@ fun LazyListScope.accountSection(
                 Spacer(Modifier.height(4.dp))
 
                 Text(
-                    text = "Unlock the full experience. Manage your apps, sync your preference, and browser faster.",
+                    text = stringResource(Res.string.profile_sign_in_description),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
@@ -130,19 +132,19 @@ fun LazyListScope.accountSection(
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     StatCard(
-                        label = "Repos",
+                        label = stringResource(Res.string.profile_repos),
                         value = state.userProfile.repositoryCount.toString(),
                         modifier = Modifier.weight(1f)
                     )
 
                     StatCard(
-                        label = "Followers",
+                        label = stringResource(Res.string.followers),
                         value = state.userProfile.followers.toString(),
                         modifier = Modifier.weight(1f)
                     )
 
                     StatCard(
-                        label = "Following",
+                        label = stringResource(Res.string.following),
                         value = state.userProfile.following.toString(),
                         modifier = Modifier.weight(1f)
                     )
@@ -153,7 +155,7 @@ fun LazyListScope.accountSection(
                 Spacer(Modifier.height(8.dp))
 
                 GithubStoreButton(
-                    text = "Login",
+                    text = stringResource(Res.string.profile_login),
                     onClick = {
                         onAction(ProfileAction.OnLoginClick)
                     },

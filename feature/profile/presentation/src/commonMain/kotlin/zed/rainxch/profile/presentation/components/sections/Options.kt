@@ -29,6 +29,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.stringResource
+import zed.rainxch.githubstore.core.presentation.res.*
 import zed.rainxch.profile.presentation.ProfileAction
 
 fun LazyListScope.options(
@@ -38,8 +40,8 @@ fun LazyListScope.options(
     item {
         OptionCard(
             icon = Icons.Default.Star,
-            label = "Stars",
-            description = "Your Starred Repositories from GitHub",
+            label = stringResource(Res.string.stars),
+            description = stringResource(Res.string.profile_stars_description),
             onClick = {
                 onAction(ProfileAction.OnStarredReposClick)
             },
@@ -50,8 +52,8 @@ fun LazyListScope.options(
 
         OptionCard(
             icon = Icons.Default.Favorite,
-            label = "Favourites",
-            description = "Your Favourite Repositories saved locally",
+            label = stringResource(Res.string.favourites),
+            description = stringResource(Res.string.profile_favourites_description),
             onClick = {
                 onAction(ProfileAction.OnFavouriteReposClick)
             }
