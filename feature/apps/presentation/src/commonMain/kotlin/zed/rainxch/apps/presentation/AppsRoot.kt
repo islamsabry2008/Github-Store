@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
@@ -27,11 +28,14 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Update
+import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.CircularWavyProgressIndicator
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -68,6 +72,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import zed.rainxch.apps.presentation.model.AppItem
 import zed.rainxch.apps.presentation.model.UpdateAllProgress
 import zed.rainxch.apps.presentation.model.UpdateState
+import zed.rainxch.core.presentation.locals.LocalBottomNavigationHeight
 import zed.rainxch.core.presentation.locals.LocalBottomNavigationLiquid
 import zed.rainxch.core.presentation.theme.GithubStoreTheme
 import zed.rainxch.core.presentation.utils.ObserveAsEvents
@@ -76,9 +81,9 @@ import zed.rainxch.core.presentation.utils.ObserveAsEvents
 fun AppsRoot(
     onNavigateBack: () -> Unit,
     onNavigateToRepo: (repoId: Long) -> Unit,
-    viewModel: AppsViewModel = koinViewModel()
+    viewModel: AppsViewModel = koinViewModel(),
+    state: AppsState,
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
@@ -126,19 +131,11 @@ fun AppsScreen(
     snackbarHostState: SnackbarHostState
 ) {
     val liquidState = LocalBottomNavigationLiquid.current
+    val bottomNavHeight = LocalBottomNavigationHeight.current
+
     Scaffold(
         topBar = {
             TopAppBar(
-                navigationIcon = {
-                    IconButton(
-                        onClick = { onAction(AppsAction.OnNavigateBackClick) }
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(Res.string.navigate_back)
-                        )
-                    }
-                },
                 title = {
                     Text(
                         text = stringResource(Res.string.installed_apps),
@@ -160,7 +157,10 @@ fun AppsScreen(
             )
         },
         snackbarHost = {
-            SnackbarHost(snackbarHostState)
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.padding(bottomNavHeight + 16.dp)
+            )
         },
         modifier = Modifier.liquefiable(liquidState)
     ) { innerPadding ->
@@ -246,25 +246,10 @@ fun AppsScreen(
                 if (state.isUpdatingAll && state.updateAllProgress != null) {
                     UpdateAllProgressCard(
                         progress = state.updateAllProgress,
-                        onCancel = { onAction(AppsAction.OnCancelUpdateAll) }
-                    )
-                }
-
-                val filteredApps = remember(state.apps, state.searchQuery) {
-                    if (state.searchQuery.isBlank()) {
-                        state.apps
-                    } else {
-                        state.apps.filter { appItem ->
-                            appItem.installedApp.appName.contains(
-                                state.searchQuery,
-                                ignoreCase = true
-                            ) ||
-                                    appItem.installedApp.repoOwner.contains(
-                                        state.searchQuery,
-                                        ignoreCase = true
-                                    )
+                        onCancel = {
+                            onAction(AppsAction.OnCancelUpdateAll)
                         }
-                    }
+                    )
                 }
 
                 when {
@@ -277,12 +262,16 @@ fun AppsScreen(
                         }
                     }
 
-                    filteredApps.isEmpty() -> {
+                    state.filteredApps.isEmpty() -> {
                         Box(
                             modifier = Modifier.fillMaxSize(),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(stringResource(Res.string.no_apps_found))
+                            Text(
+                                text = stringResource(Res.string.no_apps_found),
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
                         }
                     }
 
@@ -293,7 +282,7 @@ fun AppsScreen(
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             items(
-                                items = filteredApps,
+                                items = state.filteredApps,
                                 key = { it.installedApp.packageName }
                             ) { appItem ->
                                 AppItemCard(
@@ -301,9 +290,14 @@ fun AppsScreen(
                                     onOpenClick = { onAction(AppsAction.OnOpenApp(appItem.installedApp)) },
                                     onUpdateClick = { onAction(AppsAction.OnUpdateApp(appItem.installedApp)) },
                                     onCancelClick = { onAction(AppsAction.OnCancelUpdate(appItem.installedApp.packageName)) },
+                                    onUninstallClick = { onAction(AppsAction.OnUninstallApp(appItem.installedApp)) },
                                     onRepoClick = { onAction(AppsAction.OnNavigateToRepo(appItem.installedApp.repoId)) },
                                     modifier = Modifier.liquefiable(liquidState)
                                 )
+                            }
+
+                            item {
+                                Spacer(Modifier.height(bottomNavHeight + 32.dp))
                             }
                         }
                     }
@@ -374,27 +368,27 @@ fun AppItemCard(
     onOpenClick: () -> Unit,
     onUpdateClick: () -> Unit,
     onCancelClick: () -> Unit,
+    onUninstallClick: () -> Unit,
     onRepoClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val app = appItem.installedApp
 
-    Card(
-        modifier = modifier.fillMaxWidth()
-    ) {
+    ExpressiveCard (modifier = modifier) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .clip(RoundedCornerShape(32.dp))
+                .clickable { onRepoClick() }
+                .padding(16.dp)
         ) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onRepoClick() },
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 CoilImage(
                     imageModel = { app.repoOwnerAvatarUrl },
                     modifier = Modifier
-                        .size(48.dp)
+                        .size(64.dp)
                         .clip(CircleShape),
                     loading = {
                         Box(
@@ -409,7 +403,9 @@ fun AppItemCard(
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = app.appName,
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Bold
                     )
 
                     Text(
@@ -426,6 +422,7 @@ fun AppItemCard(
                                 color = MaterialTheme.colorScheme.tertiary
                             )
                         }
+
                         app.isUpdateAvailable -> {
                             Text(
                                 text = "${app.installedVersion} → ${app.latestVersion}",
@@ -433,6 +430,7 @@ fun AppItemCard(
                                 color = MaterialTheme.colorScheme.primary
                             )
                         }
+
                         else -> {
                             Text(
                                 text = app.installedVersion,
@@ -449,7 +447,7 @@ fun AppItemCard(
 
                 Text(
                     text = app.repoDescription!!,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyMediumEmphasized,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -542,8 +540,7 @@ fun AppItemCard(
                     )
                 }
 
-                UpdateState.Idle -> {
-                }
+                UpdateState.Idle -> {}
             }
 
             Spacer(Modifier.height(12.dp))
@@ -553,7 +550,24 @@ fun AppItemCard(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                if (!app.isPendingInstall &&
+                    appItem.updateState !is UpdateState.Downloading &&
+                    appItem.updateState !is UpdateState.Installing &&
+                    appItem.updateState !is UpdateState.CheckingUpdate
+                ) {
+                    IconButton(
+                        onClick = onUninstallClick
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.DeleteOutline,
+                            contentDescription = stringResource(Res.string.uninstall),
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
+
                 Button(
+                    shapes = ButtonDefaults.shapes(),
                     onClick = onOpenClick,
                     modifier = Modifier.weight(1f),
                     enabled = !app.isPendingInstall &&
@@ -631,6 +645,21 @@ private fun formatLastChecked(timestamp: Long): String {
         minutes < 60 -> stringResource(Res.string.last_checked_minutes_ago, minutes.toInt())
         else -> stringResource(Res.string.last_checked_hours_ago, hours.toInt())
     }
+}
+
+@Composable
+private fun ExpressiveCard(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    ElevatedCard(
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainer
+        ),
+        shape = RoundedCornerShape(32.dp),
+        content = { content() }
+    )
 }
 
 @Preview

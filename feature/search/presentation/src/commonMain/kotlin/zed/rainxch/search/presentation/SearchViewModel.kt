@@ -226,7 +226,7 @@ class SearchViewModel(
                             currentState.copy(
                                 repositories = allRepos,
                                 hasMorePages = paginatedRepos.hasMore,
-                                totalCount = paginatedRepos.totalCount ?: currentState.totalCount,
+                                totalCount = allRepos.size,
                                 errorMessage = if (allRepos.isEmpty() && !paginatedRepos.hasMore) {
                                     getString(Res.string.no_repositories_found)
                                 } else null
@@ -357,6 +357,20 @@ class SearchViewModel(
                 currentPage = 1
                 searchDebounceJob?.cancel()
                 performSearch(isInitial = true)
+            }
+
+            SearchAction.OnClearClick -> {
+                _state.update {
+                    it.copy(
+                        query = "",
+                        repositories = emptyList(),
+                        isLoading = false,
+                        isLoadingMore = false,
+                        errorMessage = null,
+                        totalCount = null
+
+                    )
+                }
             }
 
             is SearchAction.OnRepositoryClick -> {

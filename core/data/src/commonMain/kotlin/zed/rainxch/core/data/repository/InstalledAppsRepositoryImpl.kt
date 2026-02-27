@@ -127,8 +127,10 @@ class InstalledAppsRepositoryImpl(
                 val isUpdateAvailable = normalizedInstalledTag != normalizedLatestTag
 
                 Logger.d {
-                    "Update check for ${app.appName}: installedTag=${app.installedVersion}, " +
-                            "latestTag=${latestRelease.tagName}, isUpdate=$isUpdateAvailable"
+                    "Update check for ${app.appName}: " +
+                            "installedTag=${app.installedVersion}, latestTag=${latestRelease.tagName}, " +
+                            "installedCode=${app.installedVersionCode}, " +
+                            "isUpdate=$isUpdateAvailable"
                 }
 
                 installedAppsDao.updateVersionInfo(

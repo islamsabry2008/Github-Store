@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarBorder
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -31,13 +32,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -57,6 +61,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import zed.rainxch.core.presentation.theme.GithubStoreTheme
 import zed.rainxch.core.presentation.utils.ObserveAsEvents
+import zed.rainxch.core.presentation.utils.isLiquidFrostAvailable
 import zed.rainxch.details.presentation.components.sections.about
 import zed.rainxch.details.presentation.components.sections.author
 import zed.rainxch.details.presentation.components.sections.header
@@ -65,7 +70,6 @@ import zed.rainxch.details.presentation.components.sections.stats
 import zed.rainxch.details.presentation.components.sections.whatsNew
 import zed.rainxch.details.presentation.components.states.ErrorState
 import zed.rainxch.details.presentation.utils.LocalTopbarLiquidState
-import zed.rainxch.details.presentation.utils.isLiquidFrostAvailable
 
 @Composable
 fun DetailsRoot(
@@ -77,6 +81,9 @@ fun DetailsRoot(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+    var downgradeWarning by remember {
+        mutableStateOf<DetailsEvent.ShowDowngradeWarning?>(null)
+    }
 
     ObserveAsEvents(viewModel.events) { event ->
         when (event) {
@@ -93,7 +100,47 @@ fun DetailsRoot(
                     snackbarHostState.showSnackbar(event.message)
                 }
             }
+
+            is DetailsEvent.ShowDowngradeWarning -> {
+                downgradeWarning = event
+            }
         }
+    }
+
+    downgradeWarning?.let { warning ->
+        AlertDialog(
+            onDismissRequest = { downgradeWarning = null },
+            title = {
+                Text(text = stringResource(Res.string.downgrade_requires_uninstall))
+            },
+            text = {
+                Text(
+                    text = stringResource(
+                        Res.string.downgrade_warning_message,
+                        warning.targetVersion,
+                        warning.currentVersion
+                    )
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        downgradeWarning = null
+                        viewModel.onAction(DetailsAction.UninstallApp)
+                    }
+                ) {
+                    Text(
+                        text = stringResource(Res.string.uninstall_first),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { downgradeWarning = null }) {
+                    Text(text = stringResource(Res.string.cancel))
+                }
+            }
+        )
     }
 
     DetailsScreen(
@@ -338,15 +385,18 @@ private fun DetailsTopbar(
                     1f to MaterialTheme.colorScheme.surface.copy(alpha = 0.85f)
                 )
             )
-            .liquid(liquidTopbarState) {
-                this.shape = CutCornerShape(0.dp)
+            .then(
                 if (isLiquidFrostAvailable()) {
-                    this.frost = 5.dp
+                Modifier.liquid(liquidTopbarState) {
+                    this.shape = CutCornerShape(0.dp)
+                    if (isLiquidFrostAvailable()) {
+                        this.frost = 5.dp
+                    }
+                    this.curve = .25f
+                    this.refraction = .05f
+                    this.dispersion = .1f
                 }
-                this.curve = .25f
-                this.refraction = .05f
-                this.dispersion = .1f
-            }
+            } else Modifier.background(MaterialTheme.colorScheme.surfaceContainerHighest))
     )
 }
 

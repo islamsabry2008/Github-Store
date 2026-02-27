@@ -58,12 +58,13 @@ import zed.rainxch.core.domain.getPlatform
 import zed.rainxch.core.domain.model.Platform
 import zed.rainxch.core.presentation.locals.LocalBottomNavigationLiquid
 import zed.rainxch.core.presentation.theme.GithubStoreTheme
-import zed.rainxch.details.presentation.utils.isLiquidFrostAvailable
+import zed.rainxch.core.presentation.utils.isLiquidFrostAvailable
 
 @Composable
 fun BottomNavigation(
     currentScreen: GithubStoreGraph,
     onNavigate: (GithubStoreGraph) -> Unit,
+    isUpdateAvailable: Boolean,
     modifier: Modifier = Modifier
 ) {
     val liquidState = LocalBottomNavigationLiquid.current
@@ -138,9 +139,7 @@ fun BottomNavigation(
                     if (isLiquidFrostAvailable()) {
                         Modifier.liquid(liquidState) {
                             this.shape = CircleShape
-                            if (isLiquidFrostAvailable()) {
-                                this.frost = if (isDarkTheme) 12.dp else 10.dp
-                            }
+                            this.frost = if (isDarkTheme) 12.dp else 10.dp
                             this.curve = if (isDarkTheme) .35f else .45f
                             this.refraction = if (isDarkTheme) .08f else .12f
                             this.dispersion = if (isDarkTheme) .18f else .25f
@@ -237,6 +236,7 @@ fun BottomNavigation(
                 visibleItems.forEachIndexed { index, item ->
                     LiquidGlassTabItem(
                         item = item,
+                        hasBadge = item.screen == GithubStoreGraph.AppsScreen && isUpdateAvailable,
                         isSelected = item.screen == currentScreen,
                         onSelect = { onNavigate(item.screen) },
                         onPositioned = { x, width ->
@@ -264,6 +264,7 @@ private fun LiquidGlassTabItem(
     item: BottomNavigationItem,
     isSelected: Boolean,
     onSelect: () -> Unit,
+    hasBadge: Boolean = false,
     onPositioned: suspend (x: Float, width: Float) -> Unit
 ) {
     val scope = rememberCoroutineScope()
@@ -331,7 +332,7 @@ private fun LiquidGlassTabItem(
         label = "hPadding"
     )
 
-    Column(
+    Box(
         modifier = Modifier
             .clip(CircleShape)
             .clickable(
@@ -347,46 +348,59 @@ private fun LiquidGlassTabItem(
                 scaleX = pressScale
                 scaleY = pressScale
             }
-            .padding(horizontal = horizontalPadding, vertical = 6.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(1.dp)
+            .padding(horizontal = horizontalPadding, vertical = 6.dp)
     ) {
-        Icon(
-            imageVector = if (isSelected) item.iconFilled else item.iconOutlined,
-            contentDescription = stringResource(item.titleRes),
-            modifier = Modifier
-                .size(22.dp)
-                .graphicsLayer {
-                    scaleX = iconScale
-                    scaleY = iconScale
-                    translationY = with(density) { iconOffsetY.toPx() }
-                },
-            tint = iconTint
-        )
-
-        Box(
-            modifier = Modifier
-                .height(if (isSelected) 16.dp else 0.dp)
-                .graphicsLayer {
-                    alpha = labelAlpha
-                    scaleX = labelScale
-                    scaleY = labelScale
-                },
-            contentAlignment = Alignment.Center
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(1.dp)
         ) {
-            Text(
-                text = stringResource(item.titleRes),
-                style = MaterialTheme.typography.labelSmall.copy(
-                    fontSize = 10.sp,
-                    fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                    lineHeight = 12.sp
-                ),
-                color = if (isSelected) {
-                    MaterialTheme.colorScheme.onPrimaryContainer
-                } else {
-                    MaterialTheme.colorScheme.onSurface
-                },
-                maxLines = 1
+            Icon(
+                imageVector = if (isSelected) item.iconFilled else item.iconOutlined,
+                contentDescription = stringResource(item.titleRes),
+                modifier = Modifier
+                    .size(22.dp)
+                    .graphicsLayer {
+                        scaleX = iconScale
+                        scaleY = iconScale
+                        translationY = with(density) { iconOffsetY.toPx() }
+                    },
+                tint = iconTint
+            )
+
+            Box(
+                modifier = Modifier
+                    .height(if (isSelected) 16.dp else 0.dp)
+                    .graphicsLayer {
+                        alpha = labelAlpha
+                        scaleX = labelScale
+                        scaleY = labelScale
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = stringResource(item.titleRes),
+                    style = MaterialTheme.typography.labelSmall.copy(
+                        fontSize = 10.sp,
+                        fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                        lineHeight = 12.sp
+                    ),
+                    color = if (isSelected) {
+                        MaterialTheme.colorScheme.onPrimaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.onSurface
+                    },
+                    maxLines = 1
+                )
+            }
+        }
+
+        if (hasBadge) {
+            Box(
+                Modifier
+                    .size(12.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.error)
+                    .align(Alignment.TopEnd)
             )
         }
     }
@@ -403,7 +417,8 @@ fun BottomNavigationPreview() {
                 currentScreen = GithubStoreGraph.HomeScreen,
                 onNavigate = {
 
-                }
+                },
+                isUpdateAvailable = true
             )
         }
     }

@@ -53,7 +53,18 @@ data class DetailsState(
     val installedApp: InstalledApp? = null,
     val isFavourite: Boolean = false,
     val isStarred: Boolean = false,
+    val isTrackingApp: Boolean = false,
 ) {
+    /**
+     * True when the app is detected as installed on the system (via assets matching)
+     * but is NOT yet tracked in our database. Shows the "Track this app" button.
+     */
+    val isTrackable: Boolean
+        get() = installedApp == null &&
+                !isLoading &&
+                repository != null &&
+                primaryAsset != null
+
     val filteredReleases: List<GithubRelease>
         get() = when (selectedReleaseCategory) {
             ReleaseCategory.STABLE -> allReleases.filter { !it.isPrerelease }

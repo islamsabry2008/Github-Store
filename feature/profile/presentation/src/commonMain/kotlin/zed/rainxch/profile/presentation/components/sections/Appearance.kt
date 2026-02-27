@@ -84,7 +84,7 @@ fun LazyListScope.appearanceSection(
             }
         )
 
-        VerticalSpacer(16.dp)
+        VerticalSpacer(12.dp)
 
         ThemeColorCard(
             selectedThemeColor = state.selectedThemeColor,
@@ -137,7 +137,7 @@ private fun ThemeSelectionCard(
     isDarkTheme: Boolean?,
     onDarkThemeChange: (Boolean?) -> Unit
 ) {
-    ExpressiveCard {
+    ExpressiveCard{
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -192,7 +192,7 @@ private fun ThemeModeOption(
     Column(
         modifier = modifier
             .scale(scale)
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(24.dp))
             .background(
                 if (isSelected) {
                     MaterialTheme.colorScheme.primaryContainer
@@ -410,7 +410,7 @@ private fun ExpressiveCard(
         colors = CardDefaults.elevatedCardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(32.dp),
         content = { content() }
     )
 }

@@ -96,6 +96,8 @@ class AppsViewModel(
                             }
                         )
                     }
+
+                    filterApps()
                 }
             } catch (e: Exception) {
                 logger.error("Failed to load apps: ${e.message}")
@@ -157,7 +159,11 @@ class AppsViewModel(
             }
 
             is AppsAction.OnSearchChange -> {
-                _state.update { it.copy(searchQuery = action.query) }
+                _state.update {
+                    it.copy(searchQuery = action.query)
+                }
+
+                filterApps()
             }
 
             is AppsAction.OnOpenApp -> {
@@ -192,6 +198,46 @@ class AppsViewModel(
                 viewModelScope.launch {
                     _events.send(AppsEvent.NavigateToRepo(action.repoId))
                 }
+            }
+
+            is AppsAction.OnUninstallApp -> {
+                uninstallApp(action.app)
+            }
+        }
+    }
+
+    private fun filterApps() {
+        _state.update { current ->
+            current.copy(
+                filteredApps = computeFilteredApps(current.apps, current.searchQuery)
+            )
+        }
+    }
+
+    private fun computeFilteredApps(apps: List<AppItem>, query: String): List<AppItem> {
+        return if (query.isBlank()) {
+            apps.sortedBy { it.installedApp.isUpdateAvailable }
+        } else {
+            apps.filter { appItem ->
+                appItem.installedApp.appName.contains(query, ignoreCase = true) ||
+                        appItem.installedApp.repoOwner.contains(query, ignoreCase = true)
+            }.sortedBy { it.installedApp.isUpdateAvailable }
+        }
+    }
+
+
+    private fun uninstallApp(app: InstalledApp) {
+        viewModelScope.launch {
+            try {
+                installer.uninstall(app.packageName)
+                logger.debug("Requested uninstall for ${app.packageName}")
+            } catch (e: Exception) {
+                logger.error("Failed to request uninstall for ${app.packageName}: ${e.message}")
+                _events.send(
+                    AppsEvent.ShowError(
+                        getString(Res.string.failed_to_uninstall, app.appName)
+                    )
+                )
             }
         }
     }
@@ -309,7 +355,23 @@ class AppsViewModel(
                 val apkInfo = installer.getApkInfoExtractor().extractPackageInfo(filePath)
                     ?: throw IllegalStateException("Failed to extract APK info")
 
-                markPendingUpdate(app)
+                // Save latest release metadata and mark as pending install
+                // so PackageEventReceiver can verify the actual installation
+                val currentApp = installedAppsRepository.getAppByPackage(app.packageName)
+                if (currentApp != null) {
+                    installedAppsRepository.updateApp(
+                        currentApp.copy(
+                            isPendingInstall = true,
+                            latestVersion = latestVersion,
+                            latestAssetName = latestAssetName,
+                            latestAssetUrl = latestAssetUrl,
+                            latestVersionName = apkInfo.versionName,
+                            latestVersionCode = apkInfo.versionCode
+                        )
+                    )
+                } else {
+                    markPendingUpdate(app)
+                }
 
                 updateAppState(app.packageName, UpdateState.Installing)
 
@@ -320,20 +382,12 @@ class AppsViewModel(
                     throw e
                 }
 
-                installedAppsRepository.updateAppVersion(
-                    packageName = app.packageName,
-                    newTag = latestVersion,
-                    newAssetName = latestAssetName,
-                    newAssetUrl = latestAssetUrl,
-                    newVersionName = apkInfo.versionName,
-                    newVersionCode = apkInfo.versionCode
-                )
-
-                updateAppState(app.packageName, UpdateState.Success)
-                delay(2000)
+                // Don't mark as updated here — installer.install() just launches the
+                // system install dialog and returns immediately. PackageEventReceiver
+                // will handle confirming the actual installation via broadcast.
                 updateAppState(app.packageName, UpdateState.Idle)
 
-                logger.debug("Successfully updated ${app.appName} to ${latestVersion}")
+                logger.debug("Launched installer for ${app.appName} ${latestVersion}, waiting for system confirmation")
 
             } catch (e: CancellationException) {
                 logger.debug("Update cancelled for ${app.packageName}")
@@ -517,6 +571,8 @@ class AppsViewModel(
                 }
             )
         }
+
+        filterApps()
     }
 
     private fun updateAppProgress(packageName: String, progress: Int?) {
@@ -531,6 +587,8 @@ class AppsViewModel(
                 }
             )
         }
+
+        filterApps()
     }
 
     private suspend fun markPendingUpdate(app: InstalledApp) {

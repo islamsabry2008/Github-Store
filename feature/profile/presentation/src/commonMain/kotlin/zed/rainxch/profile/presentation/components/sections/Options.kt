@@ -29,6 +29,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.stringResource
+import zed.rainxch.githubstore.core.presentation.res.*
 import zed.rainxch.profile.presentation.ProfileAction
 
 fun LazyListScope.options(
@@ -38,8 +40,8 @@ fun LazyListScope.options(
     item {
         OptionCard(
             icon = Icons.Default.Star,
-            label = "Stars",
-            description = "Your Starred Repositories from GitHub",
+            label = stringResource(Res.string.stars),
+            description = stringResource(Res.string.profile_stars_description),
             onClick = {
                 onAction(ProfileAction.OnStarredReposClick)
             },
@@ -50,8 +52,8 @@ fun LazyListScope.options(
 
         OptionCard(
             icon = Icons.Default.Favorite,
-            label = "Favourites",
-            description = "Your Favourite Repositories saved locally",
+            label = stringResource(Res.string.favourites),
+            description = stringResource(Res.string.profile_favourites_description),
             onClick = {
                 onAction(ProfileAction.OnFavouriteReposClick)
             }
@@ -78,7 +80,7 @@ private fun OptionCard(
             disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = .7f),
         ),
         onClick = onClick,
-        shape = RoundedCornerShape(36.dp),
+        shape = RoundedCornerShape(32.dp),
         border = BorderStroke(
             width = .5.dp,
             color = MaterialTheme.colorScheme.surface
@@ -86,9 +88,9 @@ private fun OptionCard(
         enabled = enabled
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 12.dp),
+            modifier = Modifier.padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Icon(
                 imageVector = icon,

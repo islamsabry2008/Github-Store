@@ -23,11 +23,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -48,6 +47,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -58,17 +58,22 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.fletchmckee.liquid.liquefiable
-import zed.rainxch.githubstore.core.presentation.res.*
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import zed.rainxch.core.domain.model.GithubRepoSummary
+import zed.rainxch.core.presentation.components.GithubStoreButton
 import zed.rainxch.core.presentation.components.RepositoryCard
 import zed.rainxch.core.presentation.locals.LocalBottomNavigationLiquid
 import zed.rainxch.core.presentation.theme.GithubStoreTheme
 import zed.rainxch.domain.model.ProgrammingLanguage
 import zed.rainxch.domain.model.SearchPlatform
+import zed.rainxch.githubstore.core.presentation.res.Res
+import zed.rainxch.githubstore.core.presentation.res.language_label
+import zed.rainxch.githubstore.core.presentation.res.results_found
+import zed.rainxch.githubstore.core.presentation.res.retry
+import zed.rainxch.githubstore.core.presentation.res.search_repositories_hint
 import zed.rainxch.search.presentation.components.LanguageFilterBottomSheet
 import zed.rainxch.search.presentation.utils.label
 
@@ -118,7 +123,7 @@ fun SearchRoot(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SearchScreen(
     state: SearchState,
@@ -204,14 +209,14 @@ fun SearchScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 8.dp)
+                .padding(horizontal = 16.dp)
         ) {
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                items(SearchPlatform.entries.toList()) { sortBy ->
+                items(SearchPlatform.entries) { sortBy ->
                     FilterChip(
                         selected = state.selectedSearchPlatform == sortBy,
                         label = {
@@ -229,11 +234,9 @@ fun SearchScreen(
                 }
             }
 
-            Spacer(Modifier.height(4.dp))
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
@@ -284,7 +287,7 @@ fun SearchScreen(
                 }
             }
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(6.dp))
 
             if (state.totalCount != null) {
                 Text(
@@ -296,7 +299,7 @@ fun SearchScreen(
                     color = MaterialTheme.colorScheme.outline,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 8.dp)
+                        .padding(bottom = 6.dp)
                 )
             }
 
@@ -322,11 +325,12 @@ fun SearchScreen(
 
                             Spacer(Modifier.height(8.dp))
 
-                            Button(onClick = { onAction(SearchAction.Retry) }) {
-                                Text(
-                                    text = stringResource(Res.string.retry)
-                                )
-                            }
+                            GithubStoreButton(
+                                text = stringResource(Res.string.retry),
+                                onClick = {
+                                    onAction(SearchAction.Retry)
+                                }
+                            )
                         }
                     }
                 }
@@ -381,7 +385,6 @@ fun SearchScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun SearchTopbar(
     onAction: (SearchAction) -> Unit,
@@ -396,16 +399,6 @@ private fun SearchTopbar(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        IconButton(
-            onClick = { onAction(SearchAction.OnNavigateBackClick) }
-        ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = stringResource(Res.string.navigate_back),
-                modifier = Modifier.size(24.dp)
-            )
-        }
-
         TextField(
             value = state.query,
             onValueChange = { value ->
@@ -417,6 +410,21 @@ private fun SearchTopbar(
                     contentDescription = null,
                     modifier = Modifier.size(20.dp)
                 )
+            },
+            trailingIcon = {
+                IconButton(
+                    onClick = {
+                        onAction(SearchAction.OnClearClick)
+                    },
+                    modifier = Modifier
+                        .size(20.dp)
+                        .clip(CircleShape)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Clear,
+                        contentDescription = null
+                    )
+                }
             },
             placeholder = {
                 Text(

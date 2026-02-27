@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -65,7 +67,6 @@ fun LazyListScope.networkSection(
             }
         )
 
-        // Description text for None / System proxy types
         AnimatedVisibility(
             visible = state.proxyType == ProxyType.NONE || state.proxyType == ProxyType.SYSTEM,
             enter = expandVertically() + fadeIn(),
@@ -82,7 +83,6 @@ fun LazyListScope.networkSection(
             )
         }
 
-        // Details card for HTTP / SOCKS proxy types
         AnimatedVisibility(
             visible = state.proxyType == ProxyType.HTTP || state.proxyType == ProxyType.SOCKS,
             enter = expandVertically() + fadeIn(),
@@ -111,7 +111,7 @@ private fun ProxyTypeCard(
         colors = CardDefaults.elevatedCardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
-        shape = RoundedCornerShape(20.dp)
+        shape = RoundedCornerShape(32.dp)
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
@@ -123,13 +123,13 @@ private fun ProxyTypeCard(
                 fontWeight = FontWeight.SemiBold
             )
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(8.dp))
 
-            Row(
+            LazyRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                ProxyType.entries.forEach { type ->
+                items(ProxyType.entries) { type ->
                     FilterChip(
                         selected = selectedType == type,
                         onClick = { onTypeSelected(type) },
@@ -148,7 +148,6 @@ private fun ProxyTypeCard(
                                 overflow = TextOverflow.Ellipsis
                             )
                         },
-                        modifier = Modifier.weight(1f)
                     )
                 }
             }
@@ -174,13 +173,12 @@ private fun ProxyDetailsCard(
         colors = CardDefaults.elevatedCardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
-        shape = RoundedCornerShape(20.dp)
+        shape = RoundedCornerShape(32.dp)
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Host + Port row
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)

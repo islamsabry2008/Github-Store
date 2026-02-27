@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -26,6 +28,7 @@ import io.github.fletchmckee.liquid.rememberLiquidState
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import zed.rainxch.apps.presentation.AppsRoot
+import zed.rainxch.apps.presentation.AppsViewModel
 import zed.rainxch.auth.presentation.AuthenticationRoot
 import zed.rainxch.core.presentation.locals.LocalBottomNavigationHeight
 import zed.rainxch.core.presentation.locals.LocalBottomNavigationLiquid
@@ -44,6 +47,9 @@ fun AppNavigation(
     val liquidState = rememberLiquidState()
     var bottomNavigationHeight by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
+
+    val appsViewModel = koinViewModel<AppsViewModel>()
+    val appsState by appsViewModel.state.collectAsStateWithLifecycle()
 
     CompositionLocalProvider(
         LocalBottomNavigationLiquid provides liquidState,
@@ -222,6 +228,9 @@ fun AppNavigation(
                         },
                         onNavigateToFavouriteRepos = {
                             navController.navigate(GithubStoreGraph.FavouritesScreen)
+                        },
+                        onNavigateToDevProfile = { username ->
+                            navController.navigate(GithubStoreGraph.DeveloperProfileScreen(username))
                         }
                     )
                 }
@@ -237,7 +246,9 @@ fun AppNavigation(
                                     repositoryId = repoId
                                 )
                             )
-                        }
+                        },
+                        viewModel = appsViewModel,
+                        state = appsState
                     )
                 }
             }
@@ -248,8 +259,16 @@ fun AppNavigation(
                 BottomNavigation(
                     currentScreen = currentScreen,
                     onNavigate = {
-                        navController.navigate(it)
+                        navController.navigate(it) {
+                            popUpTo(GithubStoreGraph.HomeScreen) {
+                                saveState = true
+                            }
+
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     },
+                    isUpdateAvailable = appsState.apps.any { it.installedApp.isUpdateAvailable },
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .navigationBarsPadding()

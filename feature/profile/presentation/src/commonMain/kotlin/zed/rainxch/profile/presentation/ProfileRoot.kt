@@ -49,6 +49,7 @@ import zed.rainxch.profile.presentation.components.sections.settings
 @Composable
 fun ProfileRoot(
     onNavigateBack: () -> Unit,
+    onNavigateToDevProfile: (username: String) -> Unit,
     onNavigateToAuthentication: () -> Unit,
     onNavigateToStarredRepos: () -> Unit,
     onNavigateToFavouriteRepos: () -> Unit,
@@ -108,6 +109,10 @@ fun ProfileRoot(
                     onNavigateToStarredRepos()
                 }
 
+                is ProfileAction.OnRepositoriesClick -> {
+                    onNavigateToDevProfile(action.username)
+                }
+
                 else -> {
                     viewModel.onAction(action)
                 }
@@ -141,7 +146,7 @@ fun ProfileScreen(
         snackbarHost = {
             SnackbarHost(
                 hostState = snackbarState,
-                modifier = Modifier.padding(bottom = bottomNavHeight)
+                modifier = Modifier.padding(bottom = bottomNavHeight + 16.dp)
             )
         },
         topBar = {
@@ -188,18 +193,18 @@ fun ProfileScreen(
                 onAction = onAction
             )
 
-            if (state.isUserLoggedIn) {
-                item {
-                    Spacer(Modifier.height(16.dp))
-                }
+            item {
+                Spacer(Modifier.height(16.dp))
+            }
 
+            if (state.isUserLoggedIn) {
                 logout(
                     onAction = onAction
                 )
             }
 
             item {
-                Spacer(Modifier.height(64.dp))
+                Spacer(Modifier.height(bottomNavHeight + 32.dp))
             }
         }
     }

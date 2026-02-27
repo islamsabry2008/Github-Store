@@ -19,6 +19,7 @@ sealed interface ProfileAction {
     data class OnProxyTypeSelected(val type: ProxyType) : ProfileAction
     data class OnProxyHostChanged(val host: String) : ProfileAction
     data class OnProxyPortChanged(val port: String) : ProfileAction
+    data class OnRepositoriesClick(val username: String) : ProfileAction
     data class OnProxyUsernameChanged(val username: String) : ProfileAction
     data class OnProxyPasswordChanged(val password: String) : ProfileAction
     data object OnProxyPasswordVisibilityToggle : ProfileAction

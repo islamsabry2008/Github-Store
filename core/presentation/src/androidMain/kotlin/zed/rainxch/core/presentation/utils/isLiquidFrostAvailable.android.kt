@@ -1,4 +1,4 @@
-package zed.rainxch.details.presentation.utils
+package zed.rainxch.core.presentation.utils
 
 import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
