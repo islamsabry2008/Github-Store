@@ -248,7 +248,14 @@ fun AppNavigation(
                 BottomNavigation(
                     currentScreen = currentScreen,
                     onNavigate = {
-                        navController.navigate(it)
+                        navController.navigate(it) {
+                            popUpTo(GithubStoreGraph.HomeScreen) {
+                                saveState = true
+                            }
+
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     },
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
