@@ -72,6 +72,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import zed.rainxch.apps.presentation.model.AppItem
 import zed.rainxch.apps.presentation.model.UpdateAllProgress
 import zed.rainxch.apps.presentation.model.UpdateState
+import zed.rainxch.core.presentation.components.ExpressiveCard
 import zed.rainxch.core.presentation.locals.LocalBottomNavigationHeight
 import zed.rainxch.core.presentation.locals.LocalBottomNavigationLiquid
 import zed.rainxch.core.presentation.theme.GithubStoreTheme
@@ -374,7 +375,7 @@ fun AppItemCard(
 ) {
     val app = appItem.installedApp
 
-    ExpressiveCard (modifier = modifier) {
+    ExpressiveCard(modifier = modifier) {
         Column(
             modifier = Modifier
                 .clip(RoundedCornerShape(32.dp))
@@ -645,21 +646,6 @@ private fun formatLastChecked(timestamp: Long): String {
         minutes < 60 -> stringResource(Res.string.last_checked_minutes_ago, minutes.toInt())
         else -> stringResource(Res.string.last_checked_hours_ago, hours.toInt())
     }
-}
-
-@Composable
-private fun ExpressiveCard(
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
-) {
-    ElevatedCard(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
-        ),
-        shape = RoundedCornerShape(32.dp),
-        content = { content() }
-    )
 }
 
 @Preview

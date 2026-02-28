@@ -64,13 +64,9 @@ fun RepositoryCard(
     modifier: Modifier = Modifier
 ) {
     val uriHandler = LocalUriHandler.current
-    Card(
-        modifier = modifier.fillMaxWidth(),
+    ExpressiveCard(
         onClick = onClick,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
-        ),
-        shape = RoundedCornerShape(24.dp)
+        modifier = modifier
     ) {
         Box {
             if (discoveryRepository.isFavourite) {

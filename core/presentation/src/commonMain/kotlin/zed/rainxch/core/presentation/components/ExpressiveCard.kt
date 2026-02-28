@@ -1,4 +1,4 @@
-package zed.rainxch.devprofile.presentation.components
+package zed.rainxch.core.presentation.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ExpressiveCard(
     modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
     content: @Composable () -> Unit
 ) {
     ElevatedCard(
@@ -19,6 +20,9 @@ fun ExpressiveCard(
         colors = CardDefaults.elevatedCardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
+        onClick = {
+            onClick?.invoke()
+        },
         shape = RoundedCornerShape(32.dp),
         content = { content() }
     )
