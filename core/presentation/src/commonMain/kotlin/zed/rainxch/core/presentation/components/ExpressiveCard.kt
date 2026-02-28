@@ -15,15 +15,24 @@ fun ExpressiveCard(
     onClick: (() -> Unit)? = null,
     content: @Composable () -> Unit
 ) {
-    ElevatedCard(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
-        ),
-        onClick = {
-            onClick?.invoke()
-        },
-        shape = RoundedCornerShape(32.dp),
-        content = { content() }
-    )
+    if (onClick != null) {
+        ElevatedCard(
+            modifier = modifier.fillMaxWidth(),
+            colors = CardDefaults.elevatedCardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
+            ),
+            onClick = onClick,
+            shape = RoundedCornerShape(32.dp),
+            content = { content() }
+        )
+    } else {
+        ElevatedCard(
+            modifier = modifier.fillMaxWidth(),
+            colors = CardDefaults.elevatedCardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
+            ),
+            shape = RoundedCornerShape(32.dp),
+            content = { content() }
+        )
+    }
 }

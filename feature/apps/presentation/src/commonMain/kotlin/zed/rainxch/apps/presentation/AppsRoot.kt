@@ -375,11 +375,13 @@ fun AppItemCard(
 ) {
     val app = appItem.installedApp
 
-    ExpressiveCard(modifier = modifier) {
+    ExpressiveCard(
+        onClick = onRepoClick,
+        modifier = modifier
+    ) {
         Column(
             modifier = Modifier
                 .clip(RoundedCornerShape(32.dp))
-                .clickable { onRepoClick() }
                 .padding(16.dp)
         ) {
             Row(

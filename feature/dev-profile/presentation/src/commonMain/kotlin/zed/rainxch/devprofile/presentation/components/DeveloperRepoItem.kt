@@ -57,12 +57,12 @@ fun DeveloperRepoItem(
     modifier: Modifier = Modifier
 ) {
     ExpressiveCard(
+        onClick = onItemClick,
         modifier = modifier.fillMaxWidth(),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable(onClick = onItemClick)
                 .padding(16.dp)
         ) {
             Row(
