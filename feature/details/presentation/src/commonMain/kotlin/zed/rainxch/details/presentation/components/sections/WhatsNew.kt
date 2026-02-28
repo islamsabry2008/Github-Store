@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -107,7 +108,9 @@ fun LazyListScope.whatsNew(
                 val cardColor = MaterialTheme.colorScheme.surfaceContainerLow
 
                 val collapsedHeightPx = with(density) { collapsedHeight.toPx() }
-                var contentHeightPx by remember { mutableStateOf(0f) }
+                var contentHeightPx by remember(release.description, collapsedHeightPx) {
+                    mutableFloatStateOf(0f)
+                }
                 val needsExpansion = remember(contentHeightPx, collapsedHeightPx) {
                     contentHeightPx > collapsedHeightPx && collapsedHeightPx > 0f
                 }

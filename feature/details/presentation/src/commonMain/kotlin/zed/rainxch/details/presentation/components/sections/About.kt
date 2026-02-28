@@ -117,11 +117,8 @@ fun ExpandableMarkdownContent(
     val flavour = remember { GFMFlavourDescriptor() }
 
     val collapsedHeightPx = with(density) { collapsedHeight.toPx() }
-    var contentHeightPx by remember { mutableStateOf(0f) }
-    val needsExpansion = remember(contentHeightPx) {
-        contentHeightPx > collapsedHeightPx
-                && collapsedHeightPx > 0f
-    }
+    var contentHeightPx by remember(content, collapsedHeightPx) { mutableStateOf(0f) }
+    val needsExpansion = contentHeightPx > collapsedHeightPx && collapsedHeightPx > 0f
 
     Column(
         modifier = modifier.animateContentSize()

@@ -329,10 +329,11 @@ fun preprocessMarkdown(markdown: String, baseUrl: String): String {
     ) { match ->
         val url = match.groupValues[2]
         val text = match.groupValues[3].trim()
+        val resolvedUrl = resolveUrl(url)
         if (text.isEmpty()) {
-            "[$url]($url)"
+            "[$resolvedUrl]($resolvedUrl)"
         } else {
-            "[$text]($url)"
+            "[$text]($resolvedUrl)"
         }
     }
 
