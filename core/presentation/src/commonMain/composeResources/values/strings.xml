@@ -421,4 +421,8 @@
     <!-- Read More / Show Less -->
     <string name="read_more">Read More</string>
     <string name="show_less">Show Less</string>
+
+    <string name="share_repository">Share repository</string>
+    <string name="failed_to_share_link">Failed to share link</string>
+    <string name="link_copied_to_clipboard">Link copied to clipboard</string>
 </resources>

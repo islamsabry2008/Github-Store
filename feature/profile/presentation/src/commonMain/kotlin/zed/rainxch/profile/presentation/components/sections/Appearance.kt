@@ -57,6 +57,7 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import zed.rainxch.core.domain.model.AppTheme
 import zed.rainxch.core.domain.model.FontTheme
+import zed.rainxch.core.presentation.components.ExpressiveCard
 import zed.rainxch.core.presentation.theme.isDynamicColorAvailable
 import zed.rainxch.core.presentation.utils.displayName
 import zed.rainxch.core.presentation.utils.primaryColor
@@ -137,7 +138,7 @@ private fun ThemeSelectionCard(
     isDarkTheme: Boolean?,
     onDarkThemeChange: (Boolean?) -> Unit
 ) {
-    ExpressiveCard{
+    ExpressiveCard {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -398,19 +399,4 @@ private fun ToggleSettingCard(
             )
         }
     }
-}
-
-@Composable
-private fun ExpressiveCard(
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
-) {
-    ElevatedCard(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
-        ),
-        shape = RoundedCornerShape(32.dp),
-        content = { content() }
-    )
 }

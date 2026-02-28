@@ -389,4 +389,8 @@
     <string name="read_more">Lire la suite</string>
     <string name="show_less">Afficher moins</string>
 
+    <string name="share_repository">Partager le dépôt</string>
+    <string name="failed_to_share_link">Échec du partage du lien</string>
+    <string name="link_copied_to_clipboard">Lien copié dans le presse-papiers</string>
+
 </resources>

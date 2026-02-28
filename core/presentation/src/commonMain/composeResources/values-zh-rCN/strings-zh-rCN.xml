@@ -389,4 +389,8 @@
     <string name="read_more">阅读更多</string>
     <string name="show_less">收起</string>
 
+    <string name="share_repository">分享仓库</string>
+    <string name="failed_to_share_link">无法分享链接</string>
+    <string name="link_copied_to_clipboard">链接已复制到剪贴板</string>
+
 </resources>

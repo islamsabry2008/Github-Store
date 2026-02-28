@@ -424,4 +424,8 @@
     <string name="read_more">আরও পড়ুন</string>
     <string name="show_less">কম দেখান</string>
 
+    <string name="share_repository">রিপোজিটরি শেয়ার করুন</string>
+    <string name="failed_to_share_link">লিংক শেয়ার করতে ব্যর্থ হয়েছে</string>
+    <string name="link_copied_to_clipboard">লিংক ক্লিপবোর্ডে কপি করা হয়েছে</string>
+
 </resources>

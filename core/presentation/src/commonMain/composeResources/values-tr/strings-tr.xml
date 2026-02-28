@@ -421,4 +421,8 @@
     <string name="read_more">Devamını oku</string>
     <string name="show_less">Daha az göster</string>
 
+    <string name="share_repository">Depoyu paylaş</string>
+    <string name="failed_to_share_link">Bağlantı paylaşılamadı</string>
+    <string name="link_copied_to_clipboard">Bağlantı panoya kopyalandı</string>
+
 </resources>
