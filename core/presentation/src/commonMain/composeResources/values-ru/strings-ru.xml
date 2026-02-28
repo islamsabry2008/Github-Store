@@ -389,4 +389,8 @@
     <string name="read_more">Читать далее</string>
     <string name="show_less">Свернуть</string>
 
+    <string name="share_repository">Поделиться репозиторием</string>
+    <string name="failed_to_share_link">Не удалось поделиться ссылкой</string>
+    <string name="link_copied_to_clipboard">Ссылка скопирована в буфер обмена</string>
+
 </resources>

@@ -425,4 +425,8 @@
     <string name="read_more">Leggi di più</string>
     <string name="show_less">Mostra meno</string>
 
+    <string name="share_repository">Condividi repository</string>
+    <string name="failed_to_share_link">Impossibile condividere il link</string>
+    <string name="link_copied_to_clipboard">Link copiato negli appunti</string>
+
 </resources>

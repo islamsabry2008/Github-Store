@@ -388,4 +388,8 @@
     <string name="read_more">もっと読む</string>
     <string name="show_less">折りたたむ</string>
 
+    <string name="share_repository">リポジトリを共有</string>
+    <string name="failed_to_share_link">リンクの共有に失敗しました</string>
+    <string name="link_copied_to_clipboard">リンクをクリップボードにコピーしました</string>
+
 </resources>
