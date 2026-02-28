@@ -3,6 +3,7 @@ package zed.rainxch.details.presentation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -214,10 +215,12 @@ fun DetailsScreen(
                 return@Scaffold
             }
 
-            Box(
+            BoxWithConstraints(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
+                val collapsedSectionHeight = maxHeight * 0.7f
+
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxHeight()
@@ -242,7 +245,8 @@ fun DetailsScreen(
                             readmeMarkdown = state.readmeMarkdown,
                             readmeLanguage = state.readmeLanguage,
                             isExpanded = state.isAboutExpanded,
-                            onToggleExpanded = { onAction(DetailsAction.ToggleAboutExpanded) }
+                            onToggleExpanded = { onAction(DetailsAction.ToggleAboutExpanded) },
+                            collapsedHeight = collapsedSectionHeight,
                         )
                     }
 
@@ -250,7 +254,8 @@ fun DetailsScreen(
                         whatsNew(
                             release = release,
                             isExpanded = state.isWhatsNewExpanded,
-                            onToggleExpanded = { onAction(DetailsAction.ToggleWhatsNewExpanded) }
+                            onToggleExpanded = { onAction(DetailsAction.ToggleWhatsNewExpanded) },
+                            collapsedHeight = collapsedSectionHeight,
                         )
                     }
 

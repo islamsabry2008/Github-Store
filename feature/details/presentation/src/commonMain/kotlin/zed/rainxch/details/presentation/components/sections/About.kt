@@ -4,7 +4,6 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.mikepenz.markdown.compose.Markdown
 import com.mikepenz.markdown.model.ImageTransformer
@@ -48,6 +48,7 @@ fun LazyListScope.about(
     readmeLanguage: String?,
     isExpanded: Boolean,
     onToggleExpanded: () -> Unit,
+    collapsedHeight: Dp,
 ) {
     item {
         val liquidState = LocalTopbarLiquidState.current
@@ -91,6 +92,8 @@ fun LazyListScope.about(
             isExpanded = isExpanded,
             onToggleExpanded = onToggleExpanded,
             imageTransformer = MarkdownImageTransformer,
+            collapsedHeight = collapsedHeight,
+            fadeColor = MaterialTheme.colorScheme.background,
             modifier = Modifier
                 .fillMaxWidth()
                 .liquefiable(liquidState),
@@ -104,78 +107,82 @@ fun ExpandableMarkdownContent(
     isExpanded: Boolean,
     onToggleExpanded: () -> Unit,
     imageTransformer: ImageTransformer,
+    collapsedHeight: Dp,
+    fadeColor: Color,
     modifier: Modifier = Modifier,
 ) {
     val density = LocalDensity.current
     val colors = rememberMarkdownColors()
     val typography = rememberMarkdownTypography()
     val flavour = remember { GFMFlavourDescriptor() }
-    val surfaceColor = MaterialTheme.colorScheme.background
 
-    BoxWithConstraints(modifier = modifier) {
-        val collapsedHeightDp = maxHeight * 0.7f
-        val collapsedHeightPx = with(density) { collapsedHeightDp.toPx() }
-        var contentHeightPx by remember { mutableStateOf(0f) }
-        val needsExpansion = contentHeightPx > collapsedHeightPx && collapsedHeightPx > 0f
+    val collapsedHeightPx = with(density) { collapsedHeight.toPx() }
+    var contentHeightPx by remember { mutableStateOf(0f) }
+    val needsExpansion = remember(contentHeightPx) {
+        contentHeightPx > collapsedHeightPx
+                && collapsedHeightPx > 0f
+    }
 
-        Column(
-            modifier = Modifier.animateContentSize()
-        ) {
-            Box {
-                Surface(
-                    color = Color.Transparent,
-                    contentColor = MaterialTheme.colorScheme.onBackground,
-                    modifier = if (!isExpanded && needsExpansion) {
-                        Modifier.heightIn(max = collapsedHeightDp).clipToBounds()
-                    } else {
-                        Modifier
-                    }
-                ) {
-                    Markdown(
-                        content = content,
-                        colors = colors,
-                        typography = typography,
-                        flavour = flavour,
-                        imageTransformer = imageTransformer,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .onGloballyPositioned { coordinates ->
-                                contentHeightPx = coordinates.size.height.toFloat()
-                            },
-                    )
+    Column(
+        modifier = modifier.animateContentSize()
+    ) {
+        Box {
+            Surface(
+                color = Color.Transparent,
+                contentColor = MaterialTheme.colorScheme.onBackground,
+                modifier = if (!isExpanded && needsExpansion) {
+                    Modifier.heightIn(max = collapsedHeight).clipToBounds()
+                } else {
+                    Modifier
                 }
-
-                if (!isExpanded && needsExpansion) {
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .fillMaxWidth()
-                            .height(80.dp)
-                            .background(
-                                Brush.verticalGradient(
-                                    0f to surfaceColor.copy(alpha = 0f),
-                                    1f to surfaceColor
-                                )
-                            )
-                    )
-                }
+            ) {
+                Markdown(
+                    content = content,
+                    colors = colors,
+                    typography = typography,
+                    flavour = flavour,
+                    imageTransformer = imageTransformer,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onGloballyPositioned { coordinates ->
+                            val measured = coordinates.size.height.toFloat()
+                            if (measured > contentHeightPx) {
+                                contentHeightPx = measured
+                            }
+                        },
+                )
             }
 
-            if (needsExpansion) {
-                TextButton(
-                    onClick = onToggleExpanded,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                ) {
-                    Text(
-                        text = if (isExpanded) {
-                            stringResource(Res.string.show_less)
-                        } else {
-                            stringResource(Res.string.read_more)
-                        },
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
+            if (!isExpanded && needsExpansion) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .height(80.dp)
+                        .background(
+                            Brush.verticalGradient(
+                                0f to fadeColor.copy(alpha = 0f),
+                                1f to fadeColor
+                            )
+                        )
+                )
+            }
+        }
+
+        if (needsExpansion) {
+            TextButton(
+                onClick = onToggleExpanded,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text(
+                    text = if (isExpanded) {
+                        stringResource(Res.string.show_less)
+                    } else {
+                        stringResource(Res.string.read_more)
+                    },
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
         }
     }
