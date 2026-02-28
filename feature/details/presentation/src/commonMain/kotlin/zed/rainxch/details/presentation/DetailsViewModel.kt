@@ -452,10 +452,18 @@ class DetailsViewModel(
             DetailsAction.OnShareClick -> {
                 viewModelScope.launch {
                     _state.value.repository?.let { repo ->
-                        shareManager.shareText("https://github-store.org/app?repo=${repo.fullName}")
+                        runCatching {
+                            shareManager.shareText("https://github-store.org/app?repo=${repo.fullName}")
+                        }.onFailure { t ->
+                            logger.error("Failed to share link: ${t.message}")
+                            _events.send(
+                                DetailsEvent.OnMessage(getString(Res.string.failed_to_share_link))
+                            )
+                            return@launch
+                        }
 
                         if (platform != Platform.ANDROID) {
-                            _events.send(DetailsEvent.OnMessage("Link copied to clipboard"))
+                            _events.send(DetailsEvent.OnMessage(getString(Res.string.link_copied_to_clipboard)))
                         }
                     }
                 }

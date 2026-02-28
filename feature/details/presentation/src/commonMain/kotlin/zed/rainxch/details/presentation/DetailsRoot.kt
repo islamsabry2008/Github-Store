@@ -370,7 +370,7 @@ private fun DetailsTopbar(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Share,
-                            contentDescription = null,
+                            contentDescription = stringResource(Res.string.share_repository),
                         )
                     }
                 }
