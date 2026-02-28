@@ -4,11 +4,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -23,10 +22,8 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Update
-import androidx.compose.material.icons.outlined.CallSplit
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,13 +36,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.skydoves.landscapist.coil3.CoilImage
-import com.skydoves.landscapist.components.rememberImageComponent
-import com.skydoves.landscapist.crossfade.CrossfadePlugin
-import zed.rainxch.githubstore.core.presentation.res.*
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import zed.rainxch.core.domain.model.GithubRepoSummary
@@ -53,7 +47,13 @@ import zed.rainxch.core.domain.model.GithubUser
 import zed.rainxch.core.presentation.model.DiscoveryRepository
 import zed.rainxch.core.presentation.theme.GithubStoreTheme
 import zed.rainxch.core.presentation.utils.formatReleasedAt
-import zed.rainxch.core.presentation.utils.formatUpdatedAt
+import zed.rainxch.core.presentation.utils.hasWeekNotPassed
+import zed.rainxch.githubstore.core.presentation.res.Res
+import zed.rainxch.githubstore.core.presentation.res.forked_repository
+import zed.rainxch.githubstore.core.presentation.res.home_view_details
+import zed.rainxch.githubstore.core.presentation.res.installed
+import zed.rainxch.githubstore.core.presentation.res.open_in_browser
+import zed.rainxch.githubstore.core.presentation.res.update_available
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalLayoutApi::class)
 @Composable
@@ -237,8 +237,16 @@ fun RepositoryCard(
 
                 Spacer(Modifier.height(12.dp))
 
+                val releasedAtText = buildAnnotatedString {
+                    if (hasWeekNotPassed(discoveryRepository.repository.updatedAt)) {
+                        append("🔥 ")
+                    }
+
+                    append(formatReleasedAt(discoveryRepository.repository.updatedAt))
+                }
+
                 Text(
-                    text = formatReleasedAt(discoveryRepository.repository.updatedAt),
+                    text = releasedAtText,
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.outline,
                     maxLines = 1,
