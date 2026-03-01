@@ -157,6 +157,12 @@
 
     <string name="log_prepare_appmanager">AppManager 用に準備中</string>
     <string name="log_opened_appmanager">AppManager で開きました</string>
+    <string name="log_permission_blocked">デバイスポリシーによりインストール権限がブロックされました</string>
+    <string name="log_opened_external_installer">外部インストーラーで開きました</string>
+    <string name="install_permission_unavailable">インストール権限が利用できません</string>
+    <string name="install_permission_blocked_message">APKは正常にダウンロードされましたが、このデバイスでは直接インストールが許可されていません。外部インストーラーで開きますか？</string>
+    <string name="open_with_external_installer">外部インストーラーで開く</string>
+    <string name="external_installer_description">サードパーティアプリを使用してAPKをインストール</string>
 
     <string name="error_generic">エラー: %1$s</string>
     <string name="error_asset_not_supported">ファイル形式 .%1$s は未対応です</string>

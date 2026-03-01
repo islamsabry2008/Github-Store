@@ -38,5 +38,11 @@ fun LogResult.asText(): String {
 
         LogResult.PreparingForAppManager -> stringResource(Res.string.log_prepare_appmanager)
         LogResult.UpdateStarted -> stringResource(Res.string.log_update_started)
+
+        LogResult.PermissionBlocked ->
+            stringResource(Res.string.log_permission_blocked)
+
+        LogResult.OpenedInExternalInstaller ->
+            stringResource(Res.string.log_opened_external_installer)
     }
 }

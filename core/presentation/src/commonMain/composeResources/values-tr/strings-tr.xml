@@ -207,7 +207,13 @@
 
     <!-- External tools -->
     <string name="log_prepare_appmanager">AppManager için hazırlanıyor</string>
-    <string name="log_opened_appmanager">AppManager'da açıldı</string>
+    <string name="log_opened_appmanager">AppManager\'da açıldı</string>
+    <string name="log_permission_blocked">Yükleme izni cihaz politikası tarafından engellendi</string>
+    <string name="log_opened_external_installer">Harici yükleyicide açıldı</string>
+    <string name="install_permission_unavailable">Yükleme izni kullanılamıyor</string>
+    <string name="install_permission_blocked_message">APK başarıyla indirildi ancak bu cihaz doğrudan yüklemeye izin vermiyor. Harici bir yükleyici ile açmak ister misiniz?</string>
+    <string name="open_with_external_installer">Harici yükleyici ile aç</string>
+    <string name="external_installer_description">APK\'yı yüklemek için üçüncü taraf bir uygulama kullanın</string>
 
     <!-- Errors -->
     <string name="error_generic">Hata: %1$s</string>

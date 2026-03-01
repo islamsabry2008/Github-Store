@@ -158,6 +158,12 @@
 
     <string name="log_prepare_appmanager">正在为 AppManager 准备</string>
     <string name="log_opened_appmanager">已在 AppManager 中打开</string>
+    <string name="log_permission_blocked">安装权限被设备策略阻止</string>
+    <string name="log_opened_external_installer">已在外部安装器中打开</string>
+    <string name="install_permission_unavailable">安装权限不可用</string>
+    <string name="install_permission_blocked_message">APK已成功下载，但此设备不允许直接安装。是否使用外部安装器打开？</string>
+    <string name="open_with_external_installer">使用外部安装器打开</string>
+    <string name="external_installer_description">使用第三方应用安装APK</string>
 
     <string name="error_generic">错误：%1$s</string>
     <string name="error_asset_not_supported">不支持的文件类型 .%1$s</string>

@@ -207,6 +207,12 @@
     <!-- External tools -->
     <string name="log_prepare_appmanager">AppManager 준비 중</string>
     <string name="log_opened_appmanager">AppManager에서 열림</string>
+    <string name="log_permission_blocked">기기 정책에 의해 설치 권한이 차단됨</string>
+    <string name="log_opened_external_installer">외부 설치 프로그램에서 열림</string>
+    <string name="install_permission_unavailable">설치 권한을 사용할 수 없음</string>
+    <string name="install_permission_blocked_message">APK가 성공적으로 다운로드되었지만 이 기기에서는 직접 설치가 허용되지 않습니다. 외부 설치 프로그램으로 열까요?</string>
+    <string name="open_with_external_installer">외부 설치 프로그램으로 열기</string>
+    <string name="external_installer_description">타사 앱을 사용하여 APK 설치</string>
 
     <!-- Errors -->
     <string name="error_generic">오류: %1$s</string>

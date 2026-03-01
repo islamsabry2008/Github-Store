@@ -22,6 +22,9 @@ sealed interface DetailsAction {
 
     data object OpenInObtainium : DetailsAction
     data object OpenInAppManager : DetailsAction
+    data object InstallWithExternalApp : DetailsAction
+    data object OpenWithExternalInstaller : DetailsAction
+    data object DismissExternalInstallerPrompt : DetailsAction
     data object OnToggleInstallDropdown : DetailsAction
 
     data object OnNavigateBackClick : DetailsAction

@@ -157,6 +157,12 @@
 
     <string name="log_prepare_appmanager">Préparation pour AppManager</string>
     <string name="log_opened_appmanager">Ouvert dans AppManager</string>
+    <string name="log_permission_blocked">Permission d\'installation bloquée par la politique de l\'appareil</string>
+    <string name="log_opened_external_installer">Ouvert dans l\'installateur externe</string>
+    <string name="install_permission_unavailable">Permission d\'installation indisponible</string>
+    <string name="install_permission_blocked_message">L\'APK a été téléchargé avec succès mais cet appareil n\'autorise pas l\'installation directe. Voulez-vous l\'ouvrir avec un installateur externe ?</string>
+    <string name="open_with_external_installer">Ouvrir avec un installateur externe</string>
+    <string name="external_installer_description">Utiliser une application tierce pour installer l\'APK</string>
 
     <string name="error_generic">Erreur : %1$s</string>
     <string name="error_asset_not_supported">Type de fichier .%1$s non pris en charge</string>

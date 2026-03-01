@@ -175,6 +175,12 @@
 
     <string name="log_prepare_appmanager">Подготовка для AppManager</string>
     <string name="log_opened_appmanager">Открыто в AppManager</string>
+    <string name="log_permission_blocked">Разрешение на установку заблокировано политикой устройства</string>
+    <string name="log_opened_external_installer">Открыто во внешнем установщике</string>
+    <string name="install_permission_unavailable">Разрешение на установку недоступно</string>
+    <string name="install_permission_blocked_message">APK был успешно загружен, но это устройство не разрешает прямую установку. Хотите открыть его с помощью внешнего установщика?</string>
+    <string name="open_with_external_installer">Открыть во внешнем установщике</string>
+    <string name="external_installer_description">Использовать стороннее приложение для установки APK</string>
 
     <string name="error_generic">Ошибка: %1$s</string>
     <string name="error_asset_not_supported">Тип файла .%1$s не поддерживается</string>

@@ -241,6 +241,14 @@
     <!-- External tools -->
     <string name="log_prepare_appmanager">Preparing for AppManager</string>
     <string name="log_opened_appmanager">Opened in AppManager</string>
+    <string name="log_permission_blocked">Install permission blocked by device policy</string>
+    <string name="log_opened_external_installer">Opened in external installer</string>
+
+    <!-- External installer -->
+    <string name="install_permission_unavailable">Install permission unavailable</string>
+    <string name="install_permission_blocked_message">The APK was downloaded successfully but this device doesn\'t allow direct installation. Would you like to open it with an external installer?</string>
+    <string name="open_with_external_installer">Open with external installer</string>
+    <string name="external_installer_description">Use a third-party app to install the APK</string>
 
     <!-- Errors -->
     <string name="error_generic">Error: %1$s</string>

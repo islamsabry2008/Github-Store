@@ -146,6 +146,38 @@ fun DetailsRoot(
         )
     }
 
+    if (state.showExternalInstallerPrompt) {
+        AlertDialog(
+            onDismissRequest = {
+                viewModel.onAction(DetailsAction.DismissExternalInstallerPrompt)
+            },
+            title = {
+                Text(text = stringResource(Res.string.install_permission_unavailable))
+            },
+            text = {
+                Text(text = stringResource(Res.string.install_permission_blocked_message))
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.onAction(DetailsAction.OpenWithExternalInstaller)
+                    }
+                ) {
+                    Text(text = stringResource(Res.string.open_with_external_installer))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.onAction(DetailsAction.DismissExternalInstallerPrompt)
+                    }
+                ) {
+                    Text(text = stringResource(Res.string.dismiss))
+                }
+            }
+        )
+    }
+
     DetailsScreen(
         state = state,
         snackbarHostState = snackbarHostState,

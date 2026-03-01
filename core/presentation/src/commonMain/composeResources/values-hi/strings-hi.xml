@@ -209,6 +209,12 @@
     <!-- External tools -->
     <string name="log_prepare_appmanager">ऐपमैनेजर के लिए तैयारी कर रहा है</string>
     <string name="log_opened_appmanager">ऐप मैनेजर में खोला गया</string>
+    <string name="log_permission_blocked">डिवाइस नीति द्वारा इंस्टॉल अनुमति अवरुद्ध</string>
+    <string name="log_opened_external_installer">बाहरी इंस्टॉलर में खोला गया</string>
+    <string name="install_permission_unavailable">इंस्टॉल अनुमति उपलब्ध नहीं</string>
+    <string name="install_permission_blocked_message">APK सफलतापूर्वक डाउनलोड हो गया लेकिन यह डिवाइस सीधे इंस्टॉल करने की अनुमति नहीं देता। क्या आप इसे बाहरी इंस्टॉलर से खोलना चाहेंगे?</string>
+    <string name="open_with_external_installer">बाहरी इंस्टॉलर से खोलें</string>
+    <string name="external_installer_description">APK इंस्टॉल करने के लिए तृतीय-पक्ष ऐप का उपयोग करें</string>
 
     <!-- Errors -->
     <string name="error_generic">गलती: %1$s</string>

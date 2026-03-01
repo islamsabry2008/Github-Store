@@ -30,4 +30,6 @@ interface Installer {
     fun getApkInfoExtractor(): InstallerInfoExtractor
 
     fun openApp(packageName: String): Boolean
+
+    fun openWithExternalInstaller(filePath: String)
 }
