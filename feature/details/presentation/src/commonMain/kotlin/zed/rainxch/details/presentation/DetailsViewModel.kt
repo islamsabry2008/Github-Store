@@ -778,7 +778,8 @@ class DetailsViewModel(
             }
 
             DetailsAction.InstallWithExternalApp -> {
-                viewModelScope.launch {
+                currentDownloadJob?.cancel()
+                currentDownloadJob = viewModelScope.launch {
                     try {
                         val primary = _state.value.primaryAsset
                         val release = _state.value.selectedRelease
@@ -849,8 +850,11 @@ class DetailsViewModel(
                                 )
                             }
                         }
+                    } finally {
+                        currentDownloadJob = null
                     }
                 }
+
                 _state.update {
                     it.copy(isInstallDropdownExpanded = false)
                 }
@@ -956,6 +960,7 @@ class DetailsViewModel(
                         showExternalInstallerPrompt = true,
                         pendingInstallFilePath = filePath
                     )
+                    currentAssetName = null
                     appendLog(
                         assetName = assetName,
                         size = sizeBytes,
