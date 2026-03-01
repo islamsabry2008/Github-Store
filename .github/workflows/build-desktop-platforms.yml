@@ -206,6 +206,34 @@ jobs:
           retry ./gradlew :composeApp:packageDeb :composeApp:packageRpm
         shell: bash
 
+      - name: Build Linux AppImage
+        if: matrix.label == 'modern'
+        run: |
+          set -euo pipefail
+
+          retry() {
+            local n=1
+            local max=3
+            local delay=5
+            while true; do
+              echo "Attempt #$n: $*"
+              if "$@"; then
+                break
+              fi
+              if [ $n -ge $max ]; then
+                echo "Command failed after $n attempts."
+                return 1
+              fi
+              n=$((n+1))
+              echo "Command failed — retrying in $delay seconds..."
+              sleep $delay
+              delay=$((delay*2))
+            done
+          }
+
+          retry ./gradlew :composeApp:packageAppImage
+        shell: bash
+
       - name: Upload Linux installers
         uses: actions/upload-artifact@v4
         with:
@@ -213,5 +241,15 @@ jobs:
           path: |
             composeApp/build/compose/binaries/main/deb/*.deb
             composeApp/build/compose/binaries/main/rpm/*.rpm
+          retention-days: 30
+          compression-level: 6
+
+      - name: Upload Linux AppImage
+        if: matrix.label == 'modern'
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-appimage
+          path: |
+            composeApp/build/compose/binaries/main/app-image/
           retention-days: 30
           compression-level: 6
