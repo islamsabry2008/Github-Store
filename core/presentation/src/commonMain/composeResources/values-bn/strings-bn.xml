@@ -209,6 +209,12 @@
     <!-- External tools -->
     <string name="log_prepare_appmanager">AppManager-এর জন্য প্রস্তুত করা হচ্ছে</string>
     <string name="log_opened_appmanager">AppManager-এ খোলা হয়েছে</string>
+    <string name="log_permission_blocked">ডিভাইস নীতি দ্বারা ইনস্টল অনুমতি অবরুদ্ধ</string>
+    <string name="log_opened_external_installer">বাহ্যিক ইনস্টলারে খোলা হয়েছে</string>
+    <string name="install_permission_unavailable">ইনস্টল অনুমতি অনুপলব্ধ</string>
+    <string name="install_permission_blocked_message">APK সফলভাবে ডাউনলোড হয়েছে কিন্তু এই ডিভাইসে সরাসরি ইনস্টল করার অনুমতি নেই। আপনি কি এটি বাহ্যিক ইনস্টলার দিয়ে খুলতে চান?</string>
+    <string name="open_with_external_installer">বাহ্যিক ইনস্টলার দিয়ে খুলুন</string>
+    <string name="external_installer_description">APK ইনস্টল করতে তৃতীয় পক্ষের অ্যাপ ব্যবহার করুন</string>
 
     <!-- Errors -->
     <string name="error_generic">ত্রুটি: %1$s</string>

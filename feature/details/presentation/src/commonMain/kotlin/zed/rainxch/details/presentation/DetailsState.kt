@@ -66,6 +66,9 @@ data class DetailsState(
     val deviceLanguageCode: String = "en",
 
     val isComingFromUpdate: Boolean = false,
+
+    val showExternalInstallerPrompt: Boolean = false,
+    val pendingInstallFilePath: String? = null,
 ) {
     val filteredReleases: List<GithubRelease>
         get() = when (selectedReleaseCategory) {

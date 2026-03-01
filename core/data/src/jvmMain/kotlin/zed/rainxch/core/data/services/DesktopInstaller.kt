@@ -62,6 +62,10 @@ class DesktopInstaller(
         return false
     }
 
+    override fun openWithExternalInstaller(filePath: String) {
+        // Not applicable on desktop
+    }
+
     override fun isAssetInstallable(assetName: String): Boolean {
         val name = assetName.lowercase()
 

@@ -212,6 +212,29 @@ class AndroidInstaller(
         }
     }
 
+    override fun openWithExternalInstaller(filePath: String) {
+        val file = File(filePath)
+        if (!file.exists()) {
+            throw IllegalStateException("APK file not found: $filePath")
+        }
+
+        Logger.d { "Opening APK with external installer: $filePath" }
+
+        val authority = "${context.packageName}.fileprovider"
+        val fileUri: Uri = FileProvider.getUriForFile(context, authority, file)
+
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(fileUri, "application/vnd.android.package-archive")
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+
+        val chooser = Intent.createChooser(intent, null).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        context.startActivity(chooser)
+    }
+
     override fun openInAppManager(
         filePath: String,
         onOpenInstaller: () -> Unit

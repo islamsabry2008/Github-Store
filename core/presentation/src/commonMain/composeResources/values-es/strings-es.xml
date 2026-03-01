@@ -157,6 +157,12 @@
 
     <string name="log_prepare_appmanager">Preparando para AppManager</string>
     <string name="log_opened_appmanager">Abierto en AppManager</string>
+    <string name="log_permission_blocked">Permiso de instalación bloqueado por política del dispositivo</string>
+    <string name="log_opened_external_installer">Abierto en instalador externo</string>
+    <string name="install_permission_unavailable">Permiso de instalación no disponible</string>
+    <string name="install_permission_blocked_message">El APK se descargó correctamente pero este dispositivo no permite la instalación directa. ¿Desea abrirlo con un instalador externo?</string>
+    <string name="open_with_external_installer">Abrir con instalador externo</string>
+    <string name="external_installer_description">Usar una aplicación de terceros para instalar el APK</string>
 
     <string name="error_generic">Error: %1$s</string>
     <string name="error_asset_not_supported">Tipo de archivo .%1$s no compatible</string>

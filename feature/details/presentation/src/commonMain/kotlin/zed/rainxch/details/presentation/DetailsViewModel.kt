@@ -744,6 +744,118 @@ class DetailsViewModel(
                 }
             }
 
+            DetailsAction.OpenWithExternalInstaller -> {
+                val filePath = _state.value.pendingInstallFilePath
+                if (filePath != null) {
+                    try {
+                        installer.openWithExternalInstaller(filePath)
+                        _state.value.primaryAsset?.let { asset ->
+                            _state.value.selectedRelease?.let { release ->
+                                appendLog(
+                                    assetName = asset.name,
+                                    size = asset.size,
+                                    tag = release.tagName,
+                                    result = LogResult.OpenedInExternalInstaller
+                                )
+                            }
+                        }
+                    } catch (t: Throwable) {
+                        logger.error("Failed to open with external installer: ${t.message}")
+                        _state.value = _state.value.copy(installError = t.message)
+                    }
+                }
+                _state.value = _state.value.copy(
+                    showExternalInstallerPrompt = false,
+                    pendingInstallFilePath = null
+                )
+            }
+
+            DetailsAction.DismissExternalInstallerPrompt -> {
+                _state.value = _state.value.copy(
+                    showExternalInstallerPrompt = false,
+                    pendingInstallFilePath = null
+                )
+            }
+
+            DetailsAction.InstallWithExternalApp -> {
+                viewModelScope.launch {
+                    try {
+                        val primary = _state.value.primaryAsset
+                        val release = _state.value.selectedRelease
+
+                        if (primary != null && release != null) {
+                            currentAssetName = primary.name
+
+                            appendLog(
+                                assetName = primary.name,
+                                size = primary.size,
+                                tag = release.tagName,
+                                result = LogResult.DownloadStarted
+                            )
+
+                            _state.value = _state.value.copy(
+                                downloadError = null,
+                                installError = null,
+                                downloadProgressPercent = null,
+                                downloadStage = DownloadStage.DOWNLOADING
+                            )
+
+                            downloader.download(primary.downloadUrl, primary.name).collect { p ->
+                                _state.value =
+                                    _state.value.copy(downloadProgressPercent = p.percent)
+                                if (p.percent == 100) {
+                                    _state.value =
+                                        _state.value.copy(downloadStage = DownloadStage.VERIFYING)
+                                }
+                            }
+
+                            val filePath = downloader.getDownloadedFilePath(primary.name)
+                                ?: throw IllegalStateException("Downloaded file not found")
+
+                            appendLog(
+                                assetName = primary.name,
+                                size = primary.size,
+                                tag = release.tagName,
+                                result = LogResult.Downloaded
+                            )
+
+                            _state.value = _state.value.copy(downloadStage = DownloadStage.IDLE)
+                            currentAssetName = null
+
+                            installer.openWithExternalInstaller(filePath)
+
+                            appendLog(
+                                assetName = primary.name,
+                                size = primary.size,
+                                tag = release.tagName,
+                                result = LogResult.OpenedInExternalInstaller
+                            )
+                        }
+                    } catch (t: Throwable) {
+                        logger.error("Failed to install with external app: ${t.message}")
+                        _state.value = _state.value.copy(
+                            downloadStage = DownloadStage.IDLE,
+                            installError = t.message
+                        )
+                        currentAssetName = null
+
+                        _state.value.primaryAsset?.let { asset ->
+                            _state.value.selectedRelease?.let { release ->
+                                appendLog(
+                                    assetName = asset.name,
+                                    size = asset.size,
+                                    tag = release.tagName,
+                                    result = LogResult.Error(t.message)
+                                )
+                            }
+                        }
+                    }
+                }
+                _state.update {
+                    it.copy(isInstallDropdownExpanded = false)
+                }
+            }
+
             DetailsAction.OnNavigateBackClick -> {
                 // Handled in composable
             }
@@ -782,10 +894,6 @@ class DetailsViewModel(
                     downloadError = null,
                     installError = null,
                     downloadProgressPercent = null
-                )
-
-                installer.ensurePermissionsOrThrow(
-                    extOrMime = assetName.substringAfterLast('.', "").lowercase()
                 )
 
                 val existingPath = downloader.getDownloadedFilePath(assetName)
@@ -832,12 +940,32 @@ class DetailsViewModel(
                     result = LogResult.Downloaded
                 )
 
-                _state.value = _state.value.copy(downloadStage = DownloadStage.INSTALLING)
                 val ext = assetName.substringAfterLast('.', "").lowercase()
 
                 if (!installer.isSupported(ext)) {
                     throw IllegalStateException("Asset type .$ext not supported")
                 }
+
+                // Check install permission after download — if blocked, offer external installer
+                try {
+                    installer.ensurePermissionsOrThrow(extOrMime = ext)
+                } catch (e: IllegalStateException) {
+                    logger.warn("Install permission blocked: ${e.message}")
+                    _state.value = _state.value.copy(
+                        downloadStage = DownloadStage.IDLE,
+                        showExternalInstallerPrompt = true,
+                        pendingInstallFilePath = filePath
+                    )
+                    appendLog(
+                        assetName = assetName,
+                        size = sizeBytes,
+                        tag = releaseTag,
+                        result = LogResult.PermissionBlocked
+                    )
+                    return@launch
+                }
+
+                _state.value = _state.value.copy(downloadStage = DownloadStage.INSTALLING)
 
                 if (platform == Platform.ANDROID) {
                     saveInstalledAppToDatabase(

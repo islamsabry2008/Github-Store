@@ -15,6 +15,9 @@ sealed class LogResult {
     data object PreparingForAppManager : LogResult()
     data object OpenedInAppManager : LogResult()
 
+    data object PermissionBlocked : LogResult()
+    data object OpenedInExternalInstaller : LogResult()
+
     data class Error(val message: String?) : LogResult()
     data class Info(val message: String) : LogResult()
 }

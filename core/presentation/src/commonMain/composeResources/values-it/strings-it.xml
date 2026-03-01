@@ -209,6 +209,12 @@
     <!-- External tools -->
     <string name="log_prepare_appmanager">Preparazione dell'AppManager</string>
     <string name="log_opened_appmanager">Aperto nell'AppManager</string>
+    <string name="log_permission_blocked">Permesso di installazione bloccato dalla policy del dispositivo</string>
+    <string name="log_opened_external_installer">Aperto nell\'installatore esterno</string>
+    <string name="install_permission_unavailable">Permesso di installazione non disponibile</string>
+    <string name="install_permission_blocked_message">L\'APK è stato scaricato con successo ma questo dispositivo non consente l\'installazione diretta. Vuoi aprirlo con un installatore esterno?</string>
+    <string name="open_with_external_installer">Apri con installatore esterno</string>
+    <string name="external_installer_description">Usa un\'app di terze parti per installare l\'APK</string>
 
     <!-- Errors -->
     <string name="error_generic">Errore: %1$s</string>

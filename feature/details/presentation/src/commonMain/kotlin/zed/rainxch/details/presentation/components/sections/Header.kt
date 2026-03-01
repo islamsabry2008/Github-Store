@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Update
 import androidx.compose.material3.DropdownMenu
@@ -133,6 +134,36 @@ fun LazyListScope.header(
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Security,
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    },
+                    modifier = Modifier.liquefiable(liquidState)
+                )
+
+                Spacer(Modifier.height(8.dp))
+
+                DropdownMenuItem(
+                    text = {
+                        Column {
+                            Text(
+                                text = stringResource(Res.string.open_with_external_installer),
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Text(
+                                text = stringResource(Res.string.external_installer_description),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    },
+                    onClick = {
+                        onAction(DetailsAction.InstallWithExternalApp)
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.OpenInNew,
                             contentDescription = null,
                             modifier = Modifier.size(24.dp)
                         )
