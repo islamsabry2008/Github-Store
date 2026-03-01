@@ -234,6 +234,41 @@ jobs:
           retry ./gradlew :composeApp:packageAppImage
         shell: bash
 
+      - name: List AppImage build output
+        if: matrix.label == 'modern'
+        run: |
+          echo "=== Listing build output ==="
+          find composeApp/build/compose/binaries/main -maxdepth 3 -type d 2>/dev/null || echo "Directory not found"
+          echo "=== All files ==="
+          find composeApp/build/compose/binaries/main -maxdepth 4 -type f 2>/dev/null | head -30 || echo "No files found"
+        shell: bash
+
+      - name: Package AppImage as tar.gz
+        if: matrix.label == 'modern'
+        run: |
+          set -euo pipefail
+
+          # Find the app-image output directory (could be app-image/ or app/)
+          APPIMAGE_DIR=""
+          for dir in composeApp/build/compose/binaries/main/app-image composeApp/build/compose/binaries/main/app; do
+            if [ -d "$dir" ]; then
+              APPIMAGE_DIR="$dir"
+              echo "Found AppImage output at: $dir"
+              break
+            fi
+          done
+
+          if [ -z "$APPIMAGE_DIR" ]; then
+            echo "ERROR: Could not find AppImage output directory"
+            ls -la composeApp/build/compose/binaries/main/ || true
+            exit 1
+          fi
+
+          tar -czf composeApp/build/compose/binaries/main/GitHub-Store-linux-x64.tar.gz -C "$APPIMAGE_DIR" .
+          echo "Created tar.gz archive:"
+          ls -lh composeApp/build/compose/binaries/main/GitHub-Store-linux-x64.tar.gz
+        shell: bash
+
       - name: Upload Linux installers
         uses: actions/upload-artifact@v4
         with:
@@ -249,7 +284,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: linux-appimage
-          path: |
-            composeApp/build/compose/binaries/main/app-image/
+          path: composeApp/build/compose/binaries/main/GitHub-Store-linux-x64.tar.gz
+          if-no-files-found: error
           retention-days: 30
           compression-level: 6
