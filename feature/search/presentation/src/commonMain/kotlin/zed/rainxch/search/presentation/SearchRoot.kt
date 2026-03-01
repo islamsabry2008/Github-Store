@@ -1,5 +1,11 @@
 package zed.rainxch.search.presentation
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +19,8 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
@@ -20,18 +28,24 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -39,6 +53,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -76,11 +91,17 @@ import zed.rainxch.core.presentation.utils.ObserveAsEvents
 import zed.rainxch.domain.model.ProgrammingLanguage
 import zed.rainxch.domain.model.SearchPlatform
 import zed.rainxch.githubstore.core.presentation.res.Res
+import zed.rainxch.githubstore.core.presentation.res.clipboard_link_detected
+import zed.rainxch.githubstore.core.presentation.res.dismiss
+import zed.rainxch.githubstore.core.presentation.res.detected_links
 import zed.rainxch.githubstore.core.presentation.res.language_label
+import zed.rainxch.githubstore.core.presentation.res.open_github_link
+import zed.rainxch.githubstore.core.presentation.res.open_in_app
 import zed.rainxch.githubstore.core.presentation.res.results_found
 import zed.rainxch.githubstore.core.presentation.res.retry
 import zed.rainxch.githubstore.core.presentation.res.search_repositories_hint
 import zed.rainxch.search.presentation.components.LanguageFilterBottomSheet
+import zed.rainxch.search.presentation.utils.ParsedGithubLink
 import zed.rainxch.search.presentation.utils.label
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -88,6 +109,7 @@ import zed.rainxch.search.presentation.utils.label
 fun SearchRoot(
     onNavigateBack: () -> Unit,
     onNavigateToDetails: (GithubRepoSummary) -> Unit,
+    onNavigateToDetailsFromLink: (owner: String, repo: String) -> Unit,
     onNavigateToDeveloperProfile: (username: String) -> Unit,
     viewModel: SearchViewModel = koinViewModel()
 ) {
@@ -102,19 +124,11 @@ fun SearchRoot(
                     snackbarHost.showSnackbar(event.message)
                 }
             }
-        }
-    }
 
-    if (state.isLanguageSheetVisible) {
-        LanguageFilterBottomSheet(
-            selectedLanguage = state.selectedLanguage,
-            onLanguageSelected = { language ->
-                viewModel.onAction(SearchAction.OnLanguageSelected(language))
-            },
-            onDismissRequest = {
-                viewModel.onAction(SearchAction.OnToggleLanguageSheetVisibility)
+            is SearchEvent.NavigateToRepo -> {
+                onNavigateToDetailsFromLink(event.owner, event.repo)
             }
-        )
+        }
     }
 
     SearchScreen(
@@ -140,6 +154,18 @@ fun SearchRoot(
             }
         }
     )
+
+    if (state.isLanguageSheetVisible) {
+        LanguageFilterBottomSheet(
+            selectedLanguage = state.selectedLanguage,
+            onLanguageSelected = { language ->
+                viewModel.onAction(SearchAction.OnLanguageSelected(language))
+            },
+            onDismissRequest = {
+                viewModel.onAction(SearchAction.OnToggleLanguageSheetVisibility)
+            }
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -231,6 +257,32 @@ fun SearchScreen(
                 modifier = Modifier.padding(bottom = bottomNavHeight + 16.dp)
             )
         },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    onAction(SearchAction.OnFabClick)
+                },
+                modifier = Modifier.padding(bottom = bottomNavHeight + 16.dp)
+            ) {
+                Row (
+                    modifier = Modifier.padding(horizontal = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Link,
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+
+                    Text(
+                        text = stringResource(Res.string.open_github_link),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
+        },
         containerColor = MaterialTheme.colorScheme.background,
         modifier = Modifier.liquefiable(liquidState)
     ) { innerPadding ->
@@ -240,6 +292,37 @@ fun SearchScreen(
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp)
         ) {
+            // Clipboard banner
+            AnimatedVisibility(
+                visible = state.isClipboardBannerVisible && state.clipboardLinks.isNotEmpty(),
+                enter = slideInVertically() + fadeIn(),
+                exit = slideOutVertically() + fadeOut()
+            ) {
+                ClipboardBanner(
+                    links = state.clipboardLinks,
+                    onOpenLink = { link ->
+                        onAction(SearchAction.OpenGithubLink(link.owner, link.repo))
+                    },
+                    onDismiss = {
+                        onAction(SearchAction.DismissClipboardBanner)
+                    }
+                )
+            }
+
+            // Detected links from search query
+            AnimatedVisibility(
+                visible = state.detectedLinks.isNotEmpty(),
+                enter = slideInVertically() + fadeIn(),
+                exit = slideOutVertically() + fadeOut()
+            ) {
+                DetectedLinksSection(
+                    links = state.detectedLinks,
+                    onOpenLink = { link ->
+                        onAction(SearchAction.OpenGithubLink(link.owner, link.repo))
+                    }
+                )
+            }
+
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -418,6 +501,149 @@ fun SearchScreen(
 }
 
 @Composable
+private fun ClipboardBanner(
+    links: List<ParsedGithubLink>,
+    onOpenLink: (ParsedGithubLink) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
+        ),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(Res.string.clipboard_link_detected),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    fontWeight = FontWeight.Medium
+                )
+
+                IconButton(
+                    onClick = onDismiss,
+                    modifier = Modifier.size(24.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = stringResource(Res.string.dismiss),
+                        modifier = Modifier.size(16.dp),
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(4.dp))
+
+            links.forEach { link ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                        .clickable { onOpenLink(link) }
+                        .padding(vertical = 6.dp, horizontal = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Link,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp),
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                    Text(
+                        text = "${link.owner}/${link.repo}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.OpenInNew,
+                        contentDescription = stringResource(Res.string.open_in_app),
+                        modifier = Modifier.size(16.dp),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DetectedLinksSection(
+    links: List<ParsedGithubLink>,
+    onOpenLink: (ParsedGithubLink) -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 8.dp)
+    ) {
+        Text(
+            text = stringResource(Res.string.detected_links),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier.padding(bottom = 4.dp)
+        )
+
+        links.forEach { link ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 2.dp),
+                onClick = { onOpenLink(link) },
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                ),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Link,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp),
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                    Text(
+                        text = "${link.owner}/${link.repo}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Text(
+                        text = stringResource(Res.string.open_in_app),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun SearchTopbar(
     onAction: (SearchAction) -> Unit,
     state: SearchState,
@@ -449,7 +675,7 @@ private fun SearchTopbar(
                         onAction(SearchAction.OnClearClick)
                     },
                     modifier = Modifier
-                        .size(20.dp)
+                        .size(24.dp)
                         .clip(CircleShape)
                 ) {
                     Icon(
@@ -483,7 +709,7 @@ private fun SearchTopbar(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest
+                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer
             ),
             shape = CircleShape,
             modifier = Modifier

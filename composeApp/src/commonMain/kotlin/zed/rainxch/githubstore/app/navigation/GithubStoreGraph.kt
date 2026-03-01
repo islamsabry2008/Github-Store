@@ -17,7 +17,8 @@ sealed interface GithubStoreGraph {
     data class DetailsScreen(
         val repositoryId: Long = -1L,
         val owner: String = "",
-        val repo: String = ""
+        val repo: String = "",
+        val isComingFromUpdate: Boolean = false,
     ) : GithubStoreGraph
 
     @Serializable

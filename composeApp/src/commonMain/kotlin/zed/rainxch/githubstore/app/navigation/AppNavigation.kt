@@ -102,6 +102,14 @@ fun AppNavigation(
                                 )
                             )
                         },
+                        onNavigateToDetailsFromLink = { owner, repo ->
+                            navController.navigate(
+                                GithubStoreGraph.DetailsScreen(
+                                    owner = owner,
+                                    repo = repo
+                                )
+                            )
+                        },
                         onNavigateToDeveloperProfile = { username ->
                             navController.navigate(
                                 GithubStoreGraph.DeveloperProfileScreen(
@@ -133,7 +141,7 @@ fun AppNavigation(
                             )
                         },
                         viewModel = koinViewModel {
-                            parametersOf(args.repositoryId, args.owner, args.repo)
+                            parametersOf(args.repositoryId, args.owner, args.repo, args.isComingFromUpdate)
                         }
                     )
                 }
@@ -242,7 +250,8 @@ fun AppNavigation(
                         onNavigateToRepo = { repoId ->
                             navController.navigate(
                                 GithubStoreGraph.DetailsScreen(
-                                    repositoryId = repoId
+                                    repositoryId = repoId,
+                                    isComingFromUpdate = true
                                 )
                             )
                         },

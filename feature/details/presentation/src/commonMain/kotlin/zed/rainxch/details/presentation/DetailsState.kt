@@ -10,6 +10,7 @@ import zed.rainxch.details.domain.model.ReleaseCategory
 import zed.rainxch.details.domain.model.RepoStats
 import zed.rainxch.details.presentation.model.DownloadStage
 import zed.rainxch.details.presentation.model.InstallLogItem
+import zed.rainxch.details.presentation.model.TranslationState
 
 data class DetailsState(
     val isLoading: Boolean = true,
@@ -57,21 +58,24 @@ data class DetailsState(
 
     val isAboutExpanded: Boolean = false,
     val isWhatsNewExpanded: Boolean = false,
-) {
-    /**
-     * True when the app is detected as installed on the system (via assets matching)
-     * but is NOT yet tracked in our database. Shows the "Track this app" button.
-     */
-    val isTrackable: Boolean
-        get() = installedApp == null &&
-                !isLoading &&
-                repository != null &&
-                primaryAsset != null
 
+    val aboutTranslation: TranslationState = TranslationState(),
+    val whatsNewTranslation: TranslationState = TranslationState(),
+    val isLanguagePickerVisible: Boolean = false,
+    val languagePickerTarget: TranslationTarget? = null,
+    val deviceLanguageCode: String = "en",
+
+    val isComingFromUpdate: Boolean = false,
+) {
     val filteredReleases: List<GithubRelease>
         get() = when (selectedReleaseCategory) {
             ReleaseCategory.STABLE -> allReleases.filter { !it.isPrerelease }
             ReleaseCategory.PRE_RELEASE -> allReleases.filter { it.isPrerelease }
             ReleaseCategory.ALL -> allReleases
         }
+}
+
+sealed interface TranslationTarget {
+    data object About : TranslationTarget
+    data object WhatsNew : TranslationTarget
 }

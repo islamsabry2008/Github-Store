@@ -123,6 +123,17 @@ fun LazyListScope.appearanceSection(
                 )
             }
         )
+
+        VerticalSpacer(16.dp)
+
+        ToggleSettingCard(
+            title = stringResource(Res.string.auto_detect_clipboard_links),
+            description = stringResource(Res.string.auto_detect_clipboard_description),
+            checked = state.autoDetectClipboardLinks,
+            onCheckedChange = { enabled ->
+                onAction(ProfileAction.OnAutoDetectClipboardToggled(enabled))
+            }
+        )
     }
 }
 

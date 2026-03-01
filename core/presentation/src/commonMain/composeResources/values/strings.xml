@@ -425,4 +425,23 @@
     <string name="share_repository">Share repository</string>
     <string name="failed_to_share_link">Failed to share link</string>
     <string name="link_copied_to_clipboard">Link copied to clipboard</string>
+
+    <!-- Translation feature -->
+    <string name="translate">Translate</string>
+    <string name="translating">Translating…</string>
+    <string name="show_original">Show Original</string>
+    <string name="translated_to">Translated to %1$s</string>
+    <string name="translate_to">Translate to…</string>
+    <string name="search_language">Search language</string>
+    <string name="change_language">Change language</string>
+    <string name="translation_failed">Translation failed. Please try again.</string>
+
+    <!-- Search - GitHub Link -->
+    <string name="open_github_link">Open GitHub Link</string>
+    <string name="clipboard_link_detected">GitHub link detected in clipboard</string>
+    <string name="auto_detect_clipboard_links">Auto-detect clipboard links</string>
+    <string name="auto_detect_clipboard_description">Automatically detect GitHub links from clipboard when opening search</string>
+    <string name="detected_links">Detected Links</string>
+    <string name="open_in_app">Open in app</string>
+    <string name="no_github_link_in_clipboard">No GitHub link found in clipboard</string>
 </resources>

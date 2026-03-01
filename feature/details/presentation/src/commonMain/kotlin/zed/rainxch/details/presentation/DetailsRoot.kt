@@ -64,6 +64,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import zed.rainxch.core.presentation.theme.GithubStoreTheme
 import zed.rainxch.core.presentation.utils.ObserveAsEvents
 import zed.rainxch.core.presentation.utils.isLiquidFrostAvailable
+import zed.rainxch.details.presentation.components.LanguagePicker
 import zed.rainxch.details.presentation.components.sections.about
 import zed.rainxch.details.presentation.components.sections.author
 import zed.rainxch.details.presentation.components.sections.header
@@ -199,6 +200,24 @@ fun DetailsScreen(
             modifier = Modifier.liquefiable(liquidTopbarState)
         ) { innerPadding ->
 
+            LanguagePicker(
+                isVisible = state.isLanguagePickerVisible,
+                selectedLanguageCode = when (state.languagePickerTarget) {
+                    TranslationTarget.About -> state.aboutTranslation.targetLanguageCode
+                    TranslationTarget.WhatsNew -> state.whatsNewTranslation.targetLanguageCode
+                    null -> null
+                },
+                onLanguageSelected = { language ->
+                    when (state.languagePickerTarget) {
+                        TranslationTarget.About -> onAction(DetailsAction.TranslateAbout(language.code))
+                        TranslationTarget.WhatsNew -> onAction(DetailsAction.TranslateWhatsNew(language.code))
+                        null -> {}
+                    }
+                    onAction(DetailsAction.DismissLanguagePicker)
+                },
+                onDismiss = { onAction(DetailsAction.DismissLanguagePicker) }
+            )
+
             if (state.isLoading) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -241,23 +260,84 @@ fun DetailsScreen(
                         stats(repoStats = stats)
                     }
 
-                    state.readmeMarkdown?.let {
-                        about(
-                            readmeMarkdown = state.readmeMarkdown,
-                            readmeLanguage = state.readmeLanguage,
-                            isExpanded = state.isAboutExpanded,
-                            onToggleExpanded = { onAction(DetailsAction.ToggleAboutExpanded) },
-                            collapsedHeight = collapsedSectionHeight,
-                        )
-                    }
+                    if (state.isComingFromUpdate) {
+                        state.selectedRelease?.let { release ->
+                            whatsNew(
+                                release = release,
+                                isExpanded = state.isWhatsNewExpanded,
+                                onToggleExpanded = { onAction(DetailsAction.ToggleWhatsNewExpanded) },
+                                collapsedHeight = collapsedSectionHeight,
+                                translationState = state.whatsNewTranslation,
+                                onTranslateClick = {
+                                    onAction(DetailsAction.TranslateWhatsNew(state.deviceLanguageCode))
+                                },
+                                onLanguagePickerClick = {
+                                    onAction(DetailsAction.ShowLanguagePicker(TranslationTarget.WhatsNew))
+                                },
+                                onToggleTranslation = {
+                                    onAction(DetailsAction.ToggleWhatsNewTranslation)
+                                },
+                            )
+                        }
 
-                    state.selectedRelease?.let { release ->
-                        whatsNew(
-                            release = release,
-                            isExpanded = state.isWhatsNewExpanded,
-                            onToggleExpanded = { onAction(DetailsAction.ToggleWhatsNewExpanded) },
-                            collapsedHeight = collapsedSectionHeight,
-                        )
+                        state.readmeMarkdown?.let {
+                            about(
+                                readmeMarkdown = state.readmeMarkdown,
+                                readmeLanguage = state.readmeLanguage,
+                                isExpanded = state.isAboutExpanded,
+                                onToggleExpanded = { onAction(DetailsAction.ToggleAboutExpanded) },
+                                collapsedHeight = collapsedSectionHeight,
+                                translationState = state.aboutTranslation,
+                                onTranslateClick = {
+                                    onAction(DetailsAction.TranslateAbout(state.deviceLanguageCode))
+                                },
+                                onLanguagePickerClick = {
+                                    onAction(DetailsAction.ShowLanguagePicker(TranslationTarget.About))
+                                },
+                                onToggleTranslation = {
+                                    onAction(DetailsAction.ToggleAboutTranslation)
+                                },
+                            )
+                        }
+                    } else {
+                        state.readmeMarkdown?.let {
+                            about(
+                                readmeMarkdown = state.readmeMarkdown,
+                                readmeLanguage = state.readmeLanguage,
+                                isExpanded = state.isAboutExpanded,
+                                onToggleExpanded = { onAction(DetailsAction.ToggleAboutExpanded) },
+                                collapsedHeight = collapsedSectionHeight,
+                                translationState = state.aboutTranslation,
+                                onTranslateClick = {
+                                    onAction(DetailsAction.TranslateAbout(state.deviceLanguageCode))
+                                },
+                                onLanguagePickerClick = {
+                                    onAction(DetailsAction.ShowLanguagePicker(TranslationTarget.About))
+                                },
+                                onToggleTranslation = {
+                                    onAction(DetailsAction.ToggleAboutTranslation)
+                                },
+                            )
+                        }
+
+                        state.selectedRelease?.let { release ->
+                            whatsNew(
+                                release = release,
+                                isExpanded = state.isWhatsNewExpanded,
+                                onToggleExpanded = { onAction(DetailsAction.ToggleWhatsNewExpanded) },
+                                collapsedHeight = collapsedSectionHeight,
+                                translationState = state.whatsNewTranslation,
+                                onTranslateClick = {
+                                    onAction(DetailsAction.TranslateWhatsNew(state.deviceLanguageCode))
+                                },
+                                onLanguagePickerClick = {
+                                    onAction(DetailsAction.ShowLanguagePicker(TranslationTarget.WhatsNew))
+                                },
+                                onToggleTranslation = {
+                                    onAction(DetailsAction.ToggleWhatsNewTranslation)
+                                },
+                            )
+                        }
                     }
 
                     state.userProfile?.let { userProfile ->

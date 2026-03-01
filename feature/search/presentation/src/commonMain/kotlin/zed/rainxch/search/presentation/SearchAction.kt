@@ -12,11 +12,14 @@ sealed interface SearchAction {
     data class OnSortBySelected(val sortBy: SortBy) : SearchAction
     data class OnRepositoryClick(val repository: GithubRepoSummary) : SearchAction
     data class OnRepositoryDeveloperClick(val username: String) : SearchAction
-    data class OnShareClick (val repo: GithubRepoSummary) : SearchAction
+    data class OnShareClick(val repo: GithubRepoSummary) : SearchAction
+    data class OpenGithubLink(val owner: String, val repo: String) : SearchAction
     data object OnSearchImeClick : SearchAction
     data object OnNavigateBackClick : SearchAction
     data object LoadMore : SearchAction
     data object OnClearClick : SearchAction
     data object Retry : SearchAction
     data object OnToggleLanguageSheetVisibility : SearchAction
+    data object OnFabClick : SearchAction
+    data object DismissClipboardBanner : SearchAction
 }

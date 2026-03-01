@@ -18,6 +18,7 @@ class ThemesRepositoryImpl(
     private val AMOLED_KEY = booleanPreferencesKey("amoled_theme")
     private val IS_DARK_THEME_KEY = booleanPreferencesKey("is_dark_theme")
     private val FONT_KEY = stringPreferencesKey("font_theme")
+    private val AUTO_DETECT_CLIPBOARD_KEY = booleanPreferencesKey("auto_detect_clipboard_links")
 
     override fun getThemeColor(): Flow<AppTheme> {
         return preferences.data.map { prefs ->
@@ -71,6 +72,18 @@ class ThemesRepositoryImpl(
     override suspend fun setFontTheme(fontTheme: FontTheme) {
         preferences.edit { prefs ->
             prefs[FONT_KEY] = fontTheme.name
+        }
+    }
+
+    override fun getAutoDetectClipboardLinks(): Flow<Boolean> {
+        return preferences.data.map { prefs ->
+            prefs[AUTO_DETECT_CLIPBOARD_KEY] ?: false
+        }
+    }
+
+    override suspend fun setAutoDetectClipboardLinks(enabled: Boolean) {
+        preferences.edit { prefs ->
+            prefs[AUTO_DETECT_CLIPBOARD_KEY] = enabled
         }
     }
 }
