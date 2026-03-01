@@ -260,43 +260,84 @@ fun DetailsScreen(
                         stats(repoStats = stats)
                     }
 
-                    state.readmeMarkdown?.let {
-                        about(
-                            readmeMarkdown = state.readmeMarkdown,
-                            readmeLanguage = state.readmeLanguage,
-                            isExpanded = state.isAboutExpanded,
-                            onToggleExpanded = { onAction(DetailsAction.ToggleAboutExpanded) },
-                            collapsedHeight = collapsedSectionHeight,
-                            translationState = state.aboutTranslation,
-                            onTranslateClick = {
-                                onAction(DetailsAction.TranslateAbout(state.deviceLanguageCode))
-                            },
-                            onLanguagePickerClick = {
-                                onAction(DetailsAction.ShowLanguagePicker(TranslationTarget.ABOUT))
-                            },
-                            onToggleTranslation = {
-                                onAction(DetailsAction.ToggleAboutTranslation)
-                            },
-                        )
-                    }
+                    if (state.isComingFromUpdate) {
+                        state.selectedRelease?.let { release ->
+                            whatsNew(
+                                release = release,
+                                isExpanded = state.isWhatsNewExpanded,
+                                onToggleExpanded = { onAction(DetailsAction.ToggleWhatsNewExpanded) },
+                                collapsedHeight = collapsedSectionHeight,
+                                translationState = state.whatsNewTranslation,
+                                onTranslateClick = {
+                                    onAction(DetailsAction.TranslateWhatsNew(state.deviceLanguageCode))
+                                },
+                                onLanguagePickerClick = {
+                                    onAction(DetailsAction.ShowLanguagePicker(TranslationTarget.WHATS_NEW))
+                                },
+                                onToggleTranslation = {
+                                    onAction(DetailsAction.ToggleWhatsNewTranslation)
+                                },
+                            )
+                        }
 
-                    state.selectedRelease?.let { release ->
-                        whatsNew(
-                            release = release,
-                            isExpanded = state.isWhatsNewExpanded,
-                            onToggleExpanded = { onAction(DetailsAction.ToggleWhatsNewExpanded) },
-                            collapsedHeight = collapsedSectionHeight,
-                            translationState = state.whatsNewTranslation,
-                            onTranslateClick = {
-                                onAction(DetailsAction.TranslateWhatsNew(state.deviceLanguageCode))
-                            },
-                            onLanguagePickerClick = {
-                                onAction(DetailsAction.ShowLanguagePicker(TranslationTarget.WHATS_NEW))
-                            },
-                            onToggleTranslation = {
-                                onAction(DetailsAction.ToggleWhatsNewTranslation)
-                            },
-                        )
+                        state.readmeMarkdown?.let {
+                            about(
+                                readmeMarkdown = state.readmeMarkdown,
+                                readmeLanguage = state.readmeLanguage,
+                                isExpanded = state.isAboutExpanded,
+                                onToggleExpanded = { onAction(DetailsAction.ToggleAboutExpanded) },
+                                collapsedHeight = collapsedSectionHeight,
+                                translationState = state.aboutTranslation,
+                                onTranslateClick = {
+                                    onAction(DetailsAction.TranslateAbout(state.deviceLanguageCode))
+                                },
+                                onLanguagePickerClick = {
+                                    onAction(DetailsAction.ShowLanguagePicker(TranslationTarget.ABOUT))
+                                },
+                                onToggleTranslation = {
+                                    onAction(DetailsAction.ToggleAboutTranslation)
+                                },
+                            )
+                        }
+                    } else {
+                        state.readmeMarkdown?.let {
+                            about(
+                                readmeMarkdown = state.readmeMarkdown,
+                                readmeLanguage = state.readmeLanguage,
+                                isExpanded = state.isAboutExpanded,
+                                onToggleExpanded = { onAction(DetailsAction.ToggleAboutExpanded) },
+                                collapsedHeight = collapsedSectionHeight,
+                                translationState = state.aboutTranslation,
+                                onTranslateClick = {
+                                    onAction(DetailsAction.TranslateAbout(state.deviceLanguageCode))
+                                },
+                                onLanguagePickerClick = {
+                                    onAction(DetailsAction.ShowLanguagePicker(TranslationTarget.ABOUT))
+                                },
+                                onToggleTranslation = {
+                                    onAction(DetailsAction.ToggleAboutTranslation)
+                                },
+                            )
+                        }
+
+                        state.selectedRelease?.let { release ->
+                            whatsNew(
+                                release = release,
+                                isExpanded = state.isWhatsNewExpanded,
+                                onToggleExpanded = { onAction(DetailsAction.ToggleWhatsNewExpanded) },
+                                collapsedHeight = collapsedSectionHeight,
+                                translationState = state.whatsNewTranslation,
+                                onTranslateClick = {
+                                    onAction(DetailsAction.TranslateWhatsNew(state.deviceLanguageCode))
+                                },
+                                onLanguagePickerClick = {
+                                    onAction(DetailsAction.ShowLanguagePicker(TranslationTarget.WHATS_NEW))
+                                },
+                                onToggleTranslation = {
+                                    onAction(DetailsAction.ToggleWhatsNewTranslation)
+                                },
+                            )
+                        }
                     }
 
                     state.userProfile?.let { userProfile ->

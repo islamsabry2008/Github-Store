@@ -67,7 +67,8 @@ class DetailsViewModel(
     private val packageMonitor: PackageMonitor,
     private val syncInstalledAppsUseCase: SyncInstalledAppsUseCase,
     private val translationRepository: TranslationRepository,
-    private val logger: GitHubStoreLogger
+    private val logger: GitHubStoreLogger,
+    private val isComingFromUpdate: Boolean
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false
@@ -81,6 +82,7 @@ class DetailsViewModel(
         .onStart {
             if (!hasLoadedInitialData) {
                 loadInitial()
+
                 hasLoadedInitialData = true
             }
         }
@@ -281,6 +283,7 @@ class DetailsViewModel(
                     isAppManagerEnabled = isAppManagerEnabled,
                     installedApp = installedApp,
                     deviceLanguageCode = translationRepository.getDeviceLanguageCode(),
+                    isComingFromUpdate = isComingFromUpdate,
                 )
 
                 observeInstalledApp(repo.id)

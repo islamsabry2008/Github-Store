@@ -64,17 +64,9 @@ data class DetailsState(
     val isLanguagePickerVisible: Boolean = false,
     val languagePickerTarget: TranslationTarget? = null,
     val deviceLanguageCode: String = "en",
-) {
-    /**
-     * True when the app is detected as installed on the system (via assets matching)
-     * but is NOT yet tracked in our database. Shows the "Track this app" button.
-     */
-    val isTrackable: Boolean
-        get() = installedApp == null &&
-                !isLoading &&
-                repository != null &&
-                primaryAsset != null
 
+    val isComingFromUpdate: Boolean = false,
+) {
     val filteredReleases: List<GithubRelease>
         get() = when (selectedReleaseCategory) {
             ReleaseCategory.STABLE -> allReleases.filter { !it.isPrerelease }
