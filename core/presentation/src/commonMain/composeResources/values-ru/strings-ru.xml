@@ -403,4 +403,12 @@
     <string name="change_language">Изменить язык</string>
     <string name="translation_failed">Ошибка перевода. Попробуйте ещё раз.</string>
 
+    <string name="open_github_link">Открыть ссылку GitHub</string>
+    <string name="clipboard_link_detected">Обнаружена ссылка GitHub в буфере обмена</string>
+    <string name="auto_detect_clipboard_links">Автоопределение ссылок из буфера</string>
+    <string name="auto_detect_clipboard_description">Автоматически определять ссылки GitHub из буфера обмена при открытии поиска</string>
+    <string name="detected_links">Обнаруженные ссылки</string>
+    <string name="open_in_app">Открыть в приложении</string>
+    <string name="no_github_link_in_clipboard">Ссылка GitHub не найдена в буфере обмена</string>
+
 </resources>

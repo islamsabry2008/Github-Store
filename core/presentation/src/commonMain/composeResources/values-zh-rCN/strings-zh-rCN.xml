@@ -403,4 +403,12 @@
     <string name="change_language">更改语言</string>
     <string name="translation_failed">翻译失败，请重试。</string>
 
+    <string name="open_github_link">打开 GitHub 链接</string>
+    <string name="clipboard_link_detected">在剪贴板中检测到 GitHub 链接</string>
+    <string name="auto_detect_clipboard_links">自动检测剪贴板链接</string>
+    <string name="auto_detect_clipboard_description">打开搜索时自动检测剪贴板中的 GitHub 链接</string>
+    <string name="detected_links">检测到的链接</string>
+    <string name="open_in_app">在应用中打开</string>
+    <string name="no_github_link_in_clipboard">剪贴板中未找到 GitHub 链接</string>
+
 </resources>

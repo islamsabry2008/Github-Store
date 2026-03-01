@@ -439,4 +439,12 @@
     <string name="change_language">Cambia lingua</string>
     <string name="translation_failed">Traduzione fallita. Riprova.</string>
 
+    <string name="open_github_link">Apri link GitHub</string>
+    <string name="clipboard_link_detected">Link GitHub rilevato negli appunti</string>
+    <string name="auto_detect_clipboard_links">Rileva link dagli appunti</string>
+    <string name="auto_detect_clipboard_description">Rileva automaticamente i link GitHub dagli appunti all\'apertura della ricerca</string>
+    <string name="detected_links">Link rilevati</string>
+    <string name="open_in_app">Apri nell\'app</string>
+    <string name="no_github_link_in_clipboard">Nessun link GitHub trovato negli appunti</string>
+
 </resources>

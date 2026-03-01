@@ -94,7 +94,15 @@ class SearchViewModel(
     private fun observeClipboardSetting() {
         viewModelScope.launch {
             themesRepository.getAutoDetectClipboardLinks().collect { enabled ->
-                _state.update { it.copy(autoDetectClipboardEnabled = enabled) }
+                _state.update { current ->
+                    current.copy(
+                        autoDetectClipboardEnabled = enabled,
+                        clipboardLinks = if (enabled) current.clipboardLinks else emptyList(),
+                        isClipboardBannerVisible = if (enabled) current.isClipboardBannerVisible else false
+                    )
+                }
+                if (enabled) checkClipboardForLinks()
+
             }
         }
     }

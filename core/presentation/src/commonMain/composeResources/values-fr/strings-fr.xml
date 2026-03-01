@@ -403,4 +403,12 @@
     <string name="change_language">Changer de langue</string>
     <string name="translation_failed">Échec de la traduction. Veuillez réessayer.</string>
 
+    <string name="open_github_link">Ouvrir le lien GitHub</string>
+    <string name="clipboard_link_detected">Lien GitHub détecté dans le presse-papiers</string>
+    <string name="auto_detect_clipboard_links">Détecter les liens du presse-papiers</string>
+    <string name="auto_detect_clipboard_description">Détecter automatiquement les liens GitHub du presse-papiers lors de l\'ouverture de la recherche</string>
+    <string name="detected_links">Liens détectés</string>
+    <string name="open_in_app">Ouvrir dans l\'app</string>
+    <string name="no_github_link_in_clipboard">Aucun lien GitHub trouvé dans le presse-papiers</string>
+
 </resources>
