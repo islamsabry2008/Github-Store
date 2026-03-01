@@ -16,6 +16,7 @@ env:
     -Dorg.gradle.daemon=false
     -Dorg.gradle.parallel=true
     -Dorg.gradle.caching=true
+    -Dorg.gradle.vfs.watch=false
 
 jobs:
   build-windows:
@@ -25,47 +26,38 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@v4
+
       - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
         with:
           distribution: ${{ env.JAVA_DISTRIBUTION }}
           java-version: ${{ env.JAVA_VERSION }}
-          cache: 'gradle'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           cache-read-only: false
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+          gradle-home-cache-cleanup: true
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
         shell: bash
 
-      - name: Build Windows installers (EXE & MSI) with retries
+      - name: Build Windows installers (EXE & MSI)
         run: |
           set -euo pipefail
-
           retry() {
-            local n=1
-            local max=3
-            local delay=5
+            local n=1 max=3 delay=5
             while true; do
               echo "Attempt #$n: $*"
-              if "$@"; then
-                break
-              fi
-              if [ $n -ge $max ]; then
-                echo "Command failed after $n attempts."
-                return 1
-              fi
-              n=$((n+1))
-              echo "Command failed — retrying in $delay seconds..."
-              sleep $delay
-              delay=$((delay*2))
+              "$@" && break
+              [ $n -ge $max ] && { echo "Failed after $n attempts."; return 1; }
+              n=$((n+1)); echo "Retrying in ${delay}s..."; sleep $delay; delay=$((delay*2))
             done
           }
-
           retry ./gradlew :composeApp:packageExe :composeApp:packageMsi
         shell: bash
 
@@ -94,46 +86,37 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@v4
+
       - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
         with:
           distribution: ${{ env.JAVA_DISTRIBUTION }}
           java-version: ${{ env.JAVA_VERSION }}
-          cache: 'gradle'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           cache-read-only: false
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+          gradle-home-cache-cleanup: true
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build macOS installers (DMG & PKG) with retries
+      - name: Build macOS installers (DMG & PKG)
         run: |
           set -euo pipefail
-
           retry() {
-            local n=1
-            local max=3
-            local delay=5
+            local n=1 max=3 delay=5
             while true; do
               echo "Attempt #$n: $*"
-              if "$@"; then
-                break
-              fi
-              if [ $n -ge $max ]; then
-                echo "Command failed after $n attempts."
-                return 1
-              fi
-              n=$((n+1))
-              echo "Command failed — retrying in $delay seconds..."
-              sleep $delay
-              delay=$((delay*2))
+              "$@" && break
+              [ $n -ge $max ] && { echo "Failed after $n attempts."; return 1; }
+              n=$((n+1)); echo "Retrying in ${delay}s..."; sleep $delay; delay=$((delay*2))
             done
           }
-
           retry ./gradlew :composeApp:packageDmg :composeApp:packagePkg
         shell: bash
 
@@ -153,9 +136,16 @@ jobs:
         include:
           - os: ubuntu-latest
             label: modern
+            gradle-tasks: >-
+              :composeApp:packageDeb
+              :composeApp:packageRpm
+              :composeApp:packageAppImage
 
           - os: ubuntu-22.04
             label: debian12-compat
+            gradle-tasks: >-
+              :composeApp:packageDeb
+              :composeApp:packageRpm
 
     runs-on: ${{ matrix.os }}
 
@@ -163,47 +153,73 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@v4
+
       - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
         with:
           distribution: ${{ env.JAVA_DISTRIBUTION }}
           java-version: ${{ env.JAVA_VERSION }}
-          cache: 'gradle'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           cache-read-only: false
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+          gradle-home-cache-cleanup: true
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build Linux installers (DEB & RPM) with retries
+      - name: Build Linux installers
+        run: |
+          set -euo pipefail
+          retry() {
+            local n=1 max=3 delay=5
+            while true; do
+              echo "Attempt #$n: $*"
+              "$@" && break
+              [ $n -ge $max ] && { echo "Failed after $n attempts."; return 1; }
+              n=$((n+1)); echo "Retrying in ${delay}s..."; sleep $delay; delay=$((delay*2))
+            done
+          }
+          retry ./gradlew ${{ matrix.gradle-tasks }}
+        shell: bash
+
+      - name: List AppImage build output
+        if: matrix.label == 'modern'
+        run: |
+          echo "=== Listing build output ==="
+          find composeApp/build/compose/binaries/main -maxdepth 3 -type d 2>/dev/null || echo "Directory not found"
+          echo "=== All files ==="
+          find composeApp/build/compose/binaries/main -maxdepth 4 -type f 2>/dev/null | head -30 || echo "No files found"
+        shell: bash
+
+      - name: Package AppImage as tar.gz
+        if: matrix.label == 'modern'
         run: |
           set -euo pipefail
 
-          retry() {
-            local n=1
-            local max=3
-            local delay=5
-            while true; do
-              echo "Attempt #$n: $*"
-              if "$@"; then
-                break
-              fi
-              if [ $n -ge $max ]; then
-                echo "Command failed after $n attempts."
-                return 1
-              fi
-              n=$((n+1))
-              echo "Command failed — retrying in $delay seconds..."
-              sleep $delay
-              delay=$((delay*2))
-            done
-          }
+          # Find the app-image output directory (could be app-image/ or app/)
+          APPIMAGE_DIR=""
+          for dir in composeApp/build/compose/binaries/main/app-image composeApp/build/compose/binaries/main/app; do
+            if [ -d "$dir" ]; then
+              APPIMAGE_DIR="$dir"
+              echo "Found AppImage output at: $dir"
+              break
+            fi
+          done
 
-          retry ./gradlew :composeApp:packageDeb :composeApp:packageRpm
+          if [ -z "$APPIMAGE_DIR" ]; then
+            echo "ERROR: Could not find AppImage output directory"
+            ls -la composeApp/build/compose/binaries/main/ || true
+            exit 1
+          fi
+
+          tar -czf composeApp/build/compose/binaries/main/GitHub-Store-linux-x64.tar.gz -C "$APPIMAGE_DIR" .
+          echo "Created tar.gz archive:"
+          ls -lh composeApp/build/compose/binaries/main/GitHub-Store-linux-x64.tar.gz
         shell: bash
 
       - name: Upload Linux installers
@@ -213,5 +229,15 @@ jobs:
           path: |
             composeApp/build/compose/binaries/main/deb/*.deb
             composeApp/build/compose/binaries/main/rpm/*.rpm
+          retention-days: 30
+          compression-level: 6
+
+      - name: Upload Linux AppImage
+        if: matrix.label == 'modern'
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-appimage
+          path: composeApp/build/compose/binaries/main/GitHub-Store-linux-x64.tar.gz
+          if-no-files-found: error
           retention-days: 30
           compression-level: 6
