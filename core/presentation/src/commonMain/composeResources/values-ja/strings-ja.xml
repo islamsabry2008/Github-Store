@@ -402,4 +402,12 @@
     <string name="change_language">言語を変更</string>
     <string name="translation_failed">翻訳に失敗しました。もう一度お試しください。</string>
 
+    <string name="open_github_link">GitHubリンクを開く</string>
+    <string name="clipboard_link_detected">クリップボードにGitHubリンクを検出</string>
+    <string name="auto_detect_clipboard_links">クリップボードリンクの自動検出</string>
+    <string name="auto_detect_clipboard_description">検索画面を開く際にクリップボードからGitHubリンクを自動検出</string>
+    <string name="detected_links">検出されたリンク</string>
+    <string name="open_in_app">アプリで開く</string>
+    <string name="no_github_link_in_clipboard">クリップボードにGitHubリンクが見つかりません</string>
+
 </resources>

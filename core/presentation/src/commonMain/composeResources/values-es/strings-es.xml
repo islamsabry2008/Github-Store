@@ -403,4 +403,12 @@
     <string name="change_language">Cambiar idioma</string>
     <string name="translation_failed">Error de traducción. Inténtalo de nuevo.</string>
 
+    <string name="open_github_link">Abrir enlace de GitHub</string>
+    <string name="clipboard_link_detected">Enlace de GitHub detectado en el portapapeles</string>
+    <string name="auto_detect_clipboard_links">Detectar enlaces del portapapeles</string>
+    <string name="auto_detect_clipboard_description">Detectar automáticamente enlaces de GitHub del portapapeles al abrir la búsqueda</string>
+    <string name="detected_links">Enlaces detectados</string>
+    <string name="open_in_app">Abrir en la app</string>
+    <string name="no_github_link_in_clipboard">No se encontró enlace de GitHub en el portapapeles</string>
+
 </resources>

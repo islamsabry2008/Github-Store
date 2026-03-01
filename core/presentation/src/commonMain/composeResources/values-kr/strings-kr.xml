@@ -435,4 +435,12 @@
     <string name="change_language">언어 변경</string>
     <string name="translation_failed">번역 실패. 다시 시도해주세요.</string>
 
+    <string name="open_github_link">GitHub 링크 열기</string>
+    <string name="clipboard_link_detected">클립보드에서 GitHub 링크 감지됨</string>
+    <string name="auto_detect_clipboard_links">클립보드 링크 자동 감지</string>
+    <string name="auto_detect_clipboard_description">검색을 열 때 클립보드에서 GitHub 링크를 자동으로 감지</string>
+    <string name="detected_links">감지된 링크</string>
+    <string name="open_in_app">앱에서 열기</string>
+    <string name="no_github_link_in_clipboard">클립보드에서 GitHub 링크를 찾을 수 없습니다</string>
+
 </resources>

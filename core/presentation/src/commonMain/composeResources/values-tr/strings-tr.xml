@@ -435,4 +435,12 @@
     <string name="change_language">Dili değiştir</string>
     <string name="translation_failed">Çeviri başarısız. Lütfen tekrar deneyin.</string>
 
+    <string name="open_github_link">GitHub bağlantısını aç</string>
+    <string name="clipboard_link_detected">Panoda GitHub bağlantısı algılandı</string>
+    <string name="auto_detect_clipboard_links">Pano bağlantılarını otomatik algıla</string>
+    <string name="auto_detect_clipboard_description">Arama açılırken panodan GitHub bağlantılarını otomatik olarak algıla</string>
+    <string name="detected_links">Algılanan bağlantılar</string>
+    <string name="open_in_app">Uygulamada aç</string>
+    <string name="no_github_link_in_clipboard">Panoda GitHub bağlantısı bulunamadı</string>
+
 </resources>

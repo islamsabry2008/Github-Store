@@ -438,4 +438,12 @@
     <string name="change_language">ভাষা পরিবর্তন করুন</string>
     <string name="translation_failed">অনুবাদ ব্যর্থ হয়েছে। আবার চেষ্টা করুন।</string>
 
+    <string name="open_github_link">GitHub লিংক খুলুন</string>
+    <string name="clipboard_link_detected">ক্লিপবোর্ডে GitHub লিংক পাওয়া গেছে</string>
+    <string name="auto_detect_clipboard_links">ক্লিপবোর্ড লিংক স্বয়ংক্রিয় সনাক্তকরণ</string>
+    <string name="auto_detect_clipboard_description">অনুসন্ধান খোলার সময় স্বয়ংক্রিয়ভাবে ক্লিপবোর্ড থেকে GitHub লিংক সনাক্ত করুন</string>
+    <string name="detected_links">সনাক্তকৃত লিংক</string>
+    <string name="open_in_app">অ্যাপে খুলুন</string>
+    <string name="no_github_link_in_clipboard">ক্লিপবোর্ডে কোনো GitHub লিংক পাওয়া যায়নি</string>
+
 </resources>

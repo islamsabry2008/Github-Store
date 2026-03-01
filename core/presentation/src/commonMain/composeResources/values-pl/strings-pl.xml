@@ -401,4 +401,12 @@
     <string name="change_language">Zmień język</string>
     <string name="translation_failed">Tłumaczenie nie powiodło się. Spróbuj ponownie.</string>
 
+    <string name="open_github_link">Otwórz link GitHub</string>
+    <string name="clipboard_link_detected">Wykryto link GitHub w schowku</string>
+    <string name="auto_detect_clipboard_links">Automatyczne wykrywanie linków ze schowka</string>
+    <string name="auto_detect_clipboard_description">Automatycznie wykrywaj linki GitHub ze schowka przy otwieraniu wyszukiwania</string>
+    <string name="detected_links">Wykryte linki</string>
+    <string name="open_in_app">Otwórz w aplikacji</string>
+    <string name="no_github_link_in_clipboard">Nie znaleziono linku GitHub w schowku</string>
+
 </resources>
