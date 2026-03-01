@@ -7,7 +7,7 @@ data class ParsedGithubLink(
 )
 
 private val GITHUB_URL_REGEX = Regex(
-    """(?:https?://)?(?:www\.)?github\.com/([a-zA-Z0-9\-_.]+)/([a-zA-Z0-9\-_.]+)"""
+    """(?<![A-Za-z0-9.-])(?:https?://)?(?:www\.)?github\.com/([a-zA-Z0-9\-_.]+)/([a-zA-Z0-9\-_.]+)"""
 )
 
 fun parseGithubUrls(text: String): List<ParsedGithubLink> {

@@ -77,7 +77,7 @@ class ThemesRepositoryImpl(
 
     override fun getAutoDetectClipboardLinks(): Flow<Boolean> {
         return preferences.data.map { prefs ->
-            prefs[AUTO_DETECT_CLIPBOARD_KEY] ?: true
+            prefs[AUTO_DETECT_CLIPBOARD_KEY] ?: false
         }
     }
 

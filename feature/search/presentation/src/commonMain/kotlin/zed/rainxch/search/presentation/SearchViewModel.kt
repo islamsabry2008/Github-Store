@@ -351,7 +351,9 @@ class SearchViewModel(
                         it.copy(
                             isLoading = false,
                             isLoadingMore = false,
-                            errorMessage = null
+                            errorMessage = null,
+                            repositories = emptyList(),
+                            totalCount = null
                         )
                     }
                     return
@@ -483,12 +485,22 @@ class SearchViewModel(
                             return@launch
                         }
                         if (links.size == 1) {
-                            _events.send(SearchEvent.NavigateToRepo(links.first().owner, links.first().repo))
+                            _events.send(
+                                SearchEvent.NavigateToRepo(
+                                    links.first().owner,
+                                    links.first().repo
+                                )
+                            )
                         } else {
                             _state.update {
                                 it.copy(
                                     query = clipText,
                                     detectedLinks = links,
+                                    repositories = emptyList(),
+                                    totalCount = null,
+                                    isLoading = false,
+                                    isLoadingMore = false,
+                                    errorMessage = null,
                                 )
                             }
                         }

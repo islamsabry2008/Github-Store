@@ -203,14 +203,14 @@ fun DetailsScreen(
             LanguagePicker(
                 isVisible = state.isLanguagePickerVisible,
                 selectedLanguageCode = when (state.languagePickerTarget) {
-                    TranslationTarget.ABOUT -> state.aboutTranslation.targetLanguageCode
-                    TranslationTarget.WHATS_NEW -> state.whatsNewTranslation.targetLanguageCode
+                    TranslationTarget.About -> state.aboutTranslation.targetLanguageCode
+                    TranslationTarget.WhatsNew -> state.whatsNewTranslation.targetLanguageCode
                     null -> null
                 },
                 onLanguageSelected = { language ->
                     when (state.languagePickerTarget) {
-                        TranslationTarget.ABOUT -> onAction(DetailsAction.TranslateAbout(language.code))
-                        TranslationTarget.WHATS_NEW -> onAction(DetailsAction.TranslateWhatsNew(language.code))
+                        TranslationTarget.About -> onAction(DetailsAction.TranslateAbout(language.code))
+                        TranslationTarget.WhatsNew -> onAction(DetailsAction.TranslateWhatsNew(language.code))
                         null -> {}
                     }
                     onAction(DetailsAction.DismissLanguagePicker)
@@ -272,7 +272,7 @@ fun DetailsScreen(
                                     onAction(DetailsAction.TranslateWhatsNew(state.deviceLanguageCode))
                                 },
                                 onLanguagePickerClick = {
-                                    onAction(DetailsAction.ShowLanguagePicker(TranslationTarget.WHATS_NEW))
+                                    onAction(DetailsAction.ShowLanguagePicker(TranslationTarget.WhatsNew))
                                 },
                                 onToggleTranslation = {
                                     onAction(DetailsAction.ToggleWhatsNewTranslation)
@@ -292,7 +292,7 @@ fun DetailsScreen(
                                     onAction(DetailsAction.TranslateAbout(state.deviceLanguageCode))
                                 },
                                 onLanguagePickerClick = {
-                                    onAction(DetailsAction.ShowLanguagePicker(TranslationTarget.ABOUT))
+                                    onAction(DetailsAction.ShowLanguagePicker(TranslationTarget.About))
                                 },
                                 onToggleTranslation = {
                                     onAction(DetailsAction.ToggleAboutTranslation)
@@ -312,7 +312,7 @@ fun DetailsScreen(
                                     onAction(DetailsAction.TranslateAbout(state.deviceLanguageCode))
                                 },
                                 onLanguagePickerClick = {
-                                    onAction(DetailsAction.ShowLanguagePicker(TranslationTarget.ABOUT))
+                                    onAction(DetailsAction.ShowLanguagePicker(TranslationTarget.About))
                                 },
                                 onToggleTranslation = {
                                     onAction(DetailsAction.ToggleAboutTranslation)
@@ -331,7 +331,7 @@ fun DetailsScreen(
                                     onAction(DetailsAction.TranslateWhatsNew(state.deviceLanguageCode))
                                 },
                                 onLanguagePickerClick = {
-                                    onAction(DetailsAction.ShowLanguagePicker(TranslationTarget.WHATS_NEW))
+                                    onAction(DetailsAction.ShowLanguagePicker(TranslationTarget.WhatsNew))
                                 },
                                 onToggleTranslation = {
                                     onAction(DetailsAction.ToggleWhatsNewTranslation)

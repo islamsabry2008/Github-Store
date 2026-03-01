@@ -75,6 +75,7 @@ data class DetailsState(
         }
 }
 
-enum class TranslationTarget {
-    ABOUT, WHATS_NEW
+sealed interface TranslationTarget {
+    data object About : TranslationTarget
+    data object WhatsNew : TranslationTarget
 }

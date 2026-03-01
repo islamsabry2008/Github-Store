@@ -37,19 +37,22 @@ class TranslationRepositoryImpl(
         cacheMutex.withLock { cache[cacheKey] }?.let { return it }
 
         val chunks = chunkText(text)
-        val translatedChunks = mutableListOf<String>()
+        val translatedParts = mutableListOf<Pair<String, String>>()
+
         var detectedLang: String? = null
 
-        for ((chunkText, _) in chunks) {
+        for ((chunkText, delimiter) in chunks) {
             val response = translateSingleChunk(chunkText, targetLanguage, sourceLanguage)
-            translatedChunks.add(response.translatedText)
+            translatedParts.add(response.translatedText to delimiter)
             if (detectedLang == null) {
                 detectedLang = response.detectedSourceLanguage
             }
         }
 
         val result = TranslationResult(
-            translatedText = translatedChunks.joinToString("\n\n"),
+            translatedText = translatedParts.dropLast(1)
+                .joinToString("") { (text, delim) -> text + delim } +
+                    translatedParts.lastOrNull()?.first.orEmpty(),
             detectedSourceLanguage = detectedLang
         )
 
@@ -82,7 +85,14 @@ class TranslationRepositoryImpl(
             parameter("q", text)
         }.bodyAsText()
 
-        return parseTranslationResponse(responseText)
+        return try {
+            parseTranslationResponse(responseText)
+        } catch (_: Exception) {
+            TranslationResult(
+                translatedText = text,
+                detectedSourceLanguage = null
+            )
+        }
     }
 
     private fun parseTranslationResponse(responseText: String): TranslationResult {
