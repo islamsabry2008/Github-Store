@@ -48,6 +48,7 @@ import zed.rainxch.details.presentation.model.LogResult
 import zed.rainxch.details.presentation.model.SupportedLanguages
 import zed.rainxch.details.presentation.model.TranslationState
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.coroutines.cancellation.CancellationException
 import kotlin.time.Clock.System
 import kotlin.time.ExperimentalTime
 
@@ -779,7 +780,7 @@ class DetailsViewModel(
 
             DetailsAction.InstallWithExternalApp -> {
                 currentDownloadJob?.cancel()
-                currentDownloadJob = viewModelScope.launch {
+                val job = viewModelScope.launch {
                     try {
                         val primary = _state.value.primaryAsset
                         val release = _state.value.selectedRelease
@@ -832,6 +833,11 @@ class DetailsViewModel(
                                 result = LogResult.OpenedInExternalInstaller
                             )
                         }
+                    } catch (e: CancellationException) {
+                        logger.debug("Install with external app cancelled")
+                        _state.value = _state.value.copy(downloadStage = DownloadStage.IDLE)
+                        currentAssetName = null
+                        throw e
                     } catch (t: Throwable) {
                         logger.error("Failed to install with external app: ${t.message}")
                         _state.value = _state.value.copy(
@@ -850,7 +856,12 @@ class DetailsViewModel(
                                 )
                             }
                         }
-                    } finally {
+                    }
+                }
+
+                currentDownloadJob = job
+                job.invokeOnCompletion {
+                    if (currentDownloadJob === job) {
                         currentDownloadJob = null
                     }
                 }
