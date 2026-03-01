@@ -122,6 +122,14 @@ class ProfileViewModel(
                 }
             }
         }
+
+        viewModelScope.launch {
+            themesRepository.getAutoDetectClipboardLinks().collect { enabled ->
+                _state.update {
+                    it.copy(autoDetectClipboardLinks = enabled)
+                }
+            }
+        }
     }
 
     private fun loadProxyConfig() {
@@ -284,6 +292,12 @@ class ProfileViewModel(
 
             ProfileAction.OnProxyPasswordVisibilityToggle -> {
                 _state.update { it.copy(isProxyPasswordVisible = !it.isProxyPasswordVisible) }
+            }
+
+            is ProfileAction.OnAutoDetectClipboardToggled -> {
+                viewModelScope.launch {
+                    themesRepository.setAutoDetectClipboardLinks(action.enabled)
+                }
             }
 
             ProfileAction.OnProxySave -> {

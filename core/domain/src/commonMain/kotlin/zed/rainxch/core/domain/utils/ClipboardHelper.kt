@@ -5,4 +5,6 @@ interface ClipboardHelper {
         label: String,
         text: String
     )
+
+    fun getText(): String?
 }

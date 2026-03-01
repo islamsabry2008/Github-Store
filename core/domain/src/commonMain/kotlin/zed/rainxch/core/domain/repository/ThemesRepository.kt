@@ -13,4 +13,6 @@ interface ThemesRepository {
     suspend fun setAmoledTheme(enabled: Boolean)
     fun getFontTheme(): Flow<FontTheme>
     suspend fun setFontTheme(fontTheme: FontTheme)
+    fun getAutoDetectClipboardLinks(): Flow<Boolean>
+    suspend fun setAutoDetectClipboardLinks(enabled: Boolean)
 }

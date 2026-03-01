@@ -4,6 +4,7 @@ import zed.rainxch.core.presentation.model.DiscoveryRepository
 import zed.rainxch.domain.model.ProgrammingLanguage
 import zed.rainxch.domain.model.SearchPlatform
 import zed.rainxch.domain.model.SortBy
+import zed.rainxch.search.presentation.utils.ParsedGithubLink
 
 data class SearchState(
     val query: String = "",
@@ -16,5 +17,9 @@ data class SearchState(
     val errorMessage: String? = null,
     val hasMorePages: Boolean = true,
     val totalCount: Int? = null,
-    val isLanguageSheetVisible: Boolean = false
+    val isLanguageSheetVisible: Boolean = false,
+    val detectedLinks: List<ParsedGithubLink> = emptyList(),
+    val clipboardLinks: List<ParsedGithubLink> = emptyList(),
+    val isClipboardBannerVisible: Boolean = false,
+    val autoDetectClipboardEnabled: Boolean = true,
 )

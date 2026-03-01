@@ -24,4 +24,5 @@ sealed interface ProfileAction {
     data class OnProxyPasswordChanged(val password: String) : ProfileAction
     data object OnProxyPasswordVisibilityToggle : ProfileAction
     data object OnProxySave : ProfileAction
+    data class OnAutoDetectClipboardToggled(val enabled: Boolean) : ProfileAction
 }

@@ -102,6 +102,14 @@ fun AppNavigation(
                                 )
                             )
                         },
+                        onNavigateToDetailsFromLink = { owner, repo ->
+                            navController.navigate(
+                                GithubStoreGraph.DetailsScreen(
+                                    owner = owner,
+                                    repo = repo
+                                )
+                            )
+                        },
                         onNavigateToDeveloperProfile = { username ->
                             navController.navigate(
                                 GithubStoreGraph.DeveloperProfileScreen(

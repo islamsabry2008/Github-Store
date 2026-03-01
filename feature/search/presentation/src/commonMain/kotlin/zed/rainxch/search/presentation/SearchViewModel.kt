@@ -22,10 +22,14 @@ import zed.rainxch.core.domain.model.RateLimitException
 import zed.rainxch.core.domain.repository.FavouritesRepository
 import zed.rainxch.core.domain.repository.InstalledAppsRepository
 import zed.rainxch.core.domain.repository.StarredRepository
+import zed.rainxch.core.domain.repository.ThemesRepository
 import zed.rainxch.core.domain.use_cases.SyncInstalledAppsUseCase
+import zed.rainxch.core.domain.utils.ClipboardHelper
 import zed.rainxch.core.domain.utils.ShareManager
 import zed.rainxch.core.presentation.model.DiscoveryRepository
 import zed.rainxch.domain.repository.SearchRepository
+import zed.rainxch.search.presentation.utils.isEntirelyGithubUrls
+import zed.rainxch.search.presentation.utils.parseGithubUrls
 
 class SearchViewModel(
     private val searchRepository: SearchRepository,
@@ -35,7 +39,9 @@ class SearchViewModel(
     private val starredRepository: StarredRepository,
     private val logger: GitHubStoreLogger,
     private val shareManager: ShareManager,
-    private val platform: Platform
+    private val platform: Platform,
+    private val clipboardHelper: ClipboardHelper,
+    private val themesRepository: ThemesRepository,
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false
@@ -57,6 +63,8 @@ class SearchViewModel(
                 observeInstalledApps()
                 observeFavouriteApps()
                 observeStarredRepos()
+                observeClipboardSetting()
+                checkClipboardForLinks()
 
                 hasLoadedInitialData = true
             }
@@ -79,6 +87,36 @@ class SearchViewModel(
                 }
             } catch (e: Exception) {
                 logger.error("Initial sync failed: ${e.message}")
+            }
+        }
+    }
+
+    private fun observeClipboardSetting() {
+        viewModelScope.launch {
+            themesRepository.getAutoDetectClipboardLinks().collect { enabled ->
+                _state.update { it.copy(autoDetectClipboardEnabled = enabled) }
+            }
+        }
+    }
+
+    private fun checkClipboardForLinks() {
+        viewModelScope.launch {
+            val enabled = themesRepository.getAutoDetectClipboardLinks().first()
+            if (!enabled) return@launch
+
+            try {
+                val clipText = clipboardHelper.getText() ?: return@launch
+                val links = parseGithubUrls(clipText)
+                if (links.isNotEmpty()) {
+                    _state.update {
+                        it.copy(
+                            clipboardLinks = links,
+                            isClipboardBannerVisible = true
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                logger.debug("Failed to read clipboard: ${e.message}")
             }
         }
     }
@@ -297,9 +335,27 @@ class SearchViewModel(
 
 
             is SearchAction.OnSearchChange -> {
-                _state.update { it.copy(query = action.query) }
+                val links = parseGithubUrls(action.query)
+                _state.update {
+                    it.copy(
+                        query = action.query,
+                        detectedLinks = links,
+                    )
+                }
 
                 searchDebounceJob?.cancel()
+
+                if (isEntirelyGithubUrls(action.query)) {
+                    currentSearchJob?.cancel()
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            isLoadingMore = false,
+                            errorMessage = null
+                        )
+                    }
+                    return
+                }
 
                 if (action.query.isBlank()) {
                     _state.update {
@@ -340,6 +396,13 @@ class SearchViewModel(
             }
 
             SearchAction.OnSearchImeClick -> {
+                if (_state.value.detectedLinks.isNotEmpty() && isEntirelyGithubUrls(_state.value.query)) {
+                    val link = _state.value.detectedLinks.first()
+                    viewModelScope.launch {
+                        _events.send(SearchEvent.NavigateToRepo(link.owner, link.repo))
+                    }
+                    return
+                }
                 searchDebounceJob?.cancel()
                 currentPage = 1
                 performSearch(isInitial = true)
@@ -394,9 +457,51 @@ class SearchViewModel(
                         isLoading = false,
                         isLoadingMore = false,
                         errorMessage = null,
-                        totalCount = null
-
+                        totalCount = null,
+                        detectedLinks = emptyList(),
                     )
+                }
+            }
+
+            is SearchAction.OpenGithubLink -> {
+                viewModelScope.launch {
+                    _events.send(SearchEvent.NavigateToRepo(action.owner, action.repo))
+                }
+            }
+
+            SearchAction.OnFabClick -> {
+                viewModelScope.launch {
+                    try {
+                        val clipText = clipboardHelper.getText()
+                        if (clipText.isNullOrBlank()) {
+                            _events.send(SearchEvent.OnMessage(getString(Res.string.no_github_link_in_clipboard)))
+                            return@launch
+                        }
+                        val links = parseGithubUrls(clipText)
+                        if (links.isEmpty()) {
+                            _events.send(SearchEvent.OnMessage(getString(Res.string.no_github_link_in_clipboard)))
+                            return@launch
+                        }
+                        if (links.size == 1) {
+                            _events.send(SearchEvent.NavigateToRepo(links.first().owner, links.first().repo))
+                        } else {
+                            _state.update {
+                                it.copy(
+                                    query = clipText,
+                                    detectedLinks = links,
+                                )
+                            }
+                        }
+                    } catch (e: Exception) {
+                        logger.error("Failed to read clipboard: ${e.message}")
+                        _events.send(SearchEvent.OnMessage(getString(Res.string.no_github_link_in_clipboard)))
+                    }
+                }
+            }
+
+            SearchAction.DismissClipboardBanner -> {
+                _state.update {
+                    it.copy(isClipboardBannerVisible = false)
                 }
             }
 

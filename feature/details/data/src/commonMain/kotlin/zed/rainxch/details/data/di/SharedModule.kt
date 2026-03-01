@@ -18,7 +18,6 @@ val detailsModule = module {
 
     single<TranslationRepository> {
         TranslationRepositoryImpl(
-            logger = get(),
             localizationManager = get()
         )
     }

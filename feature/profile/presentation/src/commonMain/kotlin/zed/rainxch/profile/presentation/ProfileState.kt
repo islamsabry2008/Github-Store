@@ -20,6 +20,7 @@ data class ProfileState(
     val proxyUsername: String = "",
     val proxyPassword: String = "",
     val isProxyPasswordVisible: Boolean = false,
+    val autoDetectClipboardLinks: Boolean = true,
 )
 
 enum class ProxyType {
