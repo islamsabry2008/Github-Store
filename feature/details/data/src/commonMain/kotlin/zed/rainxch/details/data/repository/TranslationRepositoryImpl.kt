@@ -4,25 +4,26 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonPrimitive
 import zed.rainxch.core.data.network.createPlatformHttpClient
 import zed.rainxch.core.data.services.LocalizationManager
-import zed.rainxch.core.domain.logging.GitHubStoreLogger
 import zed.rainxch.core.domain.model.ProxyConfig
 import zed.rainxch.details.domain.model.TranslationResult
 import zed.rainxch.details.domain.repository.TranslationRepository
 
 class TranslationRepositoryImpl(
-    private val logger: GitHubStoreLogger,
     private val localizationManager: LocalizationManager
-) : TranslationRepository {
+) : TranslationRepository, AutoCloseable {
 
     private val httpClient: HttpClient = createPlatformHttpClient(ProxyConfig.None)
 
     private val json = Json { ignoreUnknownKeys = true; isLenient = true }
 
+    private val cacheMutex = Mutex()
     private val cache = LinkedHashMap<String, TranslationResult>(50, 0.75f, true)
     private val maxCacheSize = 50
     private val maxChunkSize = 4500
@@ -33,7 +34,7 @@ class TranslationRepositoryImpl(
         sourceLanguage: String
     ): TranslationResult {
         val cacheKey = "${text.hashCode()}:$targetLanguage"
-        cache[cacheKey]?.let { return it }
+        cacheMutex.withLock { cache[cacheKey] }?.let { return it }
 
         val chunks = chunkText(text)
         val translatedChunks = mutableListOf<String>()
@@ -52,11 +53,13 @@ class TranslationRepositoryImpl(
             detectedSourceLanguage = detectedLang
         )
 
-        if (cache.size >= maxCacheSize) {
-            val firstKey = cache.keys.first()
-            cache.remove(firstKey)
+        cacheMutex.withLock {
+            if (cache.size >= maxCacheSize) {
+                val firstKey = cache.keys.first()
+                cache.remove(firstKey)
+            }
+            cache[cacheKey] = result
         }
-        cache[cacheKey] = result
         return result
     }
 
@@ -163,5 +166,9 @@ class TranslationRepositoryImpl(
         if (currentChunk.isNotEmpty()) {
             chunks.add(Pair(currentChunk.toString(), "\n"))
         }
+    }
+
+    override fun close() {
+        httpClient.close()
     }
 }
