@@ -416,4 +416,8 @@
     <string name="open_in_app">Otwórz w aplikacji</string>
     <string name="no_github_link_in_clipboard">Nie znaleziono linku GitHub w schowku</string>
 
+    <string name="storage">Przechowywanie</string>
+    <string name="clear_cache">Wyczyść pamięć podręczną</string>
+    <string name="current_size">Aktualny rozmiar:</string>
+    <string name="clear">Wyczyść</string>
 </resources>

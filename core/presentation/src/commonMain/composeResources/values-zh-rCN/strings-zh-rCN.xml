@@ -418,4 +418,8 @@
     <string name="open_in_app">在应用中打开</string>
     <string name="no_github_link_in_clipboard">剪贴板中未找到 GitHub 链接</string>
 
+    <string name="storage">存储</string>
+    <string name="clear_cache">清除缓存</string>
+    <string name="current_size">当前大小：</string>
+    <string name="clear">清除</string>
 </resources>

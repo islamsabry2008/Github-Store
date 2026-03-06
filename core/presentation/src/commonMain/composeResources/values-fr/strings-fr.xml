@@ -418,4 +418,8 @@
     <string name="open_in_app">Ouvrir dans l\'app</string>
     <string name="no_github_link_in_clipboard">Aucun lien GitHub trouvé dans le presse-papiers</string>
 
+    <string name="storage">Stockage</string>
+    <string name="clear_cache">Vider le cache</string>
+    <string name="current_size">Taille actuelle :</string>
+    <string name="clear">Vider</string>
 </resources>

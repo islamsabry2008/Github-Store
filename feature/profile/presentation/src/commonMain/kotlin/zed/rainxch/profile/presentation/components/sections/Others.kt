@@ -26,8 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import zed.rainxch.core.presentation.components.ExpressiveCard
-import zed.rainxch.githubstore.core.presentation.res.Res
-import zed.rainxch.githubstore.core.presentation.res.section_network
+import zed.rainxch.githubstore.core.presentation.res.*
 import zed.rainxch.profile.presentation.ProfileAction
 import zed.rainxch.profile.presentation.ProfileState
 import zed.rainxch.profile.presentation.components.SectionHeader
@@ -39,7 +38,7 @@ fun LazyListScope.othersSection(
 ) {
     item {
         SectionHeader(
-            text = "Storage".uppercase()
+            text = stringResource(Res.string.storage).uppercase()
         )
 
         Spacer(Modifier.height(8.dp))
@@ -68,13 +67,13 @@ fun LazyListScope.othersSection(
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(
-                        text = "Clear Cache",
+                        text = stringResource(Res.string.clear_cache),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Text(
-                        text = "Current size: ${state.cacheSize}",
+                        text = "${stringResource(Res.string.current_size)} ${state.cacheSize}",
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -91,7 +90,7 @@ fun LazyListScope.othersSection(
                     )
                 ) {
                     Text(
-                        text = "Clear",
+                        text = stringResource(Res.string.clear),
                         style = MaterialTheme.typography.titleMediumEmphasized,
                         fontWeight = FontWeight.Bold
                     )

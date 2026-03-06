@@ -418,4 +418,8 @@
     <string name="open_in_app">Abrir en la app</string>
     <string name="no_github_link_in_clipboard">No se encontró enlace de GitHub en el portapapeles</string>
 
+    <string name="storage">Almacenamiento</string>
+    <string name="clear_cache">Borrar caché</string>
+    <string name="current_size">Tamaño actual:</string>
+    <string name="clear">Borrar</string>
 </resources>

@@ -418,4 +418,8 @@
     <string name="open_in_app">Открыть в приложении</string>
     <string name="no_github_link_in_clipboard">Ссылка GitHub не найдена в буфере обмена</string>
 
+    <string name="storage">Хранение</string>
+    <string name="clear_cache">Очистить кэш</string>
+    <string name="current_size">Текущий размер:</string>
+    <string name="clear">Очистить</string>
 </resources>

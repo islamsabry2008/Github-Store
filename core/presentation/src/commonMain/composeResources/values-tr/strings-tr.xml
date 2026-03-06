@@ -450,4 +450,8 @@
     <string name="open_in_app">Uygulamada aç</string>
     <string name="no_github_link_in_clipboard">Panoda GitHub bağlantısı bulunamadı</string>
 
+    <string name="storage">Depolama</string>
+    <string name="clear_cache">Önbelleği Temizle</string>
+    <string name="current_size">Geçerli boyut:</string>
+    <string name="clear">Temizle</string>
 </resources>

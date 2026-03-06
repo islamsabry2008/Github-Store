@@ -453,4 +453,9 @@
     <string name="detected_links">Detected Links</string>
     <string name="open_in_app">Open in app</string>
     <string name="no_github_link_in_clipboard">No GitHub link found in clipboard</string>
+
+    <string name="storage">Storage</string>
+    <string name="clear_cache">Clear Cache</string>
+    <string name="current_size">Current size:</string>
+    <string name="clear">Clear</string>
 </resources>
