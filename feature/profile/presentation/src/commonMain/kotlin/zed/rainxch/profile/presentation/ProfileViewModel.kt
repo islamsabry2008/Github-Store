@@ -59,7 +59,27 @@ class ProfileViewModel(
 
     private fun observeCacheSize() {
         viewModelScope.launch {
+            profileRepository.observeCacheSize().collect { sizeBytes ->
+                _state.update {
+                    it.copy(cacheSize = formatCacheSize(sizeBytes))
+                }
+            }
+        }
+    }
 
+    private fun formatCacheSize(bytes: Long): String {
+        if (bytes <= 0) return "0 B"
+        val units = arrayOf("B", "KB", "MB", "GB")
+        var size = bytes.toDouble()
+        var unitIndex = 0
+        while (size >= 1024 && unitIndex < units.lastIndex) {
+            size /= 1024
+            unitIndex++
+        }
+        return if (size == size.toLong().toDouble()) {
+            "${size.toLong()} ${units[unitIndex]}"
+        } else {
+            "${"%.1f".format(size)} ${units[unitIndex]}"
         }
     }
 
@@ -180,7 +200,20 @@ class ProfileViewModel(
             }
 
             ProfileAction.OnClearCacheClick -> {
-
+                viewModelScope.launch {
+                    runCatching {
+                        profileRepository.clearCache()
+                    }.onSuccess {
+                        observeCacheSize()
+                        _events.send(ProfileEvent.OnCacheCleared)
+                    }.onFailure { error ->
+                        _events.send(
+                            ProfileEvent.OnCacheClearError(
+                                error.message ?: "Failed to clear cache"
+                            )
+                        )
+                    }
+                }
             }
 
             is ProfileAction.OnThemeColorSelected -> {

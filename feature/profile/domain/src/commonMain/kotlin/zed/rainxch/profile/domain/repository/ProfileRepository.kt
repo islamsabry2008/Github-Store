@@ -8,4 +8,6 @@ interface ProfileRepository {
     fun getUser(): Flow<UserProfile?>
     fun getVersionName(): String
     suspend fun logout()
+    fun observeCacheSize(): Flow<Long>
+    suspend fun clearCache()
 }

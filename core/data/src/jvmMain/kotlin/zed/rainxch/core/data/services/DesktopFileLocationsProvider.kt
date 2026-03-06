@@ -95,6 +95,43 @@ class DesktopFileLocationsProvider(
         return downloadsDir.absolutePath
     }
 
+    override fun getCacheSizeBytes(): Long {
+        val appDir = File(appDownloadsDir())
+        val userDir = File(userDownloadsDir())
+        return calculateDirSize(appDir) + calculateDirSize(userDir)
+    }
+
+    override fun clearCacheFiles(): Boolean {
+        val appDir = File(appDownloadsDir())
+        val userDir = File(userDownloadsDir())
+        val appCleared = deleteDirectoryContents(appDir)
+        val userCleared = deleteDirectoryContents(userDir)
+        return appCleared && userCleared
+    }
+
+    private fun calculateDirSize(dir: File): Long {
+        if (!dir.exists()) return 0L
+        var size = 0L
+        dir.listFiles()?.forEach { file ->
+            size += if (file.isDirectory) calculateDirSize(file) else file.length()
+        }
+        return size
+    }
+
+    private fun deleteDirectoryContents(dir: File): Boolean {
+        if (!dir.exists()) return true
+        var allDeleted = true
+        dir.listFiles()?.forEach { file ->
+            if (file.isDirectory) {
+                if (!deleteDirectoryContents(file)) allDeleted = false
+                if (!file.delete()) allDeleted = false
+            } else {
+                if (!file.delete()) allDeleted = false
+            }
+        }
+        return allDeleted
+    }
+
     private fun getXdgDownloadsDir(): String? {
         return try {
             val userDirsFile = File(

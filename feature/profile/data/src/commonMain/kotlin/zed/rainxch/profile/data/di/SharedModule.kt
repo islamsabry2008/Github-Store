@@ -11,7 +11,8 @@ val settingsModule = module {
             tokenStore = get(),
             httpClient = get(),
             cacheManager = get(),
-            logger = get()
+            logger = get(),
+            fileLocationsProvider = get()
         )
     }
 }

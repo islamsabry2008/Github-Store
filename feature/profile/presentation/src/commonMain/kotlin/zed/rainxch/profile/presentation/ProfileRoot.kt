@@ -80,6 +80,18 @@ fun ProfileRoot(
                     snackbarState.showSnackbar(event.message)
                 }
             }
+
+            ProfileEvent.OnCacheCleared -> {
+                coroutineScope.launch {
+                    snackbarState.showSnackbar(getString(Res.string.cache_cleared))
+                }
+            }
+
+            is ProfileEvent.OnCacheClearError -> {
+                coroutineScope.launch {
+                    snackbarState.showSnackbar(event.message)
+                }
+            }
         }
     }
 
