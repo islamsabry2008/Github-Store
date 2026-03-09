@@ -1,7 +1,9 @@
 package zed.rainxch.details.presentation.components.sections
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,18 +18,27 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import zed.rainxch.githubstore.core.presentation.res.*
 import io.github.fletchmckee.liquid.liquefiable
 import org.jetbrains.compose.resources.stringResource
 import zed.rainxch.details.presentation.DetailsAction
 import zed.rainxch.details.presentation.DetailsState
 import zed.rainxch.details.presentation.components.AppHeader
+import zed.rainxch.details.presentation.components.ReleaseAssetsPicker
 import zed.rainxch.details.presentation.components.SmartInstallButton
 import zed.rainxch.details.presentation.components.VersionPicker
+import zed.rainxch.details.presentation.components.VersionTypePicker
 import zed.rainxch.details.presentation.utils.LocalTopbarLiquidState
+import zed.rainxch.githubstore.core.presentation.res.Res
+import zed.rainxch.githubstore.core.presentation.res.appmanager_description
+import zed.rainxch.githubstore.core.presentation.res.external_installer_description
+import zed.rainxch.githubstore.core.presentation.res.inspect_with_appmanager
+import zed.rainxch.githubstore.core.presentation.res.obtainium_description
+import zed.rainxch.githubstore.core.presentation.res.open_in_obtainium
+import zed.rainxch.githubstore.core.presentation.res.open_with_external_installer
 
 fun LazyListScope.header(
     state: DetailsState,
@@ -49,15 +60,40 @@ fun LazyListScope.header(
         }
     }
 
+    // versions type list
     if (state.allReleases.isNotEmpty()) {
         item {
-            VersionPicker(
-                selectedRelease = state.selectedRelease,
+            VersionTypePicker(
                 selectedCategory = state.selectedReleaseCategory,
-                filteredReleases = state.filteredReleases,
-                isPickerVisible = state.isVersionPickerVisible,
-                onAction = onAction
+                onAction = onAction,
+                modifier = Modifier.fillMaxWidth().animateItem()
             )
+        }
+    }
+
+    // version and installable release
+    if (state.allReleases.isNotEmpty() || state.installableAssets.isNotEmpty()) {
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                ReleaseAssetsPicker(
+                    assetsList = state.installableAssets,
+                    selectedAsset = state.primaryAsset,
+                    isPickerVisible = state.isReleaseSelectorVisible,
+                    onAction = onAction,
+                    modifier = Modifier.weight(.65f)
+                )
+                VersionPicker(
+                    selectedRelease = state.selectedRelease,
+                    filteredReleases = state.filteredReleases,
+                    isPickerVisible = state.isVersionPickerVisible,
+                    onAction = onAction,
+                    modifier = Modifier.weight(.35f),
+                )
+            }
         }
     }
 

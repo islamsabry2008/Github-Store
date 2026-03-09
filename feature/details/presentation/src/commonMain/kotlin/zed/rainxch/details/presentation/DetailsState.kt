@@ -1,11 +1,11 @@
 package zed.rainxch.details.presentation
 
-import zed.rainxch.core.domain.model.SystemArchitecture
-import zed.rainxch.core.domain.model.GithubRepoSummary
-import zed.rainxch.core.domain.model.GithubRelease
 import zed.rainxch.core.domain.model.GithubAsset
+import zed.rainxch.core.domain.model.GithubRelease
+import zed.rainxch.core.domain.model.GithubRepoSummary
 import zed.rainxch.core.domain.model.GithubUserProfile
 import zed.rainxch.core.domain.model.InstalledApp
+import zed.rainxch.core.domain.model.SystemArchitecture
 import zed.rainxch.details.domain.model.ReleaseCategory
 import zed.rainxch.details.domain.model.RepoStats
 import zed.rainxch.details.presentation.model.DowngradeWarning
@@ -18,13 +18,18 @@ data class DetailsState(
     val isLoading: Boolean = true,
     val errorMessage: String? = null,
 
-    val repository: GithubRepoSummary? = null,
-    val selectedRelease: GithubRelease? = null,
-    val installableAssets: List<GithubAsset> = emptyList(),
-    val primaryAsset: GithubAsset? = null,
     val userProfile: GithubUserProfile? = null,
+    val repository: GithubRepoSummary? = null,
 
+    // state for assets
+    val primaryAsset: GithubAsset? = null,
+    val installableAssets: List<GithubAsset> = emptyList(),
+
+    // state for releases
+    val selectedRelease: GithubRelease? = null,
     val allReleases: List<GithubRelease> = emptyList(),
+    val isReleaseSelectorVisible: Boolean = false,
+
     val selectedReleaseCategory: ReleaseCategory = ReleaseCategory.STABLE,
     val isVersionPickerVisible: Boolean = false,
 

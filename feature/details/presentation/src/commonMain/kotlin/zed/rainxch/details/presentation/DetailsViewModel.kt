@@ -2,7 +2,6 @@ package zed.rainxch.details.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import zed.rainxch.githubstore.core.presentation.res.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.async
@@ -46,8 +45,19 @@ import zed.rainxch.details.presentation.model.DowngradeWarning
 import zed.rainxch.details.presentation.model.DownloadStage
 import zed.rainxch.details.presentation.model.InstallLogItem
 import zed.rainxch.details.presentation.model.LogResult
+import zed.rainxch.details.presentation.model.LogResult.Error
 import zed.rainxch.details.presentation.model.SupportedLanguages
 import zed.rainxch.details.presentation.model.TranslationState
+import zed.rainxch.githubstore.core.presentation.res.Res
+import zed.rainxch.githubstore.core.presentation.res.added_to_favourites
+import zed.rainxch.githubstore.core.presentation.res.failed_to_open_app
+import zed.rainxch.githubstore.core.presentation.res.failed_to_share_link
+import zed.rainxch.githubstore.core.presentation.res.failed_to_uninstall
+import zed.rainxch.githubstore.core.presentation.res.installer_saved_downloads
+import zed.rainxch.githubstore.core.presentation.res.link_copied_to_clipboard
+import zed.rainxch.githubstore.core.presentation.res.rate_limit_exceeded
+import zed.rainxch.githubstore.core.presentation.res.removed_from_favourites
+import zed.rainxch.githubstore.core.presentation.res.translation_failed
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.time.Clock.System
@@ -857,7 +867,7 @@ class DetailsViewModel(
                                     assetName = asset.name,
                                     size = asset.size,
                                     tag = release.tagName,
-                                    result = LogResult.Error(t.message)
+                                    result = Error(t.message)
                                 )
                             }
                         }
@@ -887,6 +897,15 @@ class DetailsViewModel(
             is DetailsAction.OnMessage -> {
                 // Handled in composable
             }
+
+            is DetailsAction.SelectDownloadAsset -> {
+                _state.update { state -> state.copy(primaryAsset = action.release) }
+            }
+
+            DetailsAction.ToggleReleaseAssetsPicker -> {
+                _state.update { state -> state.copy(isReleaseSelectorVisible = !state.isReleaseSelectorVisible) }
+            }
+
         }
     }
 

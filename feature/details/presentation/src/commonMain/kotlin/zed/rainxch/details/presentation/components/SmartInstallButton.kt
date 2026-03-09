@@ -29,23 +29,38 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.fletchmckee.liquid.liquefiable
+import io.github.fletchmckee.liquid.rememberLiquidState
 import org.jetbrains.compose.resources.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import zed.rainxch.core.domain.model.GithubAsset
 import zed.rainxch.core.domain.model.GithubUser
-import zed.rainxch.githubstore.core.presentation.res.*
 import zed.rainxch.details.presentation.DetailsAction
 import zed.rainxch.details.presentation.DetailsState
 import zed.rainxch.details.presentation.model.DownloadStage
 import zed.rainxch.details.presentation.utils.LocalTopbarLiquidState
 import zed.rainxch.details.presentation.utils.extractArchitectureFromName
 import zed.rainxch.details.presentation.utils.isExactArchitectureMatch
+import zed.rainxch.githubstore.core.presentation.res.Res
+import zed.rainxch.githubstore.core.presentation.res.architecture_compatible
+import zed.rainxch.githubstore.core.presentation.res.cancel_download
+import zed.rainxch.githubstore.core.presentation.res.downloading
+import zed.rainxch.githubstore.core.presentation.res.install_latest
+import zed.rainxch.githubstore.core.presentation.res.install_version
+import zed.rainxch.githubstore.core.presentation.res.installing
+import zed.rainxch.githubstore.core.presentation.res.not_available
+import zed.rainxch.githubstore.core.presentation.res.open_app
+import zed.rainxch.githubstore.core.presentation.res.show_install_options
+import zed.rainxch.githubstore.core.presentation.res.uninstall
+import zed.rainxch.githubstore.core.presentation.res.update_to_version
+import zed.rainxch.githubstore.core.presentation.res.updating
+import zed.rainxch.githubstore.core.presentation.res.verifying
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -253,11 +268,14 @@ fun SmartInstallButton(
                                     fontWeight = FontWeight.Bold
                                 )
 
-                                val progressText = if (state.totalBytes != null && state.totalBytes > 0) {
-                                    "${formatFileSize(state.downloadedBytes)} / ${formatFileSize(state.totalBytes)}"
-                                } else {
-                                    "${progress ?: 0}%"
-                                }
+                                val progressText =
+                                    if (state.totalBytes != null && state.totalBytes > 0) {
+                                        "${formatFileSize(state.downloadedBytes)} / ${
+                                            formatFileSize(
+                                                state.totalBytes
+                                            )
+                                        }"
+                                    } else "${progress ?: 0}%"
                                 Text(
                                     text = progressText,
                                     style = MaterialTheme.typography.bodySmall,
@@ -471,28 +489,31 @@ private fun formatFileSize(bytes: Long): String {
 @Preview
 @Composable
 fun SmartInstallButtonDownloadingPreview() {
-    SmartInstallButton(
-        isDownloading = true,
-        isInstalling = false,
-        progress = 45,
-        primaryAsset = GithubAsset(
-            id = 1L,
-            name = "app-arm64-v8a.apk",
-            contentType = "application/vnd.android.package-archive",
-            size = 50_000_000L,
-            downloadUrl = "https://example.com/app.apk",
-            uploader = GithubUser(
-                id = 1L,
-                login = "developer",
-                avatarUrl = "",
-                htmlUrl = ""
-            )
-        ),
-        onAction = {},
-        state = DetailsState(
+    val liquidState = rememberLiquidState()
+    CompositionLocalProvider(LocalTopbarLiquidState provides liquidState) {
+        SmartInstallButton(
             isDownloading = true,
-            downloadStage = DownloadStage.DOWNLOADING,
-            downloadProgressPercent = 45
+            isInstalling = false,
+            progress = 45,
+            primaryAsset = GithubAsset(
+                id = 1L,
+                name = "app-arm64-v8a.apk",
+                contentType = "application/vnd.android.package-archive",
+                size = 50_000_000L,
+                downloadUrl = "https://example.com/app.apk",
+                uploader = GithubUser(
+                    id = 1L,
+                    login = "developer",
+                    avatarUrl = "",
+                    htmlUrl = ""
+                )
+            ),
+            onAction = {},
+            state = DetailsState(
+                isDownloading = true,
+                downloadStage = DownloadStage.DOWNLOADING,
+                downloadProgressPercent = 45
+            )
         )
-    )
+    }
 }

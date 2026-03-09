@@ -1,6 +1,7 @@
 package zed.rainxch.details.presentation
 
 import org.jetbrains.compose.resources.StringResource
+import zed.rainxch.core.domain.model.GithubAsset
 import zed.rainxch.core.domain.model.GithubRelease
 import zed.rainxch.details.domain.model.ReleaseCategory
 import zed.rainxch.details.presentation.model.TranslationTarget
@@ -50,4 +51,8 @@ sealed interface DetailsAction {
     data object ToggleWhatsNewTranslation : DetailsAction
     data class ShowLanguagePicker(val target: TranslationTarget) : DetailsAction
     data object DismissLanguagePicker : DetailsAction
+
+    // show release asset picker
+    data class SelectDownloadAsset(val release: GithubAsset) : DetailsAction
+    data object ToggleReleaseAssetsPicker : DetailsAction
 }
