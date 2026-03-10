@@ -384,7 +384,7 @@
   <string name="select_version">Select version</string>
   <string name="pre_release_badge">Pre-release</string>
   <string name="latest_badge">Latest</string>
-  <string name="no_version_selected">0</string>
+  <string name="no_version_selected">No version</string>
   <string name="versions_title">Versions</string>
   <string name="assets_title">Assets</string>
   <string name="no_assets_selected">No Assets</string>
@@ -392,6 +392,8 @@
   <string name="assets_selection_label">Select Asset Option</string>
   <string name="multiple_assets_info_dialog_title">Multiple Assets Available</string>
   <string name="multiple_assets_info_dialog_text">There are multiple installable files and application downloaders available for this release. Please review the list and select the one that matches your device requirements.</string>
+  <string name="icon_content_description_info">Info</string>
+
 
   <!-- Apps feature - Last checked -->
   <string name="last_checked">Last checked: %1$s</string>

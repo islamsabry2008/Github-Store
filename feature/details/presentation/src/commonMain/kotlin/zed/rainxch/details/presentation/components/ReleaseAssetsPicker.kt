@@ -55,13 +55,7 @@ import zed.rainxch.core.domain.model.GithubAsset
 import zed.rainxch.core.domain.model.GithubUser
 import zed.rainxch.details.presentation.DetailsAction
 import zed.rainxch.githubstore.core.presentation.res.Res
-import zed.rainxch.githubstore.core.presentation.res.assets_selection_label
-import zed.rainxch.githubstore.core.presentation.res.assets_title
-import zed.rainxch.githubstore.core.presentation.res.multiple_assets_info_dialog_text
-import zed.rainxch.githubstore.core.presentation.res.multiple_assets_info_dialog_title
-import zed.rainxch.githubstore.core.presentation.res.no_assets_in_list
-import zed.rainxch.githubstore.core.presentation.res.no_assets_selected
-import zed.rainxch.githubstore.core.presentation.res.select_version
+import zed.rainxch.githubstore.core.presentation.res.*
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -169,7 +163,7 @@ private fun ReleaseAssetsItemsPicker(
                         .weight(1f)
                 )
                 IconButton(onClick = { showInfoDialog = true }) {
-                    Icon(imageVector = Icons.Outlined.Info, contentDescription = "Info")
+                    Icon(imageVector = Icons.Outlined.Info, contentDescription = stringResource(Res.string.icon_content_description_info))
                 }
             }
 
